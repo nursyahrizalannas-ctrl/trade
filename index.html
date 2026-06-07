@@ -24,23 +24,29 @@
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
         
         h4 { margin: 0 0 10px 0; color: #2962ff; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
+        
+        /* Grid Edukasi */
+        .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .edu-btn { padding: 10px; font-size: 11px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
+        .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } .bg-green { background: #388e3c; } .bg-blue { background: #1976d2; }
     </style>
 </head>
 <body>
     <div class="tabs">
         <button class="tab-btn active" onclick="showTab('main', this)">📈 Trade</button>
-        <button class="tab-btn" onclick="showTab('news', this)">📰 News</button>
-        <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi</button>
+        <button class="tab-btn" onclick="showTab('news', this)">📅 Kalender</button>
+        <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi AI</button>
     </div>
 
+    <!-- TAB 1: TRADE & REALTIME PNL -->
     <div id="main" class="content active">
         <div class="live-panel">
             <div style="font-size: 12px; color: #aaa;" id="status-text">Menunggu Market...</div>
-            <div class="live-price" id="live-price">0.00</div>
+            <div class="live-price" id="live-price">Memuat Data...</div>
             <div class="pnl-box" id="pnl-display">Floating: $0.00</div>
         </div>
         
-        <div id="tv-chart" style="height:280px; margin-bottom:10px;"></div>
+        <div id="tv-chart" style="height:250px; margin-bottom:10px;"></div>
         
         <select id="pair" onchange="changePair()">
             <option value="PAXGUSDT">XAUUSD (Gold Proxy)</option>
@@ -51,43 +57,70 @@
         <div class="trade-row">
             <input type="number" id="lot" placeholder="Lot (Cth: 0.1)" step="0.01" value="0.1">
         </div>
-        
         <div class="trade-row">
             <button class="action-btn buy" onclick="execTrade('BUY')">BUY</button>
             <button class="action-btn sell" onclick="execTrade('SELL')">SELL</button>
         </div>
-        <button class="action-btn" onclick="execClose()" style="background:#ffa000;">🔴 TUTUP POSISI (Ambil Profit/Loss)</button>
+        <button class="action-btn" onclick="execClose()" style="background:#ffa000; color:black;">🔴 TUTUP POSISI (AMBIL PROFIT/LOSS)</button>
     </div>
 
+    <!-- TAB 2: KALENDER NEWS TRADINGVIEW -->
     <div id="news" class="content">
-        <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <h4>🤖 Minta Analisis Berita Hari Ini</h4>
-            <p style="font-size:12px; color:#aaa;">Pilih negara dan indikator, AI akan membedah dampaknya untuk Anda.</p>
-            <select id="newsCountry">
-                <option value="US">🇺🇸 Amerika Serikat (USD)</option>
-                <option value="EU">🇪🇺 Eropa (EUR)</option>
-                <option value="UK">🇬🇧 Inggris (GBP)</option>
-                <option value="JP">🇯🇵 Jepang (JPY)</option>
-            </select>
-            <input type="text" id="newsTopic" placeholder="Kejadian (Cth: Inflasi naik, Suku Bunga)">
-            <button class="action-btn buy" onclick="askNews()">KIRIM KE AI</button>
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+            <h4>🤖 Minta AI Analisis Berita</h4>
+            <input type="text" id="newsTopic" placeholder="Ketik kejadian (Cth: Inflasi US hari ini)">
+            <button class="action-btn buy" onclick="askNews()">KIRIM KE BOT AI</button>
+        </div>
+
+        <div style="height: 400px; background: #131722; border-radius: 5px; overflow: hidden;">
+            <!-- TradingView Economic Calendar Widget -->
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+              {
+              "colorTheme": "dark",
+              "isTransparent": true,
+              "width": "100%",
+              "height": "400",
+              "locale": "id",
+              "importanceFilter": "-1,0,1",
+              "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD"
+              }
+              </script>
+            </div>
         </div>
     </div>
 
+    <!-- TAB 3: EDUKASI LENGKAP -->
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <h4>🔴 High Impact News (Berbahaya)</h4>
-            <button class="action-btn" onclick="reqEdu('NFP (Non-Farm Payroll)')" style="background:#4a148c;">NFP (Ketenagakerjaan AS)</button>
-            <button class="action-btn" onclick="reqEdu('CPI (Data Inflasi)')" style="background:#4a148c;">CPI (Data Inflasi)</button>
-            <button class="action-btn" onclick="reqEdu('FOMC / Suku Bunga The Fed')" style="background:#4a148c;">FOMC (Suku Bunga)</button>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Klik indikator di bawah, App akan tertutup dan Bot akan mengirimkan penjelasan super lengkap beserta analoginya di obrolan chat.</p>
             
-            <h4 style="margin-top:15px;">🟡 Medium Impact News</h4>
-            <button class="action-btn" onclick="reqEdu('Retail Sales')" style="background:#f57f17;">Retail Sales (Penjualan Ritel)</button>
-            <button class="action-btn" onclick="reqEdu('PMI (Purchasing Managers Index)')" style="background:#f57f17;">PMI (Aktivitas Pabrik)</button>
+            <h4 style="color: #ef5350;">🔴 High Impact (Dampak Besar)</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="reqEdu('NFP (Non-Farm Payroll)')">NFP (Tenaga Kerja)</button>
+                <button class="edu-btn bg-red" onclick="reqEdu('CPI (Consumer Price Index)')">CPI (Inflasi Konsumen)</button>
+                <button class="edu-btn bg-red" onclick="reqEdu('FOMC / Suku Bunga Fed')">FOMC (Suku Bunga)</button>
+                <button class="edu-btn bg-red" onclick="reqEdu('GDP (Gross Domestic Product)')">GDP (Pertumbuhan Ekonomi)</button>
+                <button class="edu-btn bg-red" onclick="reqEdu('PPI (Producer Price Index)')">PPI (Inflasi Produsen)</button>
+                <button class="edu-btn bg-red" onclick="reqEdu('Unemployment Rate')">Tingkat Pengangguran</button>
+            </div>
             
-            <h4 style="margin-top:15px;">🟢 Low Impact & Konsep Dasar</h4>
-            <button class="action-btn" onclick="reqEdu('Initial Jobless Claims')" style="background:#1b5e20;">Klaim Pengangguran</button>
-            <button class="action-btn" onclick="reqEdu('Smart Money Concept dan Liquidity')" style="background:#1b5e20;">SMC & Likuiditas</button>
+            <h4 style="margin-top:15px; color: #ffb300;">🟡 Medium Impact (Dampak Sedang)</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="reqEdu('Retail Sales')">Retail Sales</button>
+                <button class="edu-btn bg-orange" onclick="reqEdu('Core PCE Price Index')">Core PCE (Inflasi Fed)</button>
+                <button class="edu-btn bg-orange" onclick="reqEdu('PMI (Purchasing Managers Index)')">PMI Manufaktur/Jasa</button>
+                <button class="edu-btn bg-orange" onclick="reqEdu('Building Permits & Housing')">Data Perumahan</button>
+            </div>
+            
+            <h4 style="margin-top:15px; color: #66bb6a;">🟢 Low Impact & Materi Dasar</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="reqEdu('Initial Jobless Claims')">Klaim Pengangguran</button>
+                <button class="edu-btn bg-green" onclick="reqEdu('Crude Oil Inventories')">Stok Minyak Mentah</button>
+                <button class="edu-btn bg-blue" onclick="reqEdu('Smart Money Concept (SMC)')">Materi SMC</button>
+                <button class="edu-btn bg-blue" onclick="reqEdu('Supply and Demand (SnD)')">Materi Supply/Demand</button>
+            </div>
         </div>
     </div>
 
@@ -96,9 +129,12 @@
         
         let ws;
         let currentPrice = 0;
+        
+        // VARIABEL STATE (Akan disimpan ke Memori HP)
+        let currentPosition = ''; 
         let entryPrice = 0;
-        let currentPosition = ''; // 'BUY' atau 'SELL'
         let activeLot = 0;
+        let savedPair = '';
 
         function showTab(t, elem) {
             document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -107,7 +143,28 @@
             elem.classList.add('active');
         }
 
-        // MESIN WEBSOCKET REALTIME
+        // SISTEM ANTI-HILANG (SAVE/LOAD LOKAL)
+        function saveState() {
+            let state = { pos: currentPosition, price: entryPrice, lot: activeLot, pair: document.getElementById("pair").value };
+            localStorage.setItem('tradeData', JSON.stringify(state));
+        }
+
+        function loadState() {
+            let data = localStorage.getItem('tradeData');
+            if (data) {
+                let state = JSON.parse(data);
+                if (state.pos !== '') {
+                    currentPosition = state.pos;
+                    entryPrice = state.price;
+                    activeLot = state.lot;
+                    document.getElementById("pair").value = state.pair; // Kembalikan ke pair yang ditrade
+                    document.getElementById('status-text').innerText = `POSISI AKTIF: ${currentPosition} @ ${entryPrice}`;
+                    document.getElementById('status-text').style.color = '#089981';
+                }
+            }
+        }
+
+        // KONEKSI DATA REALTIME
         function connectWS(symbol) {
             if(ws) ws.close();
             let wsSymbol = symbol.toLowerCase();
@@ -129,11 +186,7 @@
                 return;
             }
             
-            let diff = 0;
-            if(currentPosition === 'BUY') diff = currentPrice - entryPrice;
-            if(currentPosition === 'SELL') diff = entryPrice - currentPrice;
-            
-            // Perhitungan PnL Simulator (Lot * Perbedaan Harga * Multiplier)
+            let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
             let multiplier = document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100;
             let pnl = diff * activeLot * multiplier;
             
@@ -149,11 +202,8 @@
         }
 
         function execTrade(type) {
-            if(currentPosition !== '') {
-                Telegram.WebApp.showAlert("Anda masih punya posisi aktif! Tutup dulu.");
-                return;
-            }
-            if(currentPrice === 0) return;
+            if(currentPosition !== '') { Telegram.WebApp.showAlert("Masih ada posisi aktif! Tutup dulu."); return; }
+            if(currentPrice === 0) { Telegram.WebApp.showAlert("Menunggu harga..."); return; }
             
             currentPosition = type;
             entryPrice = currentPrice;
@@ -162,30 +212,22 @@
             document.getElementById('status-text').innerText = `POSISI AKTIF: ${type} @ ${entryPrice}`;
             document.getElementById('status-text').style.color = '#089981';
             
+            saveState(); // SIMPAN KE MEMORI HP
             Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-            // Hanya visual lokal, tidak dikirim ke bot dulu agar layar tidak tertutup
         }
 
         function execClose() {
-            if(currentPosition === '') {
-                Telegram.WebApp.showAlert("Tidak ada posisi untuk ditutup.");
-                return;
-            }
+            if(currentPosition === '') { Telegram.WebApp.showAlert("Tidak ada posisi aktif."); return; }
             
-            // Hitung final PnL
             let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
             let multiplier = document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100;
             let finalPnL = diff * activeLot * multiplier;
             
-            let data = { 
-                action: 'CLOSE_TRADE', 
-                pair: document.getElementById("pair").value,
-                type: currentPosition,
-                pnl: finalPnL.toFixed(2)
-            };
+            let data = { action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) };
             
-            // Reset state
+            // RESET & HAPUS DARI MEMORI HP
             currentPosition = '';
+            localStorage.removeItem('tradeData');
             document.getElementById('status-text').innerText = `Menunggu Market...`;
             document.getElementById('status-text').style.color = '#aaa';
             
@@ -193,17 +235,17 @@
         }
 
         function askNews() {
-            let c = document.getElementById("newsCountry").value;
             let t = document.getElementById("newsTopic").value;
             if(!t) { Telegram.WebApp.showAlert("Isi topik beritanya!"); return; }
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'NEWS_ANALYSIS', country: c, topic: t }));
+            Telegram.WebApp.sendData(JSON.stringify({ action: 'NEWS_ANALYSIS', topic: t }));
         }
 
         function reqEdu(materi) {
             Telegram.WebApp.sendData(JSON.stringify({ action: 'EDUKASI', materi: materi }));
         }
 
-        // Init pertama kali
+        // INIT
+        loadState(); // Panggil memori saat aplikasi baru dibuka
         changePair();
     </script>
 </body>
