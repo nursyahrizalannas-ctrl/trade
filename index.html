@@ -7,7 +7,7 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #0b0e14; color: #fff; margin: 0; padding: 10px; }
         .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
-        .tab-btn { flex: 1; padding: 10px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; }
+        .tab-btn { flex: 1; padding: 10px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .tab-btn.active { background: #2962ff; color: #fff; }
         .content { display: none; } .content.active { display: block; }
         
@@ -16,11 +16,9 @@
         .demo-panel span { color: #aaa; font-size: 12px; }
         .demo-panel h2 { margin: 5px 0 0 0; color: #089981; font-size: 22px; }
 
-        input, select { width: 100%; padding: 12px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
         button.action-btn { width: 100%; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; }
         .buy { background: #089981; } .sell { background: #f23645; }
-        
-        /* Layout tombol trade bersebelahan */
         .trade-row { display: flex; gap: 10px; margin-top: 5px; }
         .trade-row button { flex: 1; }
     </style>
@@ -28,10 +26,9 @@
 <body>
     <div class="tabs">
         <button class="tab-btn active" onclick="showTab('main')">📈 Trade</button>
-        <button class="tab-btn" onclick="showTab('news')">📰 News AI</button>
+        <button class="tab-btn" onclick="showTab('news')">📰 News & AI</button>
     </div>
 
-    <!-- TAB TRADE: CHART & GAME -->
     <div id="main" class="content active">
         <div class="demo-panel">
             <span>Saldo Demo Account</span>
@@ -53,21 +50,23 @@
         </div>
     </div>
 
-    <!-- TAB NEWS: FILTER NEGARA -->
     <div id="news" class="content">
-        <label style="font-size: 12px; color: #aaa;">Pilih Negara:</label>
-        <select id="newsCountry">
-            <option value="Amerika Serikat (US)">🇺🇸 Amerika Serikat (USD)</option>
-            <option value="Eropa (Eurozone)">🇪🇺 Eropa (EUR)</option>
-            <option value="Inggris (UK)">🇬🇧 Inggris (GBP)</option>
-            <option value="Jepang">🇯🇵 Jepang (JPY)</option>
-        </select>
+        <iframe src="https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&lang=1" width="100%" height="250" frameborder="0" style="border-radius:5px; margin-bottom:10px; background:white;"></iframe>
 
-        <label style="font-size: 12px; color: #aaa;">Tanggal & Topik:</label>
-        <input type="date" id="newsDate">
-        <input type="text" id="newsTopic" placeholder="Indikator (Cth: NFP, Suku Bunga)">
-        
-        <button class="action-btn" onclick="execNews()" style="background:#2962ff; margin-top: 10px;">ANALISIS BERITA NEGARA INI</button>
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; border: 1px solid #363c4e;">
+            <h4 style="margin: 0 0 10px 0; color: #2962ff; text-align: center;">🤖 Minta Analisis AI</h4>
+            <select id="newsCountry">
+                <option value="Amerika Serikat (US)">🇺🇸 Amerika Serikat (USD)</option>
+                <option value="Eropa (Eurozone)">🇪🇺 Eropa (EUR)</option>
+                <option value="Inggris (UK)">🇬🇧 Inggris (GBP)</option>
+                <option value="Jepang">🇯🇵 Jepang (JPY)</option>
+            </select>
+            <div style="display: flex; gap: 5px;">
+                <input type="date" id="newsDate" style="flex: 1;">
+                <input type="text" id="newsTopic" placeholder="Topik (Cth: NFP)" style="flex: 1;">
+            </div>
+            <button class="action-btn" onclick="execNews()" style="background:#2962ff; margin-top: 5px; padding: 10px;">KIRIM KE BOT AI</button>
+        </div>
     </div>
 
     <script>
@@ -98,7 +97,8 @@
                 lot: document.getElementById("lot").value || "0.01"
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.close();
+            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            // Menghapus Telegram.WebApp.close() agar layar tidak langsung tertutup
         }
 
         function execNews() {
@@ -109,7 +109,8 @@
                 topic: document.getElementById("newsTopic").value 
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.close();
+            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            // Menghapus Telegram.WebApp.close() agar layar tidak langsung tertutup
         }
 
         updateChart();
