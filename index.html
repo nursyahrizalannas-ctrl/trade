@@ -11,7 +11,6 @@
         .tab-btn.active { background: #2962ff; color: #fff; }
         .content { display: none; } .content.active { display: block; }
         
-        /* Panel Live PnL */
         .live-panel { background: #17212b; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e; }
         .live-price { font-size: 24px; font-weight: bold; color: #e0e0e0; margin: 5px 0; }
         .pnl-box { font-size: 20px; font-weight: bold; padding: 10px; border-radius: 5px; background: #0b0e14; margin-top: 5px; }
@@ -19,13 +18,12 @@
 
         input, select { width: 100%; padding: 10px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
         button.action-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; margin-top: 5px; }
-        .buy { background: #089981; } .sell { background: #f23645; }
+        .buy { background: #089981; } .sell { background: #f23645; } .blue { background: #1976d2; }
         .trade-row { display: flex; gap: 5px; margin-top: 5px; }
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
         
         h4 { margin: 0 0 10px 0; color: #2962ff; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
         
-        /* Grid Edukasi */
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px;}
         .edu-btn { padding: 10px; font-size: 11px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
         .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } .bg-green { background: #388e3c; } .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; }
@@ -58,20 +56,23 @@
             <button class="action-btn buy" onclick="execTrade('BUY')">BUY</button>
             <button class="action-btn sell" onclick="execTrade('SELL')">SELL</button>
         </div>
-        <button class="action-btn" onclick="execClose()" style="background:#ffa000; color:black;">🔴 TUTUP POSISI (AMBIL PROFIT/LOSS)</button>
+        <button class="action-btn" onclick="execClose()" style="background:#ffa000; color:black;">🔴 TUTUP POSISI</button>
     </div>
 
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-            <h4>🤖 Analisis Data Kalender</h4>
-            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks penjelasan berita ke bawah. AI akan menerjemahkannya ke Bahasa Indonesia dan memberi sinyal market.</p>
+            <h4>🤖 Fitur Kalender AI</h4>
+            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, lalu pilih mau diterjemahkan saja atau dianalisis dampaknya.</p>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
                 <input type="text" id="newsAct" placeholder="Aktual">
-                <input type="text" id="newsPrev" placeholder="Previous">
-                <input type="text" id="newsFore" placeholder="Forecast">
+                <input type="text" id="newsPrev" placeholder="Prev">
+                <input type="text" id="newsFore" placeholder="Fore">
             </div>
-            <button class="action-btn buy" onclick="askCalendarNews()">KIRIM KE BOT AI</button>
+            <div class="trade-row">
+                <button class="action-btn blue" onclick="processNews('TRANSLATE')">🔤 TERJEMAHKAN</button>
+                <button class="action-btn buy" onclick="processNews('ANALYZE')">🤖 ANALISIS</button>
+            </div>
         </div>
         <div style="height: 400px; background: #131722; border-radius: 5px; overflow: hidden;">
             <div class="tradingview-widget-container">
@@ -85,29 +86,29 @@
 
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Mini App akan menutup otomatis untuk memuat materi panjang di chat bot Anda.</p>
-            <h4 style="color: #ef5350;">🔴 High Impact (Dampak Besar)</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Pilih materi. Mini App akan menutup otomatis untuk memuat materi.</p>
+            <h4 style="color: #ef5350;">🔴 High Impact</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-red" onclick="reqEdu('NFP (Non-Farm Payroll)')">NFP (Tenaga Kerja)</button>
-                <button class="edu-btn bg-red" onclick="reqEdu('CPI (Consumer Price Index)')">CPI (Inflasi Konsumen)</button>
-                <button class="edu-btn bg-red" onclick="reqEdu('FOMC / Suku Bunga Fed')">FOMC (Suku Bunga)</button>
-                <button class="edu-btn bg-red" onclick="reqEdu('GDP (Gross Domestic Product)')">GDP (Ekonomi)</button>
-                <button class="edu-btn bg-red" onclick="reqEdu('PPI (Producer Price Index)')">PPI (Inflasi Produsen)</button>
-                <button class="edu-btn bg-red" onclick="reqEdu('Unemployment Rate')">Tingkat Pengangguran</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'NFP (Non-Farm Payroll)')">NFP (Tenaga Kerja)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'CPI (Consumer Price Index)')">CPI (Inflasi)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'FOMC / Suku Bunga Fed')">FOMC (Bunga)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'GDP (Gross Domestic Product)')">GDP (Ekonomi)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI (Producer Price Index)')">PPI (Produsen)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Pengangguran</button>
             </div>
             <h4 style="margin-top:15px; color: #ffb300;">🟡 Medium Impact</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-orange" onclick="reqEdu('Retail Sales')">Retail Sales</button>
-                <button class="edu-btn bg-orange" onclick="reqEdu('Core PCE Price Index')">Core PCE (Inflasi)</button>
-                <button class="edu-btn bg-orange" onclick="reqEdu('PMI (Purchasing Managers Index)')">PMI Manufaktur</button>
-                <button class="edu-btn bg-orange" onclick="reqEdu('Building Permits & Housing')">Data Perumahan</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Retail Sales')">Retail Sales</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Core PCE Price Index')">Core PCE</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'PMI (Purchasing Managers Index)')">PMI Manufaktur</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Building Permits & Housing')">Perumahan</button>
             </div>
             <h4 style="margin-top:15px; color: #66bb6a;">🟢 Basic & Technical</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-green" onclick="reqEdu('Initial Jobless Claims')">Klaim Pengangguran</button>
-                <button class="edu-btn bg-green" onclick="reqEdu('Crude Oil Inventories')">Stok Minyak</button>
-                <button class="edu-btn bg-blue" onclick="reqEdu('Smart Money Concept (SMC)')">Materi SMC</button>
-                <button class="edu-btn bg-blue" onclick="reqEdu('Supply and Demand (SnD)')">Materi Supply/Demand</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Klaim Pengangguran</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Crude Oil Inventories')">Stok Minyak</button>
+                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Smart Money Concept (SMC)')">Materi SMC</button>
+                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Supply and Demand (SnD)')">Materi SnD</button>
             </div>
         </div>
     </div>
@@ -115,13 +116,12 @@
     <div id="combo" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
             <h4>🔄 Skenario Combo News</h4>
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Beberapa berita sering rilis bersamaan. Klik di bawah untuk melihat simulasi dampaknya (Searah vs Divergence).</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Simulasi dampak berita yang rilis bersamaan (Searah vs Berlawanan).</p>
             <div class="edu-grid">
-                <button class="edu-btn bg-purple" onclick="reqCombo('NFP & Unemployment Rate')">NFP & Pengangguran</button>
-                <button class="edu-btn bg-purple" onclick="reqCombo('CPI & Core CPI')">CPI & Core CPI</button>
-                <button class="edu-btn bg-purple" onclick="reqCombo('Retail Sales & Core Retail Sales')">Retail & Core Retail</button>
-                <button class="edu-btn bg-purple" onclick="reqCombo('PMI Manufacturing & Services')">PMI Mfg & Jasa</button>
-                <button class="edu-btn bg-purple" onclick="reqCombo('GDP & Jobless Claims')">GDP & Klaim Pengangguran</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'NFP & Unemployment Rate')">NFP & Pengangguran</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'CPI & Core CPI')">CPI & Core CPI</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'Retail Sales & Core Retail Sales')">Retail & Core</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'PMI Manufacturing & Services')">PMI Mfg & Jasa</button>
             </div>
         </div>
     </div>
@@ -138,8 +138,7 @@
         }
 
         function saveState() {
-            let state = { pos: currentPosition, price: entryPrice, lot: activeLot, pair: document.getElementById("pair").value };
-            localStorage.setItem('tradeData', JSON.stringify(state));
+            localStorage.setItem('tradeData', JSON.stringify({ pos: currentPosition, price: entryPrice, lot: activeLot, pair: document.getElementById("pair").value }));
         }
 
         function loadState() {
@@ -157,10 +156,9 @@
 
         function connectWS(symbol) {
             if(ws) ws.close();
-            let wsSymbol = symbol.toLowerCase();
-            ws = new WebSocket(`wss://stream.binance.com:9443/ws/${wsSymbol}@trade`);
+            ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`);
             ws.onmessage = (event) => {
-                let data = JSON.parse(event.data); currentPrice = parseFloat(data.p);
+                currentPrice = parseFloat(JSON.parse(event.data).p);
                 document.getElementById('live-price').innerText = currentPrice.toFixed(2); calculatePnL();
             };
         }
@@ -169,8 +167,7 @@
             let pnlDisplay = document.getElementById('pnl-display');
             if(currentPosition === '') { pnlDisplay.innerText = `Floating: $0.00`; pnlDisplay.className = 'pnl-box'; return; }
             let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
-            let multiplier = document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100;
-            let pnl = diff * activeLot * multiplier;
+            let pnl = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
             pnlDisplay.innerText = `Floating: $${pnl.toFixed(2)}`;
             pnlDisplay.className = pnl >= 0 ? 'pnl-box pnl-green' : 'pnl-box pnl-red';
         }
@@ -182,7 +179,7 @@
         }
 
         function execTrade(type) {
-            if(currentPosition !== '') { Telegram.WebApp.showAlert("Masih ada posisi aktif! Tutup dulu."); return; }
+            if(currentPosition !== '') { Telegram.WebApp.showAlert("Tutup posisi aktif dulu."); return; }
             if(currentPrice === 0) { Telegram.WebApp.showAlert("Menunggu harga..."); return; }
             currentPosition = type; entryPrice = currentPrice; activeLot = parseFloat(document.getElementById("lot").value) || 0.01;
             document.getElementById('status-text').innerText = `POSISI AKTIF: ${type} @ ${entryPrice}`;
@@ -190,31 +187,28 @@
         }
 
         function execClose() {
-            if(currentPosition === '') { Telegram.WebApp.showAlert("Tidak ada posisi aktif."); return; }
+            if(currentPosition === '') return;
             let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
-            let multiplier = document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100;
-            let finalPnL = diff * activeLot * multiplier;
-            let data = { action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) };
+            let finalPnL = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
+            Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) }));
             currentPosition = ''; localStorage.removeItem('tradeData');
             document.getElementById('status-text').innerText = `Menunggu Market...`; document.getElementById('status-text').style.color = '#aaa';
-            Telegram.WebApp.sendData(JSON.stringify(data));
         }
 
-        function askCalendarNews() {
+        function processNews(tipe) {
             let n = document.getElementById("newsName").value;
-            let a = document.getElementById("newsAct").value || "Belum rilis";
-            let p = document.getElementById("newsPrev").value || "-";
-            let f = document.getElementById("newsFore").value || "-";
-            if(!n) { Telegram.WebApp.showAlert("Kopas dulu nama/penjelasan berita dari kalender ke kolom pertama!"); return; }
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'CALENDAR_ANALYSIS', nama: n, aktual: a, previous: p, forecast: f }));
+            if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
+            Telegram.WebApp.sendData(JSON.stringify({ 
+                action: tipe === 'TRANSLATE' ? 'TRANSLATE_NEWS' : 'CALENDAR_ANALYSIS', 
+                nama: n, 
+                aktual: document.getElementById("newsAct").value || "-", 
+                previous: document.getElementById("newsPrev").value || "-", 
+                forecast: document.getElementById("newsFore").value || "-" 
+            }));
         }
 
-        function reqEdu(materi) {
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'EDUKASI', materi: materi }));
-        }
-
-        function reqCombo(comboType) {
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'COMBO_NEWS', combo: comboType }));
+        function reqAction(act, val) {
+            Telegram.WebApp.sendData(JSON.stringify({ action: act, data: val }));
         }
 
         loadState(); changePair();
