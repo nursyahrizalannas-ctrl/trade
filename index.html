@@ -3,36 +3,56 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: #0e1621; color: white; padding: 20px; }
-        .box { background: #17212b; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-trade { background: #2481cc; color: white; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0b0e14; color: #fff; margin: 0; padding: 15px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; background: #1f2630; border: none; color: #aaa; border-radius: 5px; }
+        .tab-btn.active { background: #2962ff; color: #fff; }
+        .content { display: none; } .content.active { display: block; }
+        .btn-trade { width: 48%; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .buy { background: #089981; } .sell { background: #f23645; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #131722; border: 1px solid #363c4e; color: white; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h3>Dashboard Trading</h3>
-    
-    <div class="box">
-        <label>Pair</label>
-        <select id="pair" style="width:100%; padding:10px;">
-            <option value="XAUUSD">XAUUSD</option>
-            <option value="BTCUSD">BTCUSD</option>
-        </select>
-        <button class="btn-trade" onclick="kirimTrade()">KIRIM TRADE</button>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('trade')">🚀 Trade</button>
+        <button class="tab-btn" onclick="showTab('chart')">📈 Chart</button>
+        <button class="tab-btn" onclick="showTab('news')">📰 News</button>
+    </div>
+
+    <div id="trade" class="content active">
+        <select id="pair"><option value="XAUUSD">XAUUSD</option><option value="BTCUSD">BTCUSD</option><option value="DXY">DXY</option></select>
+        <input type="number" id="lot" placeholder="Lot Size (e.g., 0.01)" step="0.01">
+        <div style="display:flex; gap:10px;">
+            <button class="btn-trade buy" onclick="exec('BUY')">BUY</button>
+            <button class="btn-trade sell" onclick="exec('SELL')">SELL</button>
+        </div>
+    </div>
+
+    <div id="chart" class="content">
+        <div id="tv-chart" style="height:350px;"></div>
+    </div>
+
+    <div id="news" class="content">
+        <input type="date" id="date">
+        <input type="text" id="topic" placeholder="Analisis/Topik">
+        <button onclick="exec('NEWS')" style="width:100%; padding:15px; background:#2962ff; border:none; color:white;">Analisis Berita</button>
     </div>
 
     <script>
         Telegram.WebApp.ready();
-        function kirimTrade() {
-            let pair = document.getElementById("pair").value;
-            // Getaran agar tahu tombol diklik
-            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            // Mengirim data
-            Telegram.WebApp.sendData("TRADE_" + pair);
-            alert("Data Trade " + pair + " Terkirim!");
+        function showTab(t) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
+        }
+        function exec(type) {
+            let data = { type: type, pair: document.getElementById('pair').value, lot: document.getElementById('lot').value, date: document.getElementById('date').value, topic: document.getElementById('topic').value };
+            Telegram.WebApp.sendData(JSON.stringify(data));
             Telegram.WebApp.close();
         }
+        new TradingView.widget({"container_id":"tv-chart", "symbol":"OANDA:XAUUSD", "theme":"dark", "autosize":true, "interval":"15"});
     </script>
 </body>
 </html>
