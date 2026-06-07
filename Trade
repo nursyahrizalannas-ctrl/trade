@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        button { padding: 15px; background: #2481cc; color: white; border: none; border-radius: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Trading Dashboard</h2>
+    <input type="text" id="dataInput" placeholder="Masukkan Target Harga (Contoh: 2350)">
+    <br><br>
+    <button onclick="kirimData()">Simpan Target & Kirim ke Bot</button>
+
+    <script>
+        function kirimData() {
+            let data = document.getElementById('dataInput').value;
+            // Ini akan mengirim teks ke bot Python
+            Telegram.WebApp.sendData("Target Harga: " + data);
+            Telegram.WebApp.close();
+        }
+    </script>
+</body>
+</html>
