@@ -64,16 +64,22 @@
         <button class="action-btn" onclick="execClose()" style="background:#ffa000; color:black;">🔴 TUTUP POSISI (AMBIL PROFIT/LOSS)</button>
     </div>
 
-    <!-- TAB 2: KALENDER NEWS TRADINGVIEW -->
+    <!-- TAB 2: KALENDER NEWS & ANALISIS -->
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-            <h4>🤖 Minta AI Analisis Berita</h4>
-            <input type="text" id="newsTopic" placeholder="Ketik kejadian (Cth: NFP Aktual 250K Prev 150K)">
-            <button class="action-btn buy" onclick="askNews()">KIRIM KE BOT AI</button>
+            <h4>🤖 Analisis Data Kalender</h4>
+            <p style="font-size:11px; color:#aaa; margin-top:0;">Lihat kalender di bawah. Masukkan angkanya ke sini untuk dianalisis AI (Bahasa Indonesia).</p>
+            <input type="text" id="newsName" placeholder="Nama Berita (Cth: NFP / CPI)">
+            <div class="trade-row">
+                <input type="text" id="newsAct" placeholder="Aktual (Bila ada)">
+                <input type="text" id="newsPrev" placeholder="Previous">
+                <input type="text" id="newsFore" placeholder="Forecast">
+            </div>
+            <button class="action-btn buy" onclick="askCalendarNews()">KIRIM KE BOT AI</button>
         </div>
 
         <div style="height: 400px; background: #131722; border-radius: 5px; overflow: hidden;">
-            <!-- TradingView Economic Calendar Widget (Locale diatur ke ID) -->
+            <!-- TradingView Economic Calendar Widget -->
             <div class="tradingview-widget-container">
               <div class="tradingview-widget-container__widget"></div>
               <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
@@ -94,7 +100,7 @@
     <!-- TAB 3: EDUKASI LENGKAP -->
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Klik indikator di bawah, App akan tertutup dan Bot akan mengirimkan penjelasan super lengkap beserta analoginya di obrolan chat.</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Klik indikator di bawah, App akan tertutup otomatis & Bot mengirimkan penjelasan lengkap berdasar analogi keseharian.</p>
             
             <h4 style="color: #ef5350;">🔴 High Impact (Dampak Besar)</h4>
             <div class="edu-grid">
@@ -120,6 +126,8 @@
                 <button class="edu-btn bg-green" onclick="reqEdu('Crude Oil Inventories')">Stok Minyak Mentah</button>
                 <button class="edu-btn bg-blue" onclick="reqEdu('Smart Money Concept (SMC)')">Materi SMC</button>
                 <button class="edu-btn bg-blue" onclick="reqEdu('Supply and Demand (SnD)')">Materi Supply/Demand</button>
+                <button class="edu-btn bg-blue" onclick="reqEdu('Support and Resistance')">Materi SNR</button>
+                <button class="edu-btn bg-blue" onclick="reqEdu('Market Structure (BOS & CHoCH)')">Market Structure</button>
             </div>
         </div>
     </div>
@@ -228,22 +236,32 @@
             document.getElementById('status-text').style.color = '#aaa';
             
             Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.close(); // Tutup Mini App
         }
 
-        function askNews() {
-            let t = document.getElementById("newsTopic").value;
-            if(!t) { Telegram.WebApp.showAlert("Isi topik beritanya!"); return; }
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'NEWS_ANALYSIS', topic: t }));
-            Telegram.WebApp.close(); // Tutup Mini App
+        // FUNGSI BARU: Analisis Data Kalender
+        function askCalendarNews() {
+            let n = document.getElementById("newsName").value;
+            let a = document.getElementById("newsAct").value || "Belum rilis";
+            let p = document.getElementById("newsPrev").value || "-";
+            let f = document.getElementById("newsFore").value || "-";
+            
+            if(!n) { Telegram.WebApp.showAlert("Nama berita wajib diisi!"); return; }
+            
+            let dataPayload = {
+                action: 'CALENDAR_ANALYSIS',
+                nama: n,
+                aktual: a,
+                previous: p,
+                forecast: f
+            };
+            Telegram.WebApp.sendData(JSON.stringify(dataPayload));
         }
 
         function reqEdu(materi) {
             Telegram.WebApp.sendData(JSON.stringify({ action: 'EDUKASI', materi: materi }));
-            Telegram.WebApp.close(); // Tutup Mini App
         }
 
-        loadState();
+        loadState(); 
         changePair();
     </script>
 </body>
