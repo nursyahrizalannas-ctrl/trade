@@ -22,7 +22,7 @@
         .trade-row { display: flex; gap: 5px; margin-top: 5px; }
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
         
-        h4 { margin: 0 0 10px 0; color: #2962ff; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
+        h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
         
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px;}
         .edu-btn { padding: 10px; font-size: 11px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
@@ -61,7 +61,7 @@
 
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-            <h4>🤖 Fitur Kalender AI</h4>
+            <h4 style="color:#2962ff;">🤖 Fitur Kalender AI</h4>
             <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, lalu pilih mau diterjemahkan saja atau dianalisis dampaknya.</p>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
@@ -96,14 +96,14 @@
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI (Producer Price Index)')">PPI (Produsen)</button>
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Pengangguran</button>
             </div>
-            <h4 style="margin-top:15px; color: #ffb300;">🟡 Medium Impact</h4>
+            <h4 style="color: #ffb300;">🟡 Medium Impact</h4>
             <div class="edu-grid">
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Retail Sales')">Retail Sales</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Core PCE Price Index')">Core PCE</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'PMI (Purchasing Managers Index)')">PMI Manufaktur</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Building Permits & Housing')">Perumahan</button>
             </div>
-            <h4 style="margin-top:15px; color: #66bb6a;">🟢 Basic & Technical</h4>
+            <h4 style="color: #66bb6a;">🟢 Basic & Technical</h4>
             <div class="edu-grid">
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Klaim Pengangguran</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Crude Oil Inventories')">Stok Minyak</button>
@@ -115,13 +115,23 @@
 
     <div id="combo" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <h4>🔄 Skenario Combo News</h4>
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Simulasi dampak berita yang rilis bersamaan (Searah vs Berlawanan).</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda beserta prioritas datanya (Institusional Logic).</p>
+            
+            <h4 style="color: #ef5350;">🔥 Dampak Sangat Tinggi</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'NFP & Unemployment Rate')">NFP & Pengangguran</button>
-                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'CPI & Core CPI')">CPI & Core CPI</button>
-                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'Retail Sales & Core Retail Sales')">Retail & Core</button>
-                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'PMI Manufacturing & Services')">PMI Mfg & Jasa</button>
+                <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket NFP (NFP, AHE, Unemployment)')">Paket NFP</button>
+                <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket CPI (Core CPI & CPI)')">Paket CPI</button>
+                <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket FOMC (Rate, Dot Plot, Press Con)')">Paket FOMC</button>
+                <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket PCE (Core PCE & PCE)')">Paket PCE</button>
+            </div>
+
+            <h4 style="color: #ffb300;">🟡 Dampak Tinggi & Menengah</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="reqAction('COMBO_NEWS', 'Paket GDP (GDP & Price Index)')">Paket GDP</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('COMBO_NEWS', 'Paket Retail Sales (Core & Reg)')">Paket Retail Sales</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('COMBO_NEWS', 'Paket ISM PMI (Mfg & Jasa)')">Paket ISM PMI</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'Paket PPI (Core PPI & PPI)')">Paket PPI</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('COMBO_NEWS', 'Paket JOLTS (Openings & Quits)')">Paket JOLTS</button>
             </div>
         </div>
     </div>
