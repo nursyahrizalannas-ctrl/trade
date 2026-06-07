@@ -6,52 +6,72 @@
     <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
         body { font-family: sans-serif; background-color: #0e1621; color: white; margin: 0; padding: 10px; }
-        .chart-container { height: 300px; width: 100%; margin-bottom: 20px; }
-        .news-box { background: #17212b; padding: 15px; border-radius: 10px; }
-        select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #242f3d; color: white; border: none; }
-        .news-content { font-size: 14px; color: #b1bad3; line-height: 1.5; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
+        .tab-btn { flex: 1; padding: 10px; background: #242f3d; border: none; color: white; border-radius: 5px; }
+        .tab-btn.active { background: #2481cc; }
+        .content { display: none; }
+        .content.active { display: block; }
+        .chart-container { height: 350px; width: 100%; }
+        .btn-trade { width: 48%; padding: 20px; border: none; border-radius: 10px; font-weight: bold; }
+        .buy { background: #26a69a; color: white; }
+        .sell { background: #ef5350; color: white; }
+        select { width: 100%; padding: 10px; margin-bottom: 10px; background: #242f3d; color: white; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h3>📊 XAUUSD Chart</h3>
-    <div class="chart-container" id="tradingview-chart"></div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('chart')">📈 Chart</button>
+        <button class="tab-btn" onclick="showTab('news')">📰 News</button>
+        <button class="tab-btn" onclick="showTab('trade')">🚀 Trade</button>
+    </div>
 
-    <div class="news-box">
-        <h3>📰 News & Analysis</h3>
-        <select id="newsOption" onchange="updateNews()">
-            <option value="NFP">Audit NFP</option>
-            <option value="CPI">Audit CPI</option>
-            <option value="FOMC">Audit FOMC</option>
+    <!-- TAB CHART -->
+    <div id="chart" class="content active">
+        <select id="symbolSelect" onchange="changeSymbol()">
+            <option value="OANDA:XAUUSD">XAUUSD</option>
+            <option value="BINANCE:BTCUSD">BTCUSD</option>
+            <option value="TVC:DXY">DXY</option>
         </select>
-        <div id="newsDisplay" class="news-content">Silakan pilih indikator di atas untuk melihat berita terbaru.</div>
+        <div class="chart-container" id="tv-chart"></div>
+    </div>
+
+    <!-- TAB NEWS -->
+    <div id="news" class="content">
+        <iframe src="https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&features=datepicker,timeselector,filters&countries=25,32,5,37,72,22,17,39,14,35,43,56,36,110,11,26,12,4&calType=day&timeZone=55&lang=1" width="100%" height="450" frameborder="0"></iframe>
+    </div>
+
+    <!-- TAB TRADE -->
+    <div id="trade" class="content" style="text-align: center; margin-top: 50px;">
+        <h3>One Click Entry</h3>
+        <button class="btn-trade buy" onclick="sendOrder('BUY')">BUY</button>
+        <button class="btn-trade sell" onclick="sendOrder('SELL')">SELL</button>
     </div>
 
     <script>
         Telegram.WebApp.ready();
+        let widget;
 
-        // 1. Inisialisasi Chart TradingView
-        new TradingView.widget({
-            "container_id": "tradingview-chart",
-            "symbol": "OANDA:XAUUSD",
-            "theme": "dark",
-            "autosize": true,
-            "interval": "15",
-            "timezone": "Etc/UTC"
-        });
-
-        // 2. Fungsi Update News Dinamis
-        function updateNews() {
-            let option = document.getElementById("newsOption").value;
-            let display = document.getElementById("newsDisplay");
-            
-            if(option === "NFP") {
-                display.innerHTML = "<b>NFP (Non-Farm Payrolls):</b> Data ketenagakerjaan AS. Jika data aktual > forecast, XAUUSD cenderung turun (USD menguat).";
-            } else if(option === "CPI") {
-                display.innerHTML = "<b>CPI (Consumer Price Index):</b> Data inflasi. Inflasi tinggi = suku bunga naik = XAUUSD cenderung turun.";
-            } else if(option === "FOMC") {
-                display.innerHTML = "<b>FOMC:</b> Pernyataan suku bunga The Fed. Sangat volatil, perhatikan arah kebijakan moneter.";
-            }
+        function showTab(tabName) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(tabName === 'chart') initChart();
         }
+
+        function initChart() {
+            let symbol = document.getElementById("symbolSelect").value;
+            document.getElementById("tv-chart").innerHTML = "";
+            widget = new TradingView.widget({
+                "container_id": "tv-chart", "symbol": symbol, "theme": "dark",
+                "autosize": true, "interval": "15", "timezone": "Etc/UTC"
+            });
+        }
+
+        function changeSymbol() { initChart(); }
+        function sendOrder(type) { Telegram.WebApp.sendData(type + "_" + document.getElementById("symbolSelect").value); Telegram.WebApp.close(); }
+
+        initChart(); // Load chart awal
     </script>
 </body>
 </html>
