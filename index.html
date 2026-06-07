@@ -7,14 +7,14 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #0b0e14; color: #fff; margin: 0; padding: 10px; }
         .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
-        .tab-btn { flex: 1; padding: 10px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .tab-btn { flex: 1; padding: 8px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 13px; }
         .tab-btn.active { background: #2962ff; color: #fff; }
         .content { display: none; } .content.active { display: block; }
         .demo-panel { background: #17212b; padding: 10px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid #2962ff; }
         .demo-panel span { color: #aaa; font-size: 12px; }
         .demo-panel h2 { margin: 5px 0 0 0; color: #089981; font-size: 22px; }
         input, select { width: 100%; padding: 10px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
-        button.action-btn { width: 100%; padding: 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; }
+        button.action-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; margin-top: 5px; }
         .buy { background: #089981; } .sell { background: #f23645; }
         .trade-row { display: flex; gap: 5px; margin-top: 5px; }
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
@@ -22,105 +22,105 @@
 </head>
 <body>
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('main')">📈 Trade</button>
-        <button class="tab-btn" onclick="showTab('news')">📰 News & AI</button>
+        <button class="tab-btn active" onclick="showTab('main', this)">📈 Trade</button>
+        <button class="tab-btn" onclick="showTab('cal', this)">📅 Kalender</button>
+        <button class="tab-btn" onclick="showTab('edu', this)">🧠 AI & Edu</button>
     </div>
 
     <div id="main" class="content active">
-        <div class="demo-panel">
-            <span>Saldo Demo Account</span>
-            <h2>$10,000.00</h2>
-        </div>
-        
-        <div id="tv-chart" style="height:300px; margin-bottom:10px;"></div>
-        
+        <div class="demo-panel"><span>Saldo Demo Account</span><h2>$10,000.00</h2></div>
+        <div id="tv-chart" style="height:280px; margin-bottom:10px;"></div>
         <select id="pair" onchange="updateChart()">
             <option value="XAUUSD">XAUUSD (Gold - OANDA)</option>
             <option value="BTCUSDT">BTCUSDT (Bitcoin - BINANCE)</option>
             <option value="EURUSD">EURUSD (Euro - OANDA)</option>
         </select>
-        
         <div class="trade-row">
             <input type="number" id="lot" placeholder="Lot (Cth: 0.1)" step="0.01">
-            <input type="number" id="tp" placeholder="Harga TP">
-            <input type="number" id="sl" placeholder="Harga SL">
+            <input type="number" id="tp" placeholder="TP">
+            <input type="number" id="sl" placeholder="SL">
         </div>
-        
         <div class="trade-row">
             <button class="action-btn buy" onclick="execTrade('BUY')">BUY</button>
             <button class="action-btn sell" onclick="execTrade('SELL')">SELL</button>
         </div>
-        
-        <button class="action-btn" onclick="execClose()" style="background:#ffa000; margin-top: 10px; padding: 10px;">🔴 TUTUP POSISI AKTIF (CLOSE)</button>
+        <button class="action-btn" onclick="execClose()" style="background:#ffa000;">🔴 TUTUP POSISI (CLOSE)</button>
     </div>
 
-    <div id="news" class="content">
-        <iframe src="https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&lang=1" width="100%" height="250" frameborder="0" style="border-radius:5px; margin-bottom:10px; background:white;"></iframe>
-
-        <div style="background: #17212b; padding: 10px; border-radius: 8px; border: 1px solid #363c4e;">
-            <h4 style="margin: 0 0 10px 0; color: #2962ff; text-align: center;">🤖 Analisis AI</h4>
-            <select id="newsCountry">
-                <option value="Amerika Serikat (US)">🇺🇸 Amerika Serikat</option>
-                <option value="Eropa (Eurozone)">🇪🇺 Eropa</option>
-                <option value="Inggris (UK)">🇬🇧 Inggris</option>
-                <option value="Jepang">🇯🇵 Jepang</option>
+    <div id="cal" class="content">
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+            <label style="font-size: 12px; color: #aaa;">Filter Negara Investing:</label>
+            <select id="filterCountry" onchange="filterInvesting()">
+                <option value="ALL">🌍 Tampilkan Semua</option>
+                <option value="5">🇺🇸 Amerika Serikat Saja</option>
+                <option value="72">🇪🇺 Eropa Saja</option>
+                <option value="4">🇬🇧 Inggris Saja</option>
+                <option value="35">🇯🇵 Jepang Saja</option>
             </select>
-            <div style="display: flex; gap: 5px;">
-                <input type="date" id="newsDate" style="flex: 1;">
-                <input type="text" id="newsTopic" placeholder="Topik (Cth: NFP)" style="flex: 1;">
-            </div>
-            <button class="action-btn" onclick="execNews()" style="background:#2962ff; margin-top: 5px; padding: 10px;">KIRIM KE BOT AI</button>
+        </div>
+        <iframe id="investing-iframe" src="https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&lang=1" width="100%" height="450" frameborder="0" style="border-radius:5px; background:white;"></iframe>
+    </div>
+
+    <div id="edu" class="content">
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; border: 1px solid #363c4e; margin-bottom: 10px;">
+            <h4 style="margin: 0 0 10px 0; color: #2962ff;">🤖 Tanya AI Fundamental</h4>
+            <input type="text" id="aiTopic" placeholder="Ketik kejadian (Cth: NFP buruk hari ini)">
+            <button class="action-btn" onclick="askAI()" style="background:#2962ff;">MINTA ANALISIS AI</button>
+        </div>
+
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; border: 1px solid #363c4e;">
+            <h4 style="margin: 0 0 10px 0; color: #089981;">📚 Materi Edukasi Trading</h4>
+            <button class="action-btn" onclick="reqEdu('SMC (Smart Money Concept)')" style="background:#1f2630; border: 1px solid #555;">Smart Money Concept (SMC)</button>
+            <button class="action-btn" onclick="reqEdu('Supply and Demand')" style="background:#1f2630; border: 1px solid #555;">Supply & Demand (SND)</button>
+            <button class="action-btn" onclick="reqEdu('Psikologi Trading')" style="background:#1f2630; border: 1px solid #555;">Psikologi & Money Management</button>
         </div>
     </div>
 
     <script>
         Telegram.WebApp.ready();
         
-        function showTab(t) {
+        function showTab(t, elem) {
             document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(t).classList.add('active');
-            event.currentTarget.classList.add('active');
+            elem.classList.add('active');
             if(t === 'main') updateChart();
+        }
+
+        // FUNGSI AJAIB FILTER INVESTING
+        function filterInvesting() {
+            let code = document.getElementById("filterCountry").value;
+            let url = "https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&lang=1";
+            if(code !== "ALL") {
+                url += "&countries=" + code;
+            }
+            document.getElementById("investing-iframe").src = url; // Refresh iframe dengan link baru
         }
 
         function updateChart() {
             let pair = document.getElementById("pair").value;
             let symbol = pair === "BTCUSDT" ? "BINANCE:BTCUSDT" : "OANDA:" + pair;
-            
             document.getElementById("tv-chart").innerHTML = "";
-            new TradingView.widget({
-                "container_id": "tv-chart", 
-                "symbol": symbol, 
-                "theme": "dark", "autosize": true, "interval": "15"
-            });
+            new TradingView.widget({ "container_id": "tv-chart", "symbol": symbol, "theme": "dark", "autosize": true, "interval": "15" });
         }
 
         function execTrade(type) {
-            let data = { 
-                action: 'OPEN_TRADE', 
-                type: type, 
-                pair: document.getElementById("pair").value, 
-                lot: document.getElementById("lot").value || "0.01",
-                tp: document.getElementById("tp").value || "0",
-                sl: document.getElementById("sl").value || "0"
-            };
+            let data = { action: 'OPEN_TRADE', type: type, pair: document.getElementById("pair").value, lot: document.getElementById("lot").value || "0.01", tp: document.getElementById("tp").value || "0", sl: document.getElementById("sl").value || "0" };
             Telegram.WebApp.sendData(JSON.stringify(data));
         }
 
         function execClose() {
-            let data = { action: 'CLOSE_TRADE' };
-            Telegram.WebApp.sendData(JSON.stringify(data));
+            Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE' }));
         }
 
-        function execNews() {
-            let data = { 
-                action: 'NEWS_FILTER', 
-                country: document.getElementById("newsCountry").value, 
-                date: document.getElementById("newsDate").value, 
-                topic: document.getElementById("newsTopic").value 
-            };
-            Telegram.WebApp.sendData(JSON.stringify(data));
+        function askAI() {
+            let topic = document.getElementById("aiTopic").value;
+            if(!topic) return;
+            Telegram.WebApp.sendData(JSON.stringify({ action: 'AI_ANALISIS', topic: topic }));
+        }
+
+        function reqEdu(materi) {
+            Telegram.WebApp.sendData(JSON.stringify({ action: 'EDUKASI', materi: materi }));
         }
 
         updateChart();
