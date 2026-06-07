@@ -54,7 +54,7 @@
         <iframe src="https://sslecal2.forexprostools.com/?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=1,2,3&lang=1" width="100%" height="250" frameborder="0" style="border-radius:5px; margin-bottom:10px; background:white;"></iframe>
 
         <div style="background: #17212b; padding: 10px; border-radius: 8px; border: 1px solid #363c4e;">
-            <h4 style="margin: 0 0 10px 0; color: #2962ff; text-align: center;">🤖 Minta Analisis AI</h4>
+            <h4 style="margin: 0 0 10px 0; color: #2962ff; text-align: center;">🤖 Analisis AI</h4>
             <select id="newsCountry">
                 <option value="Amerika Serikat (US)">🇺🇸 Amerika Serikat (USD)</option>
                 <option value="Eropa (Eurozone)">🇪🇺 Eropa (EUR)</option>
@@ -97,8 +97,6 @@
                 lot: document.getElementById("lot").value || "0.01"
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            // Menghapus Telegram.WebApp.close() agar layar tidak langsung tertutup
         }
 
         function execNews() {
@@ -109,8 +107,6 @@
                 topic: document.getElementById("newsTopic").value 
             };
             Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            // Menghapus Telegram.WebApp.close() agar layar tidak langsung tertutup
         }
 
         updateChart();
