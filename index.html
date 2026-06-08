@@ -22,11 +22,11 @@
         .trade-row { display: flex; gap: 5px; margin-top: 5px; }
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
         
-        h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
+        h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; font-size: 13px; }
         
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px;}
         .edu-btn { padding: 10px; font-size: 11px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
-        .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } .bg-green { background: #388e3c; } .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; }
+        .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } .bg-green { background: #388e3c; } .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; } .bg-dark { background: #37474f; }
     </style>
 </head>
 <body>
@@ -62,7 +62,7 @@
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
             <h4 style="color:#2962ff;">🤖 Fitur Kalender AI</h4>
-            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, lalu pilih mau diterjemahkan saja atau dianalisis dampaknya.</p>
+            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, pilih menu Terjemahkan atau Analisis Dampak.</p>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
                 <input type="text" id="newsAct" placeholder="Aktual">
@@ -86,29 +86,77 @@
 
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Pilih materi. Mini App akan menutup otomatis untuk mengirim materi ke chat.</p>
-            <h4 style="color: #ef5350;">🔴 High Impact</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia Fundamental Institusional. Klik materi untuk mendapatkan penjelasan lengkap AI.</p>
+            
+            <h4 style="color: #ef5350;">🏦 1. Bank Sentral & Moneter (Tier 1)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'NFP (Non-Farm Payroll)')">NFP (Tenaga Kerja)</button>
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'CPI (Consumer Price Index)')">CPI (Inflasi)</button>
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'FOMC / Suku Bunga Fed')">FOMC (Bunga)</button>
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'GDP (Gross Domestic Product)')">GDP (Ekonomi)</button>
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI (Producer Price Index)')">PPI (Produsen)</button>
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Pengangguran</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Interest Rate Decision (Fed/ECB/BOE)')">Keputusan Suku Bunga</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Monetary Policy Statement')">Rate Statement</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Central Bank Press Conference')">Press Conference</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'FOMC Economic Projections (Dot Plot)')">FOMC Dot Plot</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Central Bank Meeting Minutes')">Meeting Minutes</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Central Bank Speeches (Powell/Lagarde)')">Pidato Gubernur (Speeches)</button>
             </div>
-            <h4 style="color: #ffb300;">🟡 Medium Impact</h4>
+
+            <h4 style="color: #ffb300;">👷 2. Ketenagakerjaan (Dampak Tinggi)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Retail Sales')">Retail Sales</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Core PCE Price Index')">Core PCE</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'PMI (Purchasing Managers Index)')">PMI Manufaktur</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Building Permits & Housing')">Perumahan</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Non-Farm Payrolls (NFP) / Employment Change')">NFP / Employment Change</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Tingkat Pengangguran</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Klaim Pengangguran Awal</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'ADP Non-Farm Employment Change')">ADP Employment</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Labor Force Participation Rate')">Partisipasi Angkatan Kerja</button>
             </div>
-            <h4 style="color: #66bb6a;">🟢 Basic & Technical</h4>
+
+            <h4 style="color: #ef5350;">📈 3. Inflasi & Harga (Dampak Tinggi)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Klaim Pengangguran</button>
-                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Crude Oil Inventories')">Stok Minyak</button>
-                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Smart Money Concept (SMC)')">Materi SMC</button>
-                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Supply and Demand (SnD)')">Materi SnD</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'CPI / IHK (Consumer Price Index)')">CPI (Inflasi Konsumen)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Core CPI')">Core CPI</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI (Producer Price Index)')">PPI (Inflasi Produsen)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PCE Price Index')">PCE (Inflasi Favorit Fed)</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'UoM Inflation Expectations')">UoM Ekspektasi Inflasi</button>
+            </div>
+
+            <h4 style="color: #ffb300;">🌍 4. Pertumbuhan Ekonomi (GDP)</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Advance / Flash GDP')">Flash GDP (Estimasi 1)</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Preliminary & Final GDP')">Prelim & Final GDP</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'GDP Price Index / Deflator')">GDP Price Index</button>
+            </div>
+
+            <h4 style="color: #66bb6a;">🏭 5. Survei Aktivitas Bisnis (PMI)</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'ISM Manufacturing PMI')">ISM Manufacturing PMI</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'ISM Non-Manufacturing (Services) PMI')">ISM Services PMI</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'S&P Global / Markit Flash PMI')">Flash PMI Global</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Empire State & Philly Fed Index')">Empire State & Philly Fed</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Tankan Large Manufacturers Index (JPY)')">Tankan Index (Jepang)</button>
+            </div>
+
+            <h4 style="color: #2962ff;">🛒 6. Konsumsi & Penjualan Ritel</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Retail Sales & Core Retail Sales')">Retail Sales (Reg & Core)</button>
+                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'CB Consumer Confidence')">CB Consumer Confidence</button>
+                <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'UoM Consumer Sentiment')">UoM Sentiment</button>
+            </div>
+
+            <h4 style="color: #6a1b9a;">🏠 7. Perumahan & Real Estat</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Building Permits & Housing Starts')">Izin & Pembangunan</button>
+                <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Existing & New Home Sales')">Penjualan Rumah</button>
+            </div>
+
+            <h4 style="color: #37474f;">⚖️ 8. Neraca & Arus Modal</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Trade Balance (Neraca Perdagangan)')">Trade Balance</button>
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Current Account & Federal Budget')">Current Account</button>
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'TIC Net Long-Term Transactions')">TIC Arus Modal (AS)</button>
+            </div>
+
+            <h4 style="color: #000000; background:#fdd835; padding:5px; border-radius:5px; margin: 10px 0;">🛢️ 9. Energi & Komoditas</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Crude Oil Inventories (EIA)')">EIA Crude Oil</button>
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Natural Gas Storage & Baker Hughes')">Gas Alam & Rig Count</button>
             </div>
         </div>
     </div>
