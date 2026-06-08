@@ -62,7 +62,7 @@
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
             <h4 style="color:#2962ff;">🤖 Fitur Kalender AI</h4>
-            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, isi angkanya, lalu pilih opsi analisis.</p>
+            <p style="font-size:11px; color:#aaa; margin-top:0;">Kopas teks Inggris dari kalender, lalu pilih mau diterjemahkan saja atau dianalisis dampaknya.</p>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
                 <input type="text" id="newsAct" placeholder="Aktual">
@@ -86,7 +86,7 @@
 
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Pilih materi. App akan menutup aman dan AI mengirim materi ke chat Anda.</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Pilih materi. Mini App akan menutup otomatis untuk mengirim materi ke chat.</p>
             <h4 style="color: #ef5350;">🔴 High Impact</h4>
             <div class="edu-grid">
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'NFP (Non-Farm Payroll)')">NFP (Tenaga Kerja)</button>
@@ -201,9 +201,7 @@
             let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
             let finalPnL = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
             
-            // HANYA MENGGUNAKAN sendData agar tidak terjadi crash
             Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) }));
-            
             currentPosition = ''; localStorage.removeItem('tradeData');
             document.getElementById('status-text').innerText = `Menunggu Market...`; document.getElementById('status-text').style.color = '#aaa';
         }
@@ -212,9 +210,20 @@
             let n = document.getElementById("newsName").value;
             if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
             
-            // MENGIRIM DATA SAJA. Telegram Web App otomatis menutup dengan sendData.
             Telegram.WebApp.sendData(JSON.stringify({ 
                 action: tipe === 'TRANSLATE' ? 'TRANSLATE_NEWS' : 'CALENDAR_ANALYSIS', 
                 nama: n, 
                 aktual: document.getElementById("newsAct").value || "-", 
-                previous: document.getElementById("newsPrev").value
+                previous: document.getElementById("newsPrev").value || "-", 
+                forecast: document.getElementById("newsFore").value || "-" 
+            }));
+        }
+
+        function reqAction(act, val) {
+            Telegram.WebApp.sendData(JSON.stringify({ action: act, data: val }));
+        }
+
+        loadState(); changePair();
+    </script>
+</body>
+</html>
