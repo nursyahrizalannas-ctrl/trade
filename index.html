@@ -25,7 +25,7 @@
         h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; font-size: 13px; }
         
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px;}
-        .edu-btn { padding: 10px; font-size: 10px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; text-align: center; height: 100%; min-height: 40px; }
+        .edu-btn { padding: 8px; font-size: 10px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; text-align: center; height: 100%; min-height: 40px; }
         .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } .bg-green { background: #388e3c; } .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; } .bg-dark { background: #37474f; }
     </style>
 </head>
@@ -90,7 +90,7 @@
             
             <h4 style="color: #ef5350;">🏦 1. Bank Sentral & Moneter (Tier 1)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Interest Rate Decision (Fed/ECB/BOE/BOJ/RBA)')">Keputusan Suku Bunga</button>
+                <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Interest Rate Decision (Fed/ECB/BOE/BOJ/RBA)')">Suku Bunga</button>
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Monetary Policy Statement / Rate Statement')">Rate Statement</button>
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Central Bank Press Conference')">Press Conference</button>
                 <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'FOMC Economic Projections (Dot Plot)')">FOMC Dot Plot</button>
@@ -100,12 +100,12 @@
 
             <h4 style="color: #ffb300;">👷 2. Ketenagakerjaan</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Non-Farm Payrolls (NFP) & Employment Change')">NFP / Employment Change</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Tingkat Pengangguran</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Initial Jobless Claims</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Non-Farm Payrolls (NFP) & Employment Change')">NFP</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Pengangguran</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Jobless Claims</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'JOLTs Job Openings')">JOLTs</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'ADP Non-Farm Employment Change')">ADP Employment</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Labor Force Participation Rate')">Partisipasi Angkatan Kerja</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Labor Force Participation Rate')">Partisipasi Kerja</button>
                 <button class="edu-btn bg-orange" style="grid-column: span 2;" onclick="reqAction('EDUKASI', 'Challenger Job Cuts')">Challenger Job Cuts</button>
             </div>
 
@@ -121,22 +121,22 @@
 
             <h4 style="color: #ffb300;">🌍 4. Pertumbuhan Ekonomi (GDP)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Advance / Flash GDP')">Advance/Flash GDP</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Preliminary GDP')">Preliminary GDP</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Advance / Flash GDP')">Flash GDP</button>
+                <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Preliminary GDP')">Prelim GDP</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Final GDP')">Final GDP</button>
                 <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'GDP Price Index / Deflator')">GDP Price Index</button>
             </div>
 
             <h4 style="color: #66bb6a;">🏭 5. Survei Aktivitas Bisnis</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'ISM Manufacturing PMI')">ISM Manufacturing PMI</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'ISM Manufacturing PMI')">ISM Mfg PMI</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'ISM Non-Manufacturing (Services) PMI')">ISM Services PMI</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'S&P Global / Markit Flash PMI')">Flash PMI Global</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Empire State Manufacturing Index')">Empire State Index</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Philly Fed Manufacturing Index')">Philly Fed Index</button>
                 <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Chicago PMI')">Chicago PMI</button>
-                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Tankan Large Manufacturers Index (JPY)')">Tankan Index (Jepang)</button>
-                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'NAB Business Confidence')">NAB Confidence (AUS)</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Tankan Large Manufacturers Index (JPY)')">Tankan (Jepang)</button>
+                <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'NAB Business Confidence')">NAB Confidence</button>
             </div>
 
             <h4 style="color: #2962ff;">🛒 6. Konsumsi & Penjualan Ritel</h4>
@@ -163,7 +163,7 @@
                 <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Trade Balance (Neraca Perdagangan)')">Trade Balance</button>
                 <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Current Account')">Current Account</button>
                 <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'Federal Budget Balance')">Federal Budget</button>
-                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'TIC Net Long-Term Transactions')">TIC Arus Modal (AS)</button>
+                <button class="edu-btn bg-dark" onclick="reqAction('EDUKASI', 'TIC Net Long-Term Transactions')">TIC Arus Modal</button>
                 <button class="edu-btn bg-dark" style="grid-column: span 2;" onclick="reqAction('EDUKASI', 'Foreign Exchange Reserves')">Cadangan Devisa</button>
             </div>
 
@@ -256,38 +256,4 @@
             if(currentPosition !== '') { Telegram.WebApp.showAlert("Tutup posisi aktif dulu."); return; }
             if(currentPrice === 0) { Telegram.WebApp.showAlert("Menunggu harga..."); return; }
             currentPosition = type; entryPrice = currentPrice; activeLot = parseFloat(document.getElementById("lot").value) || 0.01;
-            document.getElementById('status-text').innerText = `POSISI AKTIF: ${type} @ ${entryPrice}`;
-            document.getElementById('status-text').style.color = '#089981'; saveState(); Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-        }
-
-        function execClose() {
-            if(currentPosition === '') return;
-            let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
-            let finalPnL = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
-            
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) }));
-            currentPosition = ''; localStorage.removeItem('tradeData');
-            document.getElementById('status-text').innerText = `Menunggu Market...`; document.getElementById('status-text').style.color = '#aaa';
-        }
-
-        function processNews(tipe) {
-            let n = document.getElementById("newsName").value;
-            if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
-            
-            Telegram.WebApp.sendData(JSON.stringify({ 
-                action: tipe === 'TRANSLATE' ? 'TRANSLATE_NEWS' : 'CALENDAR_ANALYSIS', 
-                nama: n, 
-                aktual: document.getElementById("newsAct").value || "-", 
-                previous: document.getElementById("newsPrev").value || "-", 
-                forecast: document.getElementById("newsFore").value || "-" 
-            }));
-        }
-
-        function reqAction(act, val) {
-            Telegram.WebApp.sendData(JSON.stringify({ action: act, data: val }));
-        }
-
-        loadState(); changePair();
-    </script>
-</body>
-</html>
+            document.getElementById('status-text').innerText
