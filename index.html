@@ -24,7 +24,6 @@
         
         h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
         
-        /* EDUKASI ACCORDION & GRID */
         details { background: #1f2630; padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; border: 1px solid #363c4e; }
         summary { font-weight: bold; font-size: 13px; outline: none; }
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;}
@@ -36,7 +35,7 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="showTab('main', this)">📈 Trade</button>
         <button class="tab-btn" onclick="showTab('news', this)">📅 Kalender</button>
-        <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi</button>
+        <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi & AI</button>
         <button class="tab-btn" onclick="showTab('combo', this)">🔄 Combo</button>
     </div>
 
@@ -66,7 +65,7 @@
     <!-- TAB 2: KALENDER -->
     <div id="news" class="content">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-            <h4 style="color:#2962ff;">🤖 Fitur Kalender AI</h4>
+            <h4 style="color:#2962ff;">🤖 Filter Kalender AI</h4>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
                 <input type="text" id="newsAct" placeholder="Aktual">
@@ -88,14 +87,24 @@
         </div>
     </div>
 
-    <!-- TAB 3: EDUKASI 50 INDIKATOR LENGKAP -->
+    <!-- TAB 3: EDUKASI & AI (Diperbarui dengan Tanya Bebas & M0, M1, M2) -->
     <div id="edu" class="content">
+        <!-- FITUR DISKUSI BEBAS & ANALISIS BEBAS -->
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
+            <h4 style="color:#089981;">💡 Diskusi & Tanya Bebas</h4>
+            <input type="text" id="freeChat" placeholder="Cth: Kenapa market gold naik terus?">
+            <button class="action-btn" style="background:#089981;" onclick="reqAction('FREE_CHAT', document.getElementById('freeChat').value)">TANYA AI (DENGAN ANALOGI)</button>
+            
+            <h4 style="color:#2962ff; margin-top: 15px;">📰 Analisis Kejadian Fundamental</h4>
+            <input type="text" id="fundiNews" placeholder="Cth: NFP malam ini bagus sekali">
+            <button class="action-btn blue" onclick="reqAction('FUNDAMENTAL', document.getElementById('fundiNews').value)">ANALISIS DAMPAK KE MARKET</button>
+        </div>
+
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia 50 Indikator Ekonomi USD. Pilih materi, bot akan merangkum lengkap di chat!</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia Indikator Ekonomi USD (Bot akan membalas di chat).</p>
             
             <button class="action-btn blue" style="margin-bottom: 10px;" onclick="reqAction('EDUKASI', 'Cara Membaca Data Fundamental (Actual vs Forecast) dan 15 News Paling Ditunggu Trader')">📖 ATURAN MEMBACA DATA & TOP 15 NEWS</button>
 
-            <!-- TIER 1 -->
             <details>
                 <summary style="color: #ef5350;">🔴 Dampak Sangat Tinggi (Tier 1)</summary>
                 <div class="edu-grid">
@@ -113,7 +122,6 @@
                 </div>
             </details>
 
-            <!-- TIER 2 -->
             <details>
                 <summary style="color: #ffb300;">🟠 Dampak Tinggi (Tier 2)</summary>
                 <div class="edu-grid">
@@ -130,7 +138,16 @@
                 </div>
             </details>
 
-            <!-- TIER 3 -->
+            <!-- KATEGORI BARU: MONEY SUPPLY (M0, M1, M2) -->
+            <details>
+                <summary style="color: #ce93d8;">💱 Monetary Policy (Money Supply)</summary>
+                <div class="edu-grid">
+                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Money Supply M0 (Base Money / Uang Inti)')">Money Supply M0</button>
+                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Money Supply M1 (Narrow Money)')">Money Supply M1</button>
+                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Money Supply M2 (Broad Money / Uang Beredar)')">Money Supply M2</button>
+                </div>
+            </details>
+
             <details>
                 <summary style="color: #fbc02d;">🟡 Dampak Menengah (Tier 3)</summary>
                 <div class="edu-grid">
@@ -144,7 +161,6 @@
                 </div>
             </details>
 
-            <!-- TIER 4 -->
             <details>
                 <summary style="color: #66bb6a;">🟢 Dampak Rendah-Menengah (Tier 4)</summary>
                 <div class="edu-grid">
@@ -267,6 +283,7 @@
         }
 
         function reqAction(act, val) {
+            if(!val) { Telegram.WebApp.showAlert("Kolom tidak boleh kosong!"); return; }
             Telegram.WebApp.sendData(JSON.stringify({ action: act, data: val }));
             Telegram.WebApp.close();
         }
