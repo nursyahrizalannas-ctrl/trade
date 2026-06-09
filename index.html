@@ -5,62 +5,46 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
     <style>
-        /* Animasi Perubahan Warna Background */
         body { font-family: 'Segoe UI', sans-serif; background-color: #0b0e14; color: #fff; margin: 0; padding: 10px; transition: background-color 1s ease; }
-        
-        /* Modal Welcome & Quiz */
-        #welcome-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.98); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 25px; box-sizing: border-box; text-align: center;
-            transition: opacity 0.5s ease;
-        }
-        .quiz-title { font-size: 22px; color: #fbc02d; margin-bottom: 5px; font-weight: bold; }
-        .quiz-subtitle { font-size: 12px; color: #aaa; margin-bottom: 25px; }
-        .quiz-q { font-size: 15px; margin-bottom: 25px; color: #fff; line-height: 1.5; font-weight: bold; background: #1f2630; padding: 15px; border-radius: 8px; border: 1px solid #363c4e; }
-        .quiz-btn { width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 5px; background: #2962ff; color: white; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .quiz-btn:active { background: #1e88e5; }
-
-        /* Tampilan Utama */
         .tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
         .tab-btn { flex: 1; min-width: 22%; padding: 8px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; }
         .tab-btn.active { background: #2962ff; color: #fff; }
         .content { display: none; } .content.active { display: block; }
-        
-        .live-panel { background: rgba(23, 33, 43, 0.9); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e; }
+        .live-panel { background: rgba(23, 33, 43, 0.8); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(54, 60, 78, 0.5); }
         .live-price { font-size: 24px; font-weight: bold; color: #e0e0e0; margin: 5px 0; }
         .pnl-box { font-size: 20px; font-weight: bold; padding: 10px; border-radius: 5px; background: #0b0e14; margin-top: 5px; }
         .pnl-green { color: #089981; } .pnl-red { color: #f23645; }
-
         input, select { width: 100%; padding: 10px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
         button.action-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; margin-top: 5px; }
         .buy { background: #089981; } .sell { background: #f23645; } .blue { background: #1976d2; }
         .trade-row { display: flex; gap: 5px; margin-top: 5px; }
         .trade-row button, .trade-row input { flex: 1; margin: 0; }
-        
         h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
-        
-        details { background: rgba(31, 38, 48, 0.9); padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; border: 1px solid #363c4e; }
+        details { background: #1f2630; padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; border: 1px solid rgba(54, 60, 78, 0.5); }
         summary { font-weight: bold; font-size: 13px; outline: none; }
         .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;}
         .edu-btn { padding: 10px; font-size: 10px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
         
-        /* Warna Edukasi */
+        /* Pewarnaan Kategori */
         .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } 
         .bg-yellow { background: #fbc02d; color: black; } .bg-green { background: #388e3c; } 
         .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; }
         .bg-teal { background: #00897b; } .bg-brown { background: #795548; }
         .bg-pink { background: #c2185b; } .bg-grey { background: #616161; }
+
+        /* Kuis Animasi & Overlay */
+        #quizModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0e14; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; transition: opacity 0.5s; }
+        .quiz-option { width: 100%; padding: 15px; margin: 5px 0; background: #1f2630; border: 2px solid #363c4e; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; text-align: center; }
+        @keyframes fall { 0% { transform: translateY(-10vh); opacity: 1; } 100% { transform: translateY(110vh); opacity: 0; } }
+        .falling-item { position: fixed; font-size: 28px; font-weight: bold; animation: fall 2s linear forwards; z-index: 9998; pointer-events: none; }
     </style>
 </head>
 <body>
-
-    <div id="welcome-modal">
-        <div class="quiz-title">🏛️ WAKE UP, TRADER!</div>
-        <div class="quiz-subtitle">Dashboard Institusional v.Pro</div>
-        <div class="quiz-q" id="quiz-text">Memuat pertanyaan...</div>
-        <div id="quiz-options" style="width: 100%;"></div>
+    <div id="quizModal">
+        <h2 style="color:#2962ff; margin-bottom: 5px;">🔥 Welcome Trader!</h2>
+        <p style="color:#aaa; font-size: 12px; margin-top:0;">Jawab kuis fundamental ini sebelum masuk ke market.</p>
+        <p id="quizQuestion" style="text-align:center; font-size: 16px; font-weight: bold; margin: 20px 0; line-height: 1.5;"></p>
+        <div id="quizOptions" style="display:flex; flex-direction:column; width:100%; gap:10px;"></div>
     </div>
 
     <div class="tabs">
@@ -93,7 +77,7 @@
     </div>
 
     <div id="news" class="content">
-        <div style="background: rgba(23, 33, 43, 0.9); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+        <div style="background: rgba(23, 33, 43, 0.8); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
             <h4 style="color:#2962ff;">🤖 Filter Kalender AI</h4>
             <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
             <div class="trade-row">
@@ -117,100 +101,37 @@
     </div>
 
     <div id="edu" class="content">
-        <div style="background: rgba(23, 33, 43, 0.9); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
-            <h4 style="color:#089981;">💡 Diskusi & Tanya Bebas</h4>
-            <input type="text" id="freeChat" placeholder="Cth: Kenapa market gold naik terus?">
-            <button class="action-btn" style="background:#089981;" onclick="reqAction('FREE_CHAT', document.getElementById('freeChat').value)">TANYA AI (DENGAN ANALOGI)</button>
+        <div style="background: rgba(23, 33, 43, 0.8); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
+            <h4 style="color:#089981;">💡 Diskusi Bebas Makroekonomi</h4>
+            <input type="text" id="freeChat" placeholder="Cth: Mengapa suku bunga turun bikin Emas naik?">
+            <button class="action-btn" style="background:#089981;" onclick="reqAction('FREE_CHAT', document.getElementById('freeChat').value)">TANYA AI</button>
             
-            <h4 style="color:#2962ff; margin-top: 15px;">📰 Analisis Kejadian Fundamental</h4>
-            <input type="text" id="fundiNews" placeholder="Cth: NFP malam ini bagus sekali">
+            <h4 style="color:#2962ff; margin-top: 15px;">📰 Analisis Kejadian Cepat</h4>
+            <input type="text" id="fundiNews" placeholder="Cth: Inflasi CPI AS malam ini sangat tinggi">
             <button class="action-btn blue" onclick="reqAction('FUNDAMENTAL', document.getElementById('fundiNews').value)">ANALISIS DAMPAK KE MARKET</button>
         </div>
 
-        <div style="background: rgba(23, 33, 43, 0.9); padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia Lengkap Indikator Ekonomi.</p>
-            <button class="action-btn blue" style="margin-bottom: 10px;" onclick="reqAction('EDUKASI', 'Cara Membaca Data Fundamental (Actual vs Forecast) dan 15 News Paling Ditunggu Trader')">📖 ATURAN MEMBACA DATA & TOP 15 NEWS</button>
-
-            <details>
-                <summary style="color: #64b5f6;">🌍 Markets</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Currency Market')">Currency</button>
-                    <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Government Bond 10Y')">Gov Bond 10Y</button>
-                    <button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Stock Market')">Stock Market</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: #81c784;">📊 GDP (Gross Domestic Product)</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'GDP')">GDP</button>
-                    <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'GDP Growth Rate')">GDP Growth Rate</button>
-                    <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'GDP per Capita')">GDP per Capita</button>
-                    <button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Gross National Product')">GNP</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: #ffb74d;">👷 Labour & Employment</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Non Farm Payrolls')">Non Farm Payrolls (NFP)</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Unemployment Rate</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Initial Jobless Claims</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'ADP Employment Change')">ADP Employment</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Average Hourly Earnings MoM')">Avg Hourly Earnings</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: #e57373;">🏷️ Prices & Inflation</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'CPI')">CPI (Inflasi)</button>
-                    <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Core CPI')">Core CPI</button>
-                    <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI MOM')">PPI MoM</button>
-                    <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PCE Price Index')">PCE Price Index</button>
-                    <button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Michigan Inflation Expectations')">Mich Inflation Exp</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: #ce93d8;">💱 Money & Central Bank</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Fed Interest Rate')">Fed Interest Rate</button>
-                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Fed Balance Sheet')">Fed Balance Sheet</button>
-                    <button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Money Supply M2')">Money Supply M2</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: #a1887f;">🏭 Business & PMI</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'ISM Manufacturing PMI')">ISM Mfg PMI</button>
-                    <button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'ISM Services PMI')">ISM Services PMI</button>
-                    <button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'Chicago PMI')">Chicago PMI</button>
-                    <button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'Durable Goods Orders MoM')">Durable Goods MoM</button>
-                </div>
-            </details>
-            
-            <details>
-                <summary style="color: #ff8a65;">🛒 Consumer & Retail</summary>
-                <div class="edu-grid">
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Retail Sales MoM')">Retail Sales MoM</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Core Retail Sales Ex Autos MoM')">Core Retail Sales</button>
-                    <button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Michigan Consumer Sentiment')">Mich Sentiment</button>
-                </div>
-            </details>
+        <div style="background: rgba(23, 33, 43, 0.8); padding: 15px; border-radius: 8px;">
+            <button class="action-btn blue" style="margin-bottom: 10px;" onclick="reqAction('EDUKASI', 'Cara Membaca Data Fundamental (Actual vs Forecast)')">📖 ATURAN MEMBACA DATA NEWS</button>
+            <details><summary style="color: #64b5f6;">🌍 Markets</summary><div class="edu-grid"><button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Currency Market')">Currency</button><button class="edu-btn bg-blue" onclick="reqAction('EDUKASI', 'Government Bond 10Y')">Gov Bond 10Y</button></div></details>
+            <details><summary style="color: #81c784;">📊 GDP & Pertumbuhan</summary><div class="edu-grid"><button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'GDP')">Gross Domestic Product</button><button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'GDP Growth Rate')">GDP Growth Rate</button></div></details>
+            <details><summary style="color: #ffb74d;">👷 Tenaga Kerja (NFP dkk)</summary><div class="edu-grid"><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Non Farm Payrolls')">Non Farm Payrolls (NFP)</button><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Unemployment Rate')">Unemployment Rate</button><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Initial Jobless Claims')">Initial Jobless Claims</button><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button></div></details>
+            <details><summary style="color: #e57373;">🏷️ Inflasi (CPI/PPI/PCE)</summary><div class="edu-grid"><button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'CPI')">CPI (Inflasi Konsumen)</button><button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'PPI')">PPI (Inflasi Produsen)</button><button class="edu-btn bg-red" onclick="reqAction('EDUKASI', 'Core PCE Price Index')">Core PCE (Favorit Fed)</button></div></details>
+            <details><summary style="color: #ce93d8;">💱 Kebijakan Bank Sentral</summary><div class="edu-grid"><button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Fed Interest Rate')">Fed Interest Rate</button><button class="edu-btn bg-purple" onclick="reqAction('EDUKASI', 'Fed Balance Sheet')">Fed Balance Sheet</button></div></details>
+            <details><summary style="color: #a1887f;">🏭 Bisnis & PMI</summary><div class="edu-grid"><button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'ISM Manufacturing PMI')">ISM Mfg PMI</button><button class="edu-btn bg-brown" onclick="reqAction('EDUKASI', 'ISM Services PMI')">ISM Services PMI</button></div></details>
+            <details><summary style="color: #ff8a65;">🛒 Retail & Konsumen</summary><div class="edu-grid"><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Retail Sales MoM')">Retail Sales MoM</button><button class="edu-btn bg-orange" onclick="reqAction('EDUKASI', 'Michigan Consumer Sentiment')">Mich Consumer Sentiment</button></div></details>
+            <details><summary style="color: #aed581;">🏠 Perumahan & ⚡ Energi</summary><div class="edu-grid"><button class="edu-btn bg-green" onclick="reqAction('EDUKASI', 'Building Permits')">Building Permits</button><button class="edu-btn bg-grey" onclick="reqAction('EDUKASI', 'Crude Oil Inventories')">EIA Crude Oil</button></div></details>
         </div>
     </div>
 
     <div id="combo" class="content">
-        <div style="background: rgba(23, 33, 43, 0.9); padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda (Institusional Logic).</p>
+        <div style="background: rgba(23, 33, 43, 0.8); padding: 15px; border-radius: 8px;">
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Skenario Rilis Ganda (Institusional Logic).</p>
             <div class="edu-grid">
                 <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket NFP (NFP, AHE, Unemployment)')">Paket NFP</button>
                 <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket CPI (Core CPI & CPI)')">Paket CPI</button>
                 <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket FOMC (Rate, Dot Plot, Press Con)')">Paket FOMC</button>
-                <button class="edu-btn bg-orange" onclick="reqAction('COMBO_NEWS', 'Paket GDP (GDP & Price Index)')">Paket GDP</button>
+                <button class="edu-btn bg-red" onclick="reqAction('COMBO_NEWS', 'Paket PCE (Core PCE & PCE)')">Paket PCE</button>
             </div>
         </div>
     </div>
@@ -219,54 +140,53 @@
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
         
-        // ================= KUIS SISTEM =================
+        // --- LOGIKA KUIS ---
         const quizzes = [
-            { q: "Jika data NFP AS (Tenaga Kerja) dirilis SANGAT BAGUS (di atas ekspektasi), apa yang biasanya terjadi pada Emas (XAUUSD)?", options: [{t: "Emas Turun Tajam (USD Menguat)", c: true}, {t: "Emas Naik Tajam (USD Melemah)", c: false}] },
-            { q: "Jika The Fed memutuskan untuk MEMOTONG (Cut) Suku Bunga, apa dampak logisnya terhadap US Dollar (DXY)?", options: [{t: "USD akan Menguat", c: false}, {t: "USD akan Melemah", c: true}] },
-            { q: "Dalam rilis kalender ekonomi, warna MERAH pada nilai 'Actual' menandakan bahwa data tersebut...", options: [{t: "Lebih baik dari perkiraan pasar", c: false}, {t: "Lebih buruk dari perkiraan pasar", c: true}] },
-            { q: "Jika inflasi (CPI) AS terus meroket naik, apa yang kemungkinan besar akan dilakukan oleh Bank Sentral (The Fed)?", options: [{t: "Menaikkan Suku Bunga (Hawkish)", c: true}, {t: "Menurunkan Suku Bunga (Dovish)", c: false}] }
+            { q: "Jika The Fed memotong suku bunga (Rate Cut), apa reaksi mutlak teoritis pada Emas (XAUUSD)?", opts: ["Harga Emas Turun", "Harga Emas Naik Tajam", "Tidak Ada Pengaruh"], ans: 1 },
+            { q: "Apa yang terjadi jika data NFP AS dirilis JAUH LEBIH BURUK dari perkiraan (merah)?", opts: ["USD Menguat, Emas Turun", "USD Melemah, Emas Terbang", "Pasar Saham Hancur"], ans: 1 },
+            { q: "Sentimen 'Risk-Off' berarti investor panik. Ke mana uang mereka mengalir?", opts: ["Ke Saham dan Kripto", "Ke Safe-Haven (Emas, Yen, Swiss Franc)", "Dibiarkan di Kasur"], ans: 1 },
+            { q: "Data Inflasi (CPI) dirilis sangat tinggi. Apa yang kemungkinan dilakukan Bank Sentral selanjutnya?", opts: ["Menaikkan Suku Bunga", "Mencetak Uang Baru", "Menurunkan Suku Bunga"], ans: 0 }
         ];
 
         function initQuiz() {
-            let qz = quizzes[Math.floor(Math.random() * quizzes.length)];
-            document.getElementById('quiz-text').innerText = qz.q;
-            let opts = document.getElementById('quiz-options');
-            opts.innerHTML = '';
-            
-            // Render tombol pilihan
-            qz.options.forEach(o => {
-                let btn = document.createElement('button');
-                btn.className = 'quiz-btn'; 
-                btn.innerText = o.t;
-                btn.onclick = () => answerQuiz(o.c);
-                opts.appendChild(btn);
+            let qData = quizzes[Math.floor(Math.random() * quizzes.length)];
+            document.getElementById('quizQuestion').innerText = qData.q;
+            let optionsHtml = '';
+            qData.opts.forEach((opt, idx) => {
+                optionsHtml += `<button class="quiz-option" onclick="checkQuiz(${idx}, ${qData.ans})">${opt}</button>`;
             });
+            document.getElementById('quizOptions').innerHTML = optionsHtml;
         }
 
-        function answerQuiz(isCorrect) {
-            let modal = document.getElementById('welcome-modal');
-            if(isCorrect) {
-                // Jawaban Benar -> Biru Tua Terang (#0d47a1)
-                document.body.style.backgroundColor = "#0d47a1"; 
-                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-                modal.innerHTML = "<h2 style='color:#64b5f6; font-size:30px;'>TEPAT SEKALI! 🎯</h2><p style='color:white; font-weight:bold;'>Insting fundamental yang bagus.</p>";
-            } else {
-                // Jawaban Salah -> Merah Darah (#8b0000)
-                document.body.style.backgroundColor = "#8b0000"; 
-                Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-                modal.innerHTML = "<h2 style='color:#ef5350; font-size:30px;'>SALAH! 🩸</h2><p style='color:white; font-weight:bold;'>Hati-hati, market tidak kenal ampun!</p>";
-            }
+        function createFallingItem(text, color) {
+            let item = document.createElement("div");
+            item.className = "falling-item";
+            item.innerText = text;
+            item.style.color = color;
+            item.style.left = Math.random() * 90 + "vw";
+            item.style.animationDuration = (Math.random() * 2 + 1.5) + "s";
+            document.body.appendChild(item);
+            setTimeout(() => { item.remove(); }, 3500);
+        }
+
+        function checkQuiz(selected, correct) {
+            document.getElementById('quizModal').style.opacity = '0';
+            setTimeout(() => { document.getElementById('quizModal').style.display = 'none'; }, 500);
             
-            // Hilangkan modal setelah 1.5 detik agar user bisa pakai dashboard
-            setTimeout(() => {
-                modal.style.opacity = '0';
-                setTimeout(() => modal.style.display = 'none', 500);
-            }, 1500);
+            if (selected === correct) {
+                // BENAR: Biru Tua Terang + Ikon Hijau
+                document.body.style.backgroundColor = '#001a4d';
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                for(let i=0; i<30; i++) { setTimeout(() => createFallingItem('+$', '#089981'), i*100); }
+            } else {
+                // SALAH: Merah Darah + Ikon Merah
+                document.body.style.backgroundColor = '#4a0404';
+                Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                for(let i=0; i<30; i++) { setTimeout(() => createFallingItem('-$', '#f23645'), i*100); }
+            }
         }
-
-        // Panggil kuis saat web dimuat
         initQuiz();
-        // ===============================================
+        // ------------------
 
         let ws; let currentPrice = 0; let currentPosition = ''; let entryPrice = 0; let activeLot = 0;
 
@@ -275,23 +195,6 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(t).classList.add('active');
             elem.classList.add('active');
-        }
-
-        function saveState() {
-            localStorage.setItem('tradeData', JSON.stringify({ pos: currentPosition, price: entryPrice, lot: activeLot, pair: document.getElementById("pair").value }));
-        }
-
-        function loadState() {
-            let data = localStorage.getItem('tradeData');
-            if (data) {
-                let state = JSON.parse(data);
-                if (state.pos !== '') {
-                    currentPosition = state.pos; entryPrice = state.price; activeLot = state.lot;
-                    document.getElementById("pair").value = state.pair; 
-                    document.getElementById('status-text').innerText = `POSISI AKTIF: ${currentPosition} @ ${entryPrice}`;
-                    document.getElementById('status-text').style.color = '#089981';
-                }
-            }
         }
 
         function connectWS(symbol) {
@@ -320,33 +223,23 @@
 
         function execTrade(type) {
             if(currentPosition !== '') { Telegram.WebApp.showAlert("Tutup posisi aktif dulu."); return; }
-            if(currentPrice === 0) { Telegram.WebApp.showAlert("Menunggu harga..."); return; }
-            currentPosition = type; entryPrice = currentPrice; activeLot = parseFloat(document.getElementById("lot").value) || 0.01;
+            currentPosition = type; entryPrice = currentPrice; activeLot = parseFloat(document.getElementById("lot").value) || 0.1;
             document.getElementById('status-text').innerText = `POSISI AKTIF: ${type} @ ${entryPrice}`;
-            document.getElementById('status-text').style.color = '#089981'; saveState(); Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+            document.getElementById('status-text').style.color = '#089981'; Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
         }
 
         function execClose() {
             if(currentPosition === '') return;
             let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
             let finalPnL = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
-            
             Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE', pair: document.getElementById("pair").value, type: currentPosition, pnl: finalPnL.toFixed(2) }));
-            currentPosition = ''; localStorage.removeItem('tradeData');
-            document.getElementById('status-text').innerText = `Menunggu Market...`; document.getElementById('status-text').style.color = '#aaa';
+            currentPosition = ''; document.getElementById('status-text').innerText = `Menunggu Market...`; document.getElementById('status-text').style.color = '#aaa';
         }
 
         function processNews(tipe) {
             let n = document.getElementById("newsName").value;
             if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
-            
-            Telegram.WebApp.sendData(JSON.stringify({ 
-                action: tipe === 'TRANSLATE' ? 'TRANSLATE_NEWS' : 'CALENDAR_ANALYSIS', 
-                nama: n, 
-                aktual: document.getElementById("newsAct").value || "-", 
-                previous: document.getElementById("newsPrev").value || "-", 
-                forecast: document.getElementById("newsFore").value || "-" 
-            }));
+            Telegram.WebApp.sendData(JSON.stringify({ action: tipe === 'TRANSLATE' ? 'TRANSLATE_NEWS' : 'CALENDAR_ANALYSIS', nama: n, aktual: document.getElementById("newsAct").value || "-", previous: document.getElementById("newsPrev").value || "-", forecast: document.getElementById("newsFore").value || "-" }));
             Telegram.WebApp.close();
         }
 
@@ -356,7 +249,7 @@
             Telegram.WebApp.close();
         }
 
-        loadState(); changePair();
+        changePair();
     </script>
 </body>
 </html>
