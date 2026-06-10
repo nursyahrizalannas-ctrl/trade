@@ -59,6 +59,9 @@
         /* SCROLLBAR JURNAL & PERPUSTAKAAN CUSTOM */
         #journal-list::-webkit-scrollbar, #library-list::-webkit-scrollbar { width: 4px; }
         #journal-list::-webkit-scrollbar-thumb, #library-list::-webkit-scrollbar-thumb { background: #363c4e; border-radius: 4px; }
+        
+        /* IMAGE E-BOOK STYLING */
+        .ebook-img { width: 100%; border-radius: 5px; margin-bottom: 10px; background: white; padding: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -83,7 +86,7 @@
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('main', this)">📈 Trade / Backtest</button>
+        <button class="tab-btn active" onclick="showTab('main', this)">📊 Backtest</button>
         <button class="tab-btn" onclick="showTab('news', this)">📅 Kalender</button>
         <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi & AI</button>
         <button class="tab-btn" onclick="showTab('combo', this)">🔄 Combo</button>
@@ -91,35 +94,89 @@
 
     <div id="main" class="content active">
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 12px; color: #aaa;" id="status-text">Menunggu Market...</div>
-            <div id="live-price" style="font-size: 20px; font-weight: bold; color: #fff;">Memuat Data...</div>
-            <div id="pnl-display" style="font-size: 13px; font-weight: bold; background: #0b0e14; padding: 5px 10px; border-radius: 5px; color: #fff;">Floating: $0.00</div>
+            <h4 style="color:#089981; margin:0;">🛠️ StrategyTune Backtest</h4>
+            <div style="font-size: 11px; color: #aaa;">Uji Strategi Anda Secara Presisi</div>
         </div>
         
-        <div style="width: 100%; height: 75vh; overflow-y: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e; background: #131722;">
-            <iframe src="https://gocharting.com/terminal/chart?ticker=EXNESS:XAUUSD" style="width: 100%; height: 1500px; border: none; display: block;" scrolling="yes"></iframe>
+        <div style="width: 100%; height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e; background: #131722;">
+            <iframe src="https://strategytune.com/app" style="width: 100%; height: 1500px; border: none; display: block;" scrolling="yes"></iframe>
         </div>
 
-        <select id="pair" onchange="changePair()">
-            <option value="PAXGUSDT">XAUUSD (Gold Proxy)</option>
-            <option value="BTCUSDT">BTCUSDT (Bitcoin)</option>
-            <option value="EURUSDT">EURUSD (Euro Proxy)</option>
-        </select>
-        
-        <div class="trade-row">
-            <input type="number" id="lot" placeholder="Lot (Cth: 0.1)" step="0.01" value="0.1">
-        </div>
-        <div class="trade-row">
-            <button class="action-btn buy" onclick="execTrade('BUY')">BUY</button>
-            <button class="action-btn sell" onclick="execTrade('SELL')">SELL</button>
-        </div>
-        
-        <button class="action-btn" onclick="execClose()" style="background:#ffa000; color:black; margin-top:10px;">🔴 TUTUP POSISI & SIMPAN KE JURNAL</button>
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #363c4e;">
+            <h4 style="color:#089981;">📘 E-Book: Master Class Teknikal</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Panduan visual lengkap menguasai pergerakan harga pasar.</p>
+            
+            <details style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                <summary style="color: #2962ff; font-weight: bold;">1. Anatomi Candlestick</summary>
+                <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: #e0e0e0;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Candlestick_chart_scheme_03-en.svg/512px-Candlestick_chart_scheme_03-en.svg.png" class="ebook-img">
+                    <b>Bullish (Hijau/Putih):</b> Harga ditutup lebih tinggi dari harga buka. Mengindikasikan dominasi pembeli (buyer).<br><br>
+                    <b>Bearish (Merah/Hitam):</b> Harga ditutup lebih rendah dari harga buka. Mengindikasikan dominasi penjual (seller).<br><br>
+                    <b>Sumbu (Wick / Tail):</b> Garis tipis di atas dan bawah menandakan jejak harga tertinggi dan terendah yang sempat dicapai sebelum akhirnya ditutup.
+                </div>
+            </details>
 
-        <details style="margin-top:15px;" open>
-            <summary style="color: #2962ff;">📝 Jurnal Trading Otomatis</summary>
+            <details style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                <summary style="color: #2962ff; font-weight: bold;">2. Support & Resistance</summary>
+                <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: #e0e0e0;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Support_and_Resistance.svg/512px-Support_and_Resistance.svg.png" class="ebook-img">
+                    <b>Support (Lantai):</b> Area level bawah di mana harga sering memantul naik. Di sini minat beli jauh lebih besar mengalahkan tekanan jual.<br><br>
+                    <b>Resistance (Atap):</b> Area level atas di mana harga sering tertahan dan turun. Di sini tekanan jual lebih dominan dari minat beli.<br><br>
+                    <i>Aturan Emas: Jika garis Support tertembus (breakout) ke bawah, garis itu akan berubah fungsi menjadi Resistance baru. Begitu juga sebaliknya.</i>
+                </div>
+            </details>
+
+            <details style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                <summary style="color: #2962ff; font-weight: bold;">3. Garis Tren (Trendline)</summary>
+                <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: #e0e0e0;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Uptrend-en.svg/512px-Uptrend-en.svg.png" class="ebook-img">
+                    Trendline adalah garis miring yang digunakan untuk mengidentifikasi arah pergerakan pasar utama.<br><br>
+                    <b>Uptrend (Tren Naik):</b> Ditarik dengan menghubungkan 2 titik lembah atau lebih yang posisinya semakin meninggi (Higher Lows).<br><br>
+                    <b>Downtrend (Tren Turun):</b> Ditarik dengan menghubungkan 2 titik puncak atau lebih yang posisinya semakin merendah (Lower Highs).<br><br>
+                    <b>Breakout Tren:</b> Ketika harga menembus keluar dari garis tren, ini merupakan indikasi kuat bahwa pasar akan berbalik arah (reversal).
+                </div>
+            </details>
+
+            <details style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                <summary style="color: #2962ff; font-weight: bold;">4. Pola Chart (Chart Patterns)</summary>
+                <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: #e0e0e0;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Head_and_shoulders_top.svg/512px-Head_and_shoulders_top.svg.png" class="ebook-img">
+                    <b>Head & Shoulders (Kepala & Bahu):</b> Pola pembalikan arah dari naik menjadi turun yang sangat akurat. Terdapat tiga puncak: Puncak tengah (Head) yang paling tinggi, diapit oleh puncak kiri dan kanan yang lebih rendah (Shoulders). Entry Sell dilakukan saat harga tembus garis leher (Neckline).<br><br>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Double_top.svg/512px-Double_top.svg.png" class="ebook-img">
+                    <b>Double Top (Bentuk M):</b> Harga membentur Resistance dua kali berturut-turut namun gagal tembus. Mengindikasikan pembeli sudah kehabisan tenaga dan harga siap terjun bebas.<br><br>
+                    <b>Double Bottom (Bentuk W):</b> Kebalikan dari Double Top. Harga membentur Support dua kali namun tertahan. Mengindikasikan pasar siap memantul terbang.
+                </div>
+            </details>
+            
+            <details style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                <summary style="color: #2962ff; font-weight: bold;">5. Indikator (RSI & Moving Average)</summary>
+                <div style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: #e0e0e0;">
+                    <b>RSI (Relative Strength Index):</b> Mengukur momentum harga dengan skala 0 hingga 100.<br>
+                    - Jika indikator menyentuh angka <b>> 70</b>, pasar dianggap <i>Overbought</i> (Jenuh Beli), bersiap mencari peluang SELL.<br>
+                    - Jika indikator menyentuh angka <b>< 30</b>, pasar dianggap <i>Oversold</i> (Jenuh Jual), bersiap mencari peluang BUY.<br><br>
+                    <b>Moving Average (MA):</b> Garis yang mewakili rata-rata harga masa lalu. Jika candlestick berada kokoh di atas garis MA, maka tren secara keseluruhan adalah naik. Jika dua garis MA saling bersilangan dari atas ke bawah (Death Cross), itu merupakan sinyal bahaya dimulainya tren turun jangka panjang.
+                </div>
+            </details>
+        </div>
+
+        <details style="margin-top:15px;">
+            <summary style="color: #2962ff;">📝 Buka Jurnal & Catat Trade</summary>
             <div style="margin-top: 10px;">
                 <div id="total-pnl" style="font-size: 15px; font-weight: bold; text-align:center; background: #0b0e14; padding: 10px; border-radius: 5px; color: #fff; margin-bottom:10px;">Total PnL: $0.00</div>
+                
+                <div class="trade-row">
+                    <input type="text" id="j-pair" placeholder="Pair (Cth: XAUUSD)" style="font-size: 12px; padding: 8px;">
+                    <select id="j-type" style="font-size: 12px; padding: 8px;">
+                        <option value="BUY">BUY</option>
+                        <option value="SELL">SELL</option>
+                    </select>
+                </div>
+                <div class="trade-row">
+                    <input type="number" id="j-pnl" placeholder="PnL Hasil ($)" step="0.01" style="font-size: 12px; padding: 8px;">
+                    <input type="text" id="j-note" placeholder="Catatan/Alasan (Opsional)" style="font-size: 12px; padding: 8px;">
+                </div>
+                <button class="action-btn buy" style="padding: 10px; font-size: 12px;" onclick="addJournalEntry()">➕ SIMPAN KE JURNAL</button>
+                
                 <div id="journal-list" style="margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 11px;"></div>
                 <button class="action-btn sell" style="margin-top: 10px; padding: 8px; font-size: 11px;" onclick="clearJournal()">🗑️ HAPUS SEMUA JURNAL</button>
             </div>
@@ -693,9 +750,8 @@
         initQuiz();
 
         // ==========================================
-        // SISTEM TRADING, PNL, DAN JURNAL OTOMATIS
+        // SISTEM JURNAL PENCATATAN MANUAL
         // ==========================================
-        let ws; let currentPrice = 0; let currentPosition = ''; let entryPrice = 0; let activeLot = 0;
         let journalData = JSON.parse(localStorage.getItem('tradingJournal')) || [];
 
         function renderJournal() {
@@ -705,7 +761,7 @@
             let total = 0;
             
             if(journalData.length === 0) {
-                list.innerHTML = "<div style='text-align:center; color:#aaa; padding:10px;'>Jurnal masih kosong. Trade di atas akan otomatis tersimpan di sini!</div>";
+                list.innerHTML = "<div style='text-align:center; color:#aaa; padding:10px;'>Jurnal masih kosong. Yuk mulai catat trade Anda di atas!</div>";
             } else {
                 journalData.forEach((entry) => {
                     total += parseFloat(entry.pnl);
@@ -733,81 +789,30 @@
             });
         }
         
-        function saveState() {
-            localStorage.setItem('tradeData', JSON.stringify({ pos: currentPosition, price: entryPrice, lot: activeLot, pair: document.getElementById("pair").value }));
-        }
-
-        function loadState() {
-            let data = localStorage.getItem('tradeData');
-            if (data) {
-                let state = JSON.parse(data);
-                if (state.pos !== '') {
-                    currentPosition = state.pos; entryPrice = state.price; activeLot = state.lot;
-                    document.getElementById("pair").value = state.pair; 
-                    document.getElementById('status-text').innerText = `POSISI AKTIF: ${currentPosition} @ ${entryPrice}`;
-                    document.getElementById('status-text').style.color = '#089981';
-                }
+        function addJournalEntry() {
+            let pair = document.getElementById('j-pair').value.toUpperCase();
+            let type = document.getElementById('j-type').value;
+            let pnl = document.getElementById('j-pnl').value;
+            let note = document.getElementById('j-note').value || "-";
+            
+            if(!pair || !pnl) {
+                Telegram.WebApp.showAlert("Pair dan PnL wajib diisi!");
+                return;
             }
-        }
-
-        function connectWS(symbol) {
-            if(ws) ws.close();
-            ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`);
-            ws.onmessage = (event) => {
-                currentPrice = parseFloat(JSON.parse(event.data).p);
-                document.getElementById('live-price').innerText = currentPrice.toFixed(2); calculatePnL();
-            };
-        }
-
-        function calculatePnL() {
-            let pnlDisplay = document.getElementById('pnl-display');
-            if(currentPosition === '') { pnlDisplay.innerText = `Floating: $0.00`; pnlDisplay.style.color = '#fff'; return; }
-            let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
-            let pnl = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
-            pnlDisplay.innerText = `Floating: $${pnl.toFixed(2)}`;
-            pnlDisplay.style.color = pnl >= 0 ? '#089981' : '#f23645';
-        }
-
-        function changePair() {
-            let pair = document.getElementById("pair").value; 
-            connectWS(pair);
-        }
-
-        function execTrade(type) {
-            if(currentPosition !== '') { Telegram.WebApp.showAlert("Tutup posisi aktif dulu."); return; }
-            if(currentPrice === 0) { Telegram.WebApp.showAlert("Menunggu harga..."); return; }
-            currentPosition = type; entryPrice = currentPrice; activeLot = parseFloat(document.getElementById("lot").value) || 0.01;
-            document.getElementById('status-text').innerText = `POSISI AKTIF: ${type} @ ${entryPrice}`;
-            document.getElementById('status-text').style.color = '#089981'; saveState(); Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-        }
-
-        function execClose() {
-            if(currentPosition === '') return;
-            let diff = (currentPosition === 'BUY') ? (currentPrice - entryPrice) : (entryPrice - currentPrice);
-            let finalPnL = diff * activeLot * (document.getElementById("pair").value === 'BTCUSDT' ? 1 : 100);
             
-            let pairName = document.getElementById("pair").value;
-            journalData.unshift({ 
-                pair: pairName, 
-                type: currentPosition, 
-                pnl: parseFloat(finalPnL).toFixed(2), 
-                note: `Auto Close @ ${currentPrice.toFixed(2)}`, 
-                date: new Date().toISOString() 
-            });
+            journalData.unshift({ pair, type, pnl: parseFloat(pnl).toFixed(2), note, date: new Date().toISOString() });
             localStorage.setItem('tradingJournal', JSON.stringify(journalData));
-            renderJournal(); 
-            Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-
-            Telegram.WebApp.sendData(JSON.stringify({ action: 'CLOSE_TRADE', pair: pairName, type: currentPosition, pnl: finalPnL.toFixed(2) }));
             
-            currentPosition = ''; localStorage.removeItem('tradeData');
-            document.getElementById('status-text').innerText = `Menunggu Market...`; 
-            document.getElementById('status-text').style.color = '#aaa';
+            // Clear input
+            document.getElementById('j-pair').value = "";
+            document.getElementById('j-pnl').value = "";
+            document.getElementById('j-note').value = "";
+            
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            renderJournal();
         }
 
         renderJournal();
-        loadState(); 
-        changePair();
 
         // TABS NAVIGATOR
         function showTab(t, elem) {
@@ -843,7 +848,6 @@
 
         function saveToLibrary() {
             if(!currentAiContent) return;
-            // Cek duplikasi
             let exists = aiLibraryData.find(i => i.title === currentAiTitle);
             if(!exists) {
                 aiLibraryData.unshift({ title: currentAiTitle, content: currentAiContent });
@@ -874,12 +878,9 @@
             
             modal.style.display = 'flex';
             content.innerHTML = item.content;
-            
-            // Sembunyikan tombol simpan karena ini data yang sudah tersimpan
             document.getElementById('btn-save-ai').style.display = 'none';
         }
 
-        // Panggil renderLibrary saat web dimuat
         renderLibrary();
 
 
@@ -898,7 +899,6 @@
             const content = document.getElementById('ai-content');
             const btnSave = document.getElementById('btn-save-ai');
             
-            // Reset status
             currentAiTitle = titleText || "Penjelasan AI";
             currentAiContent = "";
             btnSave.style.display = 'none';
@@ -923,8 +923,6 @@
                 if(data.choices && data.choices.length > 0) {
                     currentAiContent = parseMD(data.choices[0].message.content);
                     content.innerHTML = currentAiContent;
-                    
-                    // Tampilkan tombol simpan setelah berhasil menjawab
                     btnSave.style.display = 'block';
                     Telegram.WebApp.HapticFeedback.notificationOccurred('success');
                 } else {
