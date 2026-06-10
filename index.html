@@ -55,6 +55,10 @@
         .ai-header { color: #089981; border-bottom: 2px solid #089981; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px; font-weight: bold; }
         .ai-body { flex: 1; line-height: 1.6; font-size: 14px; margin-bottom: 20px; color: #e0e0e0; }
         .ai-body b { color: #2962ff; }
+        
+        /* SCROLLBAR JURNAL CUSTOM */
+        #journal-list::-webkit-scrollbar { width: 4px; }
+        #journal-list::-webkit-scrollbar-thumb { background: #363c4e; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -83,11 +87,34 @@
     </div>
 
     <div id="main" class="content active">
-        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
-            <h4 style="color:#089981; margin:0 0 5px 0;">🛠️ StrategyTune Backtest</h4>
-            <p style="font-size:11px; color:#aaa; margin:0;">Uji strategi Anda secara presisi dengan data historis di bawah ini.</p>
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color:#089981; margin:0;">🛠️ StrategyTune</h4>
+            <div id="total-pnl" style="font-size: 13px; font-weight: bold; background: #0b0e14; padding: 5px 10px; border-radius: 5px; color: #fff;">PnL: $0.00</div>
         </div>
-        <iframe src="https://strategytune.com/app" style="width: 100%; height: 75vh; border: none; border-radius: 8px; background: #131722;"></iframe>
+        
+        <iframe src="https://strategytune.com/app" style="width: 100%; height: 50vh; border: none; border-radius: 8px; background: #131722; margin-bottom: 10px;"></iframe>
+
+        <details>
+            <summary style="color: #2962ff;">📝 Buka Jurnal & Catat Trade</summary>
+            <div style="margin-top: 10px;">
+                <div class="trade-row">
+                    <input type="text" id="j-pair" placeholder="Pair (Cth: XAUUSD)" style="font-size: 12px; padding: 8px;">
+                    <select id="j-type" style="font-size: 12px; padding: 8px;">
+                        <option value="BUY">BUY</option>
+                        <option value="SELL">SELL</option>
+                    </select>
+                </div>
+                <div class="trade-row">
+                    <input type="number" id="j-pnl" placeholder="PnL Hasil ($)" step="0.01" style="font-size: 12px; padding: 8px;">
+                    <input type="text" id="j-note" placeholder="Catatan/Alasan (Opsional)" style="font-size: 12px; padding: 8px;">
+                </div>
+                <button class="action-btn buy" style="padding: 10px; font-size: 12px;" onclick="addJournalEntry()">➕ SIMPAN KE JURNAL</button>
+                
+                <div id="journal-list" style="margin-top: 10px; max-height: 160px; overflow-y: auto; font-size: 11px;">
+                    </div>
+                <button class="action-btn sell" style="margin-top: 10px; padding: 8px; font-size: 11px;" onclick="clearJournal()">🗑️ HAPUS SEMUA JURNAL</button>
+            </div>
+        </details>
     </div>
 
     <div id="news" class="content">
@@ -143,21 +170,24 @@
 
     <div id="combo" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda beserta prioritas datanya (Institusional Logic).</p>
-            <h4 style="color: #ef5350;">🔥 Dampak Sangat Tinggi</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda yang sangat sering keluar pada waktu yang bersamaan di kalender ekonomi.</p>
+            
+            <h4 style="color: #ef5350;">🔥 Super Combo (Sangat Berbahaya)</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket NFP (NFP, AHE, Unemployment)')">Paket NFP</button>
-                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket CPI (Core CPI & CPI)')">Paket CPI</button>
-                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket FOMC (Rate, Dot Plot, Press Con)')">Paket FOMC</button>
-                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket PCE (Core PCE & PCE)')">Paket PCE</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'NFP + Unemployment Rate + Average Hourly Earnings m/m & y/y (Sering rilis bersamaan Jumat minggu ke-1)')">NFP Full Package</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'CPI m/m + CPI y/y + Core CPI (Paket lengkap Inflasi Utama AS)')">CPI Full Package</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'FOMC Rate Decision + Statement + Press Conference + Dot Plot Projections')">The Fed (FOMC) Mega Combo</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'US NFP + Canada Employment Change (Bentrokan data tenaga kerja AS dan Kanada di hari Jumat yang sama)')">US NFP + CAD Jobs</button>
             </div>
-            <h4 style="color: #ffb300;">🟡 Dampak Tinggi & Menengah</h4>
+            
+            <h4 style="color: #ffb300;">🟡 Combo Tinggi & Menengah</h4>
             <div class="edu-grid">
-                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket GDP (GDP & Price Index)')">Paket GDP</button>
-                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket Retail Sales (Core & Reg)')">Paket Retail Sales</button>
-                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket ISM PMI (Mfg & Jasa)')">Paket ISM PMI</button>
-                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Paket PPI (Core PPI & PPI)')">Paket PPI</button>
-                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Paket JOLTS (Openings & Quits)')">Paket JOLTS</button>
+                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Retail Sales m/m + Core Retail Sales m/m (Kekuatan konsumsi inti)')">Retail Sales Combo</button>
+                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Flash Manufacturing PMI + Flash Services PMI (S&P Global)')">PMI S&P Global</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Advance GDP q/q + Initial Jobless Claims (Sering rilis bersamaan di hari Kamis)')">GDP + Jobless Claims</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'BOE Official Bank Rate + Monetary Policy Summary + MPC Votes')">Bank of England (BOE) Combo</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'ECB Main Refinancing Rate + Monetary Policy Statement')">ECB Combo (Eropa)</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'PPI m/m + Core PPI m/m (Inflasi Produsen Pintu Pabrik)')">PPI Combo</button>
             </div>
         </div>
     </div>
@@ -167,10 +197,10 @@
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
 
-        // KUNCI API GROQ (Langsung akses dari web app untuk kecepatan instan)
+        // KUNCI API GROQ
         const GROQ_API = "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";
 
-        // DATA KUIS (TIDAK BERUBAH)
+        // DATA KUIS
         const quizData = [
             { q: "Jika Data Inflasi (CPI) AS meroket tajam dari perkiraan, apa yang biasa The Fed lakukan?", opts: ["Menurunkan Suku Bunga", "Menaikkan Suku Bunga", "Membeli Obligasi", "Mencetak Uang"], ans: 1 },
             { q: "Data NFP rilis JAUH lebih rendah (buruk) dari perkiraan. Apa dampak umumnya ke Gold (XAUUSD)?", opts: ["Gold Terjun Bebas", "Gold Akan Naik (Bullish)", "Gold Sideways", "Tidak Ada Efek"], ans: 1 },
@@ -209,13 +239,13 @@
 
         function checkAnswer(selected, correct) {
             document.getElementById("quiz-overlay").style.display = "none";
-            // KOREKSI: Latar belakang kini bersifat permanen sesuai jawaban
+            // Latar belakang kini bersifat permanen sesuai jawaban
             if(selected === correct) {
-                document.body.style.backgroundColor = "#0d47a1"; // Biru Tua Permanen
+                document.body.style.backgroundColor = "#0d47a1"; 
                 Telegram.WebApp.HapticFeedback.notificationOccurred('success');
                 createRain("+$", "#00e676", 40);
             } else {
-                document.body.style.backgroundColor = "#8a0303"; // Merah Darah Permanen
+                document.body.style.backgroundColor = "#8a0303"; 
                 Telegram.WebApp.HapticFeedback.notificationOccurred('error');
                 createRain("-$", "#ff1744", 40);
             }
@@ -237,18 +267,86 @@
 
         initQuiz();
 
+        // ==========================================
+        // SISTEM JURNAL TRADING & PNL TRACKER
+        // ==========================================
+        let journalData = JSON.parse(localStorage.getItem('tradingJournal')) || [];
+
+        function renderJournal() {
+            let list = document.getElementById('journal-list');
+            let totalPnLDisplay = document.getElementById('total-pnl');
+            list.innerHTML = "";
+            let total = 0;
+            
+            if(journalData.length === 0) {
+                list.innerHTML = "<div style='text-align:center; color:#aaa; padding:10px;'>Jurnal masih kosong. Yuk catat trade pertama!</div>";
+            } else {
+                journalData.forEach((entry) => {
+                    total += parseFloat(entry.pnl);
+                    let color = entry.pnl >= 0 ? '#089981' : '#f23645';
+                    let sign = entry.pnl > 0 ? '+' : '';
+                    list.innerHTML += `
+                        <div style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 5px; display: flex; justify-content: space-between; border-left: 3px solid ${color};">
+                            <span><b style="color:#fff;">${entry.pair}</b> <span style="color:#aaa;">(${entry.type})</span><br><i style="color:#aaa;">${entry.note}</i></span>
+                            <span style="color: ${color}; font-weight: bold; font-size: 13px;">${sign}$${entry.pnl}</span>
+                        </div>`;
+                });
+            }
+            
+            totalPnLDisplay.innerText = `PnL: $${total.toFixed(2)}`;
+            totalPnLDisplay.style.color = total >= 0 ? '#089981' : '#f23645';
+        }
+
+        function addJournalEntry() {
+            let pair = document.getElementById('j-pair').value.toUpperCase();
+            let type = document.getElementById('j-type').value;
+            let pnl = document.getElementById('j-pnl').value;
+            let note = document.getElementById('j-note').value || "-";
+            
+            if(!pair || !pnl) {
+                Telegram.WebApp.showAlert("Pair dan PnL wajib diisi!");
+                return;
+            }
+            
+            journalData.unshift({ pair, type, pnl: parseFloat(pnl).toFixed(2), note, date: new Date().toISOString() });
+            localStorage.setItem('tradingJournal', JSON.stringify(journalData));
+            
+            // Clear input
+            document.getElementById('j-pair').value = "";
+            document.getElementById('j-pnl').value = "";
+            document.getElementById('j-note').value = "";
+            
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            renderJournal();
+        }
+
+        function clearJournal() {
+            Telegram.WebApp.showConfirm("Yakin ingin menghapus seluruh riwayat jurnal Anda?", function(confirmed) {
+                if(confirmed) {
+                    journalData = [];
+                    localStorage.setItem('tradingJournal', JSON.stringify(journalData));
+                    renderJournal();
+                    Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+                }
+            });
+        }
+        
+        // Panggil jurnal saat web dimuat
+        renderJournal();
+
+
+        // TABS NAVIGATOR
         function showTab(t, elem) {
             document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(t).classList.add('active');
             elem.classList.add('active');
+            Telegram.WebApp.HapticFeedback.selectionChanged();
         }
 
         // ==========================================
         // SISTEM OTAK AI TERPUSAT DI DALAM MINI APP
         // ==========================================
-        
-        // Fungsi untuk mengonversi format teks AI (*tebal*, dll) menjadi HTML
         function parseMD(text) {
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
@@ -256,14 +354,12 @@
                 .replace(/\n/g, '<br>');
         }
 
-        // Memanggil API Groq langsung dari browser HP pengguna
         async function fetchAI(promptText) {
             const modal = document.getElementById('ai-modal');
             const content = document.getElementById('ai-content');
             
-            // Tampilkan modal dan animasi loading
             modal.style.display = 'flex';
-            content.innerHTML = "<i>Menghubungkan ke server AI... Mohon tunggu ⏳</i>";
+            content.innerHTML = "<i>Menganalisis skenario market... Mohon tunggu ⏳</i>";
             Telegram.WebApp.HapticFeedback.impactOccurred('medium');
 
             try {
@@ -290,7 +386,6 @@
             }
         }
 
-        // Fungsi penyalur (Trigger) dari tombol UI ke Prompt AI
         function askAI(actionType, value) {
             if(!value || value.trim() === '') {
                 Telegram.WebApp.showAlert("Kolom teks tidak boleh kosong!");
@@ -301,7 +396,7 @@
             if (actionType === 'EDUKASI') {
                 prompt = `[INSTRUKSI MUTLAK]: Jawab dalam Bahasa Indonesia. Dilarang pakai tag HTML. Anda adalah Mentor Institusi Hedge Fund. Jelaskan indikator '${value}': \n1. Definisi singkat \n2. Analogi kehidupan sehari-hari (penting!) \n3. Dampak ke Emas (XAUUSD) & USD \n4. Rumus trading (Jika Rilis Data Tinggi = Emas ke mana?)`;
             } else if (actionType === 'COMBO_NEWS') {
-                prompt = `[INSTRUKSI MUTLAK]: Jawab Bahasa Indonesia. Jelaskan rilis berita ganda '${value}': \n1. Hierarki Prioritas Bank Besar \n2. Skenario jika data bersinergi (searah) \n3. Skenario jika data divergen / whipsaw.`;
+                prompt = `[INSTRUKSI MUTLAK]: Jawab Bahasa Indonesia. Dilarang pakai tag HTML. Jelaskan skenario rilis berita ganda '${value}': \n1. Hierarki Prioritas Bank Besar (Bank fokus lihat data yang mana?) \n2. Skenario jika data bersinergi (semua searah) \n3. Skenario jika data divergen / whipsaw.`;
             } else if (actionType === 'FREE_CHAT') {
                 prompt = `[INSTRUKSI MUTLAK]: Anda adalah AI Trading Assistant (Ahli Makroekonomi). Jawablah dalam Bahasa Indonesia yang santai tapi profesional. Pertanyaan: "${value}". Berikan jawaban yang bernas, dan sertakan analogi yang mudah dipahami.`;
             } else if (actionType === 'FUNDAMENTAL') {
@@ -310,7 +405,6 @@
             fetchAI(prompt);
         }
 
-        // Khusus untuk tab Kalender
         function processNews(tipe) {
             let n = document.getElementById("newsName").value;
             if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
