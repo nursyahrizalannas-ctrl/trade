@@ -993,17 +993,17 @@
         // ==========================================
         function filterEdu() {
             let input = document.getElementById('searchEdu').value.toLowerCase();
-            // Ambil semua blok rincian di tab edukasi saja
-            let detailBlocks = document.querySelectorAll('#edu > details');
+            // Hapus '>' agar bisa menyeleksi semua tag details di dalam tab edu, termasuk yang ada di dalam div pembungkus
+            let detailBlocks = document.querySelectorAll('#edu details');
 
             detailBlocks.forEach(detail => {
                 let btns = detail.querySelectorAll('.edu-btn');
-                if(btns.length === 0) return; // Lewati library
+                if(btns.length === 0) return; // Lewati library atau details lain yang bukan indikator
 
                 let hasVisibleBtn = false;
                 btns.forEach(btn => {
                     if(btn.innerText.toLowerCase().includes(input)) {
-                        btn.style.display = "inline-block";
+                        btn.style.display = ""; // Kembalikan ke style bawaan (grid)
                         hasVisibleBtn = true;
                     } else {
                         btn.style.display = "none";
