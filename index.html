@@ -42,9 +42,21 @@
         .quiz-btn { width: 100%; padding: 15px; margin: 5px 0; background: #242f3d; border: 1px solid #2962ff; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .quiz-btn:active { background: #2962ff; }
         
-        /* ANIMASI HUJAN (Ikon Uang) */
-        .rain-icon { position: fixed; z-index: 9998; font-size: 28px; font-weight: bold; animation: fall linear forwards; pointer-events: none; text-shadow: 0px 0px 10px rgba(0,0,0,0.5); }
-        @keyframes fall { to { transform: translateY(110vh); } }
+        /* ANIMASI TEKS KUIS (BARIKI SUGEH / SUAALLAH) */
+        #quiz-result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; align-items: center; justify-content: center;
+            z-index: 100000; font-size: 45px; font-weight: 900; text-align: center;
+            animation: popinout 2s forwards; text-transform: uppercase;
+            text-shadow: 4px 4px 15px rgba(0,0,0,0.8); pointer-events: none;
+            word-wrap: break-word; padding: 20px; box-sizing: border-box;
+        }
+        @keyframes popinout {
+            0% { transform: scale(0.1); opacity: 0; }
+            15% { transform: scale(1.2); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
 
         /* POPUP AI JAWAB LANGSUNG DI MINI APP */
         #ai-modal {
@@ -56,32 +68,44 @@
         .ai-body { flex: 1; line-height: 1.6; font-size: 14px; margin-bottom: 20px; color: #e0e0e0; }
         .ai-body b { color: #2962ff; }
         
-        /* SCROLLBAR JURNAL & PERPUSTAKAAN CUSTOM */
-        #journal-list::-webkit-scrollbar, #library-list::-webkit-scrollbar { width: 4px; }
-        #journal-list::-webkit-scrollbar-thumb, #library-list::-webkit-scrollbar-thumb { background: #363c4e; border-radius: 4px; }
-        
-        /* IMAGE E-BOOK STYLING */
+        /* SCROLLBAR & EBOOK */
+        #library-list::-webkit-scrollbar { width: 4px; }
+        #library-list::-webkit-scrollbar-thumb { background: #363c4e; border-radius: 4px; }
         .ebook-img { width: 100%; border-radius: 5px; margin-bottom: 10px; background: white; padding: 5px; box-sizing: border-box; display: block; }
+
+        /* PETA DUNIA MARKET SESSION */
+        .session-dot {
+            position: absolute; width: 16px; height: 16px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff1744, #2962ff);
+            box-shadow: 0 0 10px #ff1744, 0 0 20px #2962ff;
+            animation: kelapKelip 1s infinite alternate;
+            display: none;
+        }
+        @keyframes kelapKelip {
+            0% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 5px #ff1744; }
+            100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px #2962ff, 0 0 30px #ff1744; }
+        }
     </style>
 </head>
 <body>
     <div id="quiz-overlay">
         <h2 style="color: #2962ff; margin-bottom: 5px;">🚀 Welcome Trader!</h2>
-        <p style="color: #aaa; margin-top: 0; margin-bottom: 20px; font-size: 14px;">Jawab kuis pemanasan ini untuk membuka Dashboard</p>
+        <div id="quiz-achievement" style="background: #1f2630; padding: 10px; border-radius: 8px; border: 1px solid #ffb300; color: #ffb300; font-size: 13px; margin-bottom: 15px; width: 100%; max-width: 400px;">
+            Memuat Data...
+        </div>
+        <p style="color: #aaa; margin-top: 0; margin-bottom: 15px; font-size: 14px;">Jawab kuis pemanasan ini untuk membuka Dashboard</p>
         <div id="quiz-container" style="width: 100%; max-width: 400px; background: #17212b; padding: 20px; border-radius: 10px; border: 1px solid #363c4e;">
             <h3 id="quiz-question" style="margin-top: 0; color: #e0e0e0;">Memuat kuis...</h3>
             <div id="quiz-options"></div>
         </div>
     </div>
 
-    <!-- POPUP AI DENGAN FITUR TANYA BALIK & BELUM PAHAM -->
     <div id="ai-modal">
         <div class="ai-header" id="ai-modal-title">🤖 AI Analis Institusional</div>
         <div class="ai-body" id="ai-content">
             <i>Menganalisis data pasar, mohon tunggu beberapa detik... ⏳</i>
         </div>
-
-        <!-- FITUR BARU: DISKUSI / TANYA BALIK -->
+        
         <div style="margin-bottom: 15px; border-top: 1px solid #363c4e; padding-top: 15px;" id="followup-container">
             <div class="trade-row">
                 <input type="text" id="ai-followup" placeholder="💬 Bingung? Tanya lebih lanjut di sini..." style="font-size: 12px;">
@@ -99,13 +123,29 @@
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('main', this)">📊 Backtest</button>
+        <button class="tab-btn active" onclick="showTab('main', this)">📊 Dashboard</button>
         <button class="tab-btn" onclick="showTab('news', this)">📅 Kalender</button>
         <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi & AI</button>
         <button class="tab-btn" onclick="showTab('combo', this)">🔄 Combo</button>
     </div>
 
     <div id="main" class="content active">
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #363c4e; text-align:center; position:relative; overflow:hidden;" id="session-container">
+            <h4 style="color:#64b5f6; margin-top:0;">🌍 Global Market Session</h4>
+            
+            <div id="map-area" style="position:relative; width:100%; height:160px; background:url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') no-repeat center center; background-size:contain; border-radius:8px; opacity:0.8;">
+                <div id="syd-tok" class="session-dot" style="left: 80%; top: 40%;" title="Sydney/Tokyo"></div>
+                <div id="lon" class="session-dot" style="left: 48%; top: 30%;" title="London/Eropa"></div>
+                <div id="ny" class="session-dot" style="left: 25%; top: 35%;" title="New York"></div>
+            </div>
+
+            <div id="sleep-earth" style="display:none; width:100%; height:160px; flex-direction:column; align-items:center; justify-content:center;">
+                <img src="https://cdn3d.iconscout.com/3d/premium/thumb/sleeping-earth-5120613-4277717.png?f=webp" style="height:110px;" alt="Bumi Tidur">
+            </div>
+            
+            <div id="session-status" style="font-size:13px; color:#fff; margin-top:10px; font-weight:bold;">Memuat status market...</div>
+        </div>
+
         <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             <h4 style="color:#089981; margin:0;">🛠️ StrategyTune Backtest</h4>
             <div style="font-size: 11px; color: #aaa;">Uji Strategi Secara Presisi</div>
@@ -115,7 +155,6 @@
             <iframe src="https://strategytune.com/app" style="width: 100%; height: 1500px; border: none; display: block;" scrolling="yes"></iframe>
         </div>
 
-        <!-- E-BOOK 24 BAB DENGAN GAMBAR ANTI ERROR (REFERRER POLICY) -->
         <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #363c4e;">
             <h4 style="color:#089981;">📘 E-Book: Master Class Teknikal</h4>
             <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia trading terlengkap. Klik materi untuk dianalisis oleh AI.</p>
@@ -328,34 +367,9 @@
                 <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Jurnal Trading & Evaluasi')">Evaluasi Jurnal</button>
             </div></details>
         </div>
-
-        <details style="margin-top:15px;" open>
-            <summary style="color: #2962ff;">📝 Buka Jurnal & Catat Trade</summary>
-            <div style="margin-top: 10px;">
-                <div id="total-pnl" style="font-size: 15px; font-weight: bold; text-align:center; background: #0b0e14; padding: 10px; border-radius: 5px; color: #fff; margin-bottom:10px;">Total PnL: $0.00</div>
-                
-                <div class="trade-row">
-                    <input type="text" id="j-pair" placeholder="Pair (Cth: XAUUSD)" style="font-size: 12px; padding: 8px;">
-                    <select id="j-type" style="font-size: 12px; padding: 8px;">
-                        <option value="BUY">BUY</option>
-                        <option value="SELL">SELL</option>
-                    </select>
-                </div>
-                <div class="trade-row">
-                    <input type="number" id="j-pnl" placeholder="PnL Hasil ($)" step="0.01" style="font-size: 12px; padding: 8px;">
-                    <input type="text" id="j-note" placeholder="Catatan/Alasan (Opsional)" style="font-size: 12px; padding: 8px;">
-                </div>
-                <button class="action-btn buy" style="padding: 10px; font-size: 12px;" onclick="addJournalEntry()">➕ SIMPAN KE JURNAL</button>
-                
-                <div id="journal-list" style="margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 11px;"></div>
-                <button class="action-btn sell" style="margin-top: 10px; padding: 8px; font-size: 11px;" onclick="clearJournal()">🗑️ HAPUS SEMUA JURNAL</button>
-            </div>
-        </details>
     </div>
 
     <div id="news" class="content">
-
-        <!-- FITUR BARU: MADING HARIAN MARKET -->
         <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ffb300;">
             <h4 style="color:#ffb300; margin-top:0;">📰 Mading Makroekonomi Harian</h4>
             <p style="font-size:12px; color:#aaa; margin-top:0;">Rangkuman cepat arah market hari ini. Dilengkapi dengan analogi sederhana dari AI agar mudah dipahami!</p>
@@ -406,10 +420,17 @@
             <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia Lengkap Indikator Ekonomi USD (Klik untuk penjelasan AI).</p>
             <button class="action-btn blue" style="margin-bottom: 10px;" onclick="askAI('EDUKASI', 'Cara Membaca Data Fundamental (Actual vs Forecast) dan 15 News Paling Ditunggu Trader')">📖 ATURAN MEMBACA DATA & TOP 15 NEWS</button>
 
-            <!-- FITUR BARU: PENCARIAN EDUKASI NEWS -->
-            <input type="text" id="searchEdu" placeholder="🔍 Cari Materi/Indikator... (Cth: NFP, CPI, GDP)" onkeyup="filterEdukasi()" style="margin-bottom: 15px; border: 1px solid #089981;">
+            <h4 style="color:#ffb300; margin-top: 15px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🌍 Pendekatan Global Macro</h4>
+            <div class="edu-grid" style="margin-bottom: 15px;">
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Hubungan US Treasury Yield 10Y dengan Gold (XAUUSD) dan USD')">US Treasury Yield 10Y</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Capital Flow (Aliran Modal) antar negara dan dampaknya ke pair mayor')">Capital Flow</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Divergence Kebijakan Bank Sentral (Contoh: Fed Hawkish vs BOJ Dovish)')">Central Bank Divergence</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Siklus Ekonomi Makro: Fase Reflation, Recovery, Overheat, Stagflation')">Siklus Makro Ekonomi</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Risk On vs Risk Off Market Sentiment')">Risk On / Risk Off</button>
+            </div>
 
-            <!-- CONTAINER AKORDION UNTUK SEARCH -->
+            <input type="text" id="searchEdu" placeholder="🔍 Cari Indikator... (Cth: NFP, CPI, GDP)" onkeyup="filterEdukasi()" style="margin-bottom: 15px; border: 1px solid #089981;">
+
             <div id="edu-accordion-container">
                 <details>
                     <summary style="color: #64b5f6;">🌍 Markets</summary>
@@ -824,7 +845,6 @@
         </div>
     </div>
 
-    <!-- SEMUA COMBO NEWS LENGKAP -->
     <div id="combo" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
             <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda beserta prioritas datanya (Institusional Logic) & Waktu yang sering bentrok bersamaan.</p>
@@ -868,7 +888,62 @@
         // KUNCI API GROQ
         const GROQ_API = "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";
 
-        // DATA KUIS 
+        // ==========================================
+        // LOGIKA MARKET SESSION BUMI / PETA
+        // ==========================================
+        function updateMarketSession() {
+            let now = new Date();
+            let day = now.getUTCDay(); // 0: Sunday, 6: Saturday
+            let hour = now.getUTCHours();
+
+            let mapArea = document.getElementById('map-area');
+            let sleepEarth = document.getElementById('sleep-earth');
+            let statusText = document.getElementById('session-status');
+
+            let dotAsia = document.getElementById('syd-tok');
+            let dotLon = document.getElementById('lon');
+            let dotNY = document.getElementById('ny');
+
+            // Kalkulasi Market Tutup (Weekend)
+            // Market tutup Sabtu full, Minggu sebelum jam 22.00 UTC, Jumat setelah jam 22.00 UTC
+            let isWeekend = false;
+            if (day === 6) isWeekend = true; 
+            if (day === 0 && hour < 22) isWeekend = true; 
+            if (day === 5 && hour >= 22) isWeekend = true; 
+
+            if (isWeekend) {
+                mapArea.style.display = 'none';
+                sleepEarth.style.display = 'flex';
+                statusText.innerText = "💤 Market Libur (Bumi Sedang Tidur)";
+                return;
+            }
+
+            mapArea.style.display = 'block';
+            sleepEarth.style.display = 'none';
+
+            let activeSessions = [];
+            dotAsia.style.display = 'none';
+            dotLon.style.display = 'none';
+            dotNY.style.display = 'none';
+
+            // Jam Trading UTC
+            // Sydney/Tokyo: 22:00 - 08:00 UTC
+            if (hour >= 22 || hour < 8) { activeSessions.push("Asia (Syd/Tok)"); dotAsia.style.display = 'block'; }
+            // London: 07:00 - 16:00 UTC
+            if (hour >= 7 && hour < 16) { activeSessions.push("Eropa (London)"); dotLon.style.display = 'block'; }
+            // New York: 12:00 - 21:00 UTC
+            if (hour >= 12 && hour < 21) { activeSessions.push("AS (New York)"); dotNY.style.display = 'block'; }
+
+            statusText.innerText = "🔥 Sesi Aktif Saat Ini: " + (activeSessions.length > 0 ? activeSessions.join(" & ") : "Peralihan Sesi");
+        }
+
+        // Panggil saat dimuat & cek tiap 1 menit
+        updateMarketSession();
+        setInterval(updateMarketSession, 60000);
+
+        // ==========================================
+        // DATA KUIS & ACHIEVEMENT SYSTEM
+        // ==========================================
         const quizData = [
             { q: "Jika Data Inflasi (CPI) AS meroket tajam dari perkiraan, apa yang biasa The Fed lakukan?", opts: ["Menurunkan Suku Bunga", "Menaikkan Suku Bunga", "Membeli Obligasi", "Mencetak Uang"], ans: 1 },
             { q: "Data NFP rilis JAUH lebih rendah (buruk) dari perkiraan. Apa dampak umumnya ke Gold (XAUUSD)?", opts: ["Gold Terjun Bebas", "Gold Akan Naik (Bullish)", "Gold Sideways", "Tidak Ada Efek"], ans: 1 },
@@ -878,10 +953,26 @@
             { q: "Indikator fundamental manakah yang paling menggerakkan pasar setiap hari Jumat minggu pertama?", opts: ["CPI", "NFP", "Retail Sales", "GDP"], ans: 1 },
             { q: "Apa yang dimaksud dengan 'Dovish' dalam kebijakan moneter?", opts: ["Cenderung menaikkan suku bunga", "Cenderung menurunkan suku bunga", "Menjaga suku bunga tetap", "Menghapus suku bunga"], ans: 1 },
             { q: "Ketika tingkat pengangguran (Unemployment Rate) naik tak terduga, biasanya US Dollar akan?", opts: ["Melemah", "Menguat", "Tidak Bergerak", "Meroket"], ans: 0 },
-            { q: "Apa aset 'Safe Haven' yang paling sering dicari saat terjadi perang atau krisis?", opts: ["Bitcoin", "Saham Tech", "Emas (Gold)", "Minyak Mentah"], ans: 2 }
+            { q: "Apa aset 'Safe Haven' yang paling sering dicari saat terjadi perang atau krisis?", opts: ["Bitcoin", "Saham Tech", "Emas (Gold)", "Minyak Mentah"], ans: 2 },
+            { q: "Ketika US Treasury Yield 10Y naik drastis, apa yang umumnya terjadi pada Emas (XAUUSD)?", opts: ["Emas Terbang Ratusan Pips", "Emas Turun / Tertekan", "Tidak Ada Hubungan", "Harga Emas di-Lock"], ans: 1 }
         ];
 
         function initQuiz() {
+            // Render Achievement Data
+            let total = parseInt(localStorage.getItem('quizTotal') || 0);
+            let corrects = parseInt(localStorage.getItem('quizCorrect') || 0);
+            let acc = total > 0 ? ((corrects/total)*100).toFixed(0) : 0;
+            let rank = "Pemula Baru";
+            
+            if (total > 0) {
+                if (acc >= 90) rank = "👑 Grandmaster Makro";
+                else if (acc >= 70) rank = "🏅 Master Trader";
+                else if (acc >= 50) rank = "🥈 Trader Amatir";
+                else rank = "🥉 Penjudi Pasar";
+            }
+            document.getElementById('quiz-achievement').innerHTML = `🏆 Akurasi Anda: ${acc}% (Benar: ${corrects} | Total: ${total}) <br> <b>Rank Anda: ${rank}</b>`;
+
+            // Setup Pertanyaan Kuis
             let overlay = document.getElementById("quiz-overlay");
             let qIndex = Math.floor(Math.random() * quizData.length);
             let currentQ = quizData[qIndex];
@@ -901,96 +992,41 @@
 
         function checkAnswer(selected, correct) {
             document.getElementById("quiz-overlay").style.display = "none";
-            if(selected === correct) {
-                document.body.style.backgroundColor = "#0d47a1"; 
-                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-                createRain("+$", "#00e676", 40);
-            } else {
-                document.body.style.backgroundColor = "#8a0303"; 
-                Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-                createRain("-$", "#ff1744", 40);
-            }
-        }
+            
+            let total = parseInt(localStorage.getItem('quizTotal') || 0) + 1;
+            let corrects = parseInt(localStorage.getItem('quizCorrect') || 0);
 
-        function createRain(text, color, count) {
-            for(let i=0; i<count; i++) {
-                let el = document.createElement("div");
-                el.innerText = text;
-                el.className = "rain-icon";
-                el.style.color = color;
-                el.style.left = (Math.random() * 95) + "vw";
-                el.style.top = "-50px";
-                el.style.animationDuration = (Math.random() * 1.5 + 2) + "s"; 
-                document.body.appendChild(el);
-                setTimeout(() => { el.remove(); }, 4000); 
+            // Buat elemen untuk teks RAKSASA animasi
+            let resOverlay = document.createElement("div");
+            resOverlay.id = "quiz-result-overlay";
+
+            if(selected === correct) {
+                corrects++;
+                document.body.style.backgroundColor = "#0d47a1"; // Biru Tua jika Benar
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                resOverlay.innerText = "BARIKI SUGEH";
+                resOverlay.style.color = "#00e676";
+            } else {
+                document.body.style.backgroundColor = "#8a0303"; // Merah jika Salah
+                Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                resOverlay.innerText = "SUAAAALLAAAAAH";
+                resOverlay.style.color = "#ff1744";
             }
+
+            localStorage.setItem('quizTotal', total);
+            localStorage.setItem('quizCorrect', corrects);
+
+            document.body.appendChild(resOverlay);
+            resOverlay.style.display = "flex";
+
+            // Animasi menghilang setelah 2.5 detik
+            setTimeout(() => {
+                resOverlay.remove();
+                document.body.style.backgroundColor = "#0b0e14"; 
+            }, 2500);
         }
 
         initQuiz();
-
-        // ==========================================
-        // SISTEM JURNAL PENCATATAN MANUAL
-        // ==========================================
-        let journalData = JSON.parse(localStorage.getItem('tradingJournal')) || [];
-
-        function renderJournal() {
-            let list = document.getElementById('journal-list');
-            let totalPnLDisplay = document.getElementById('total-pnl');
-            list.innerHTML = "";
-            let total = 0;
-            
-            if(journalData.length === 0) {
-                list.innerHTML = "<div style='text-align:center; color:#aaa; padding:10px;'>Jurnal masih kosong. Yuk mulai catat trade Anda di atas!</div>";
-            } else {
-                journalData.forEach((entry) => {
-                    total += parseFloat(entry.pnl);
-                    let color = entry.pnl >= 0 ? '#089981' : '#f23645';
-                    let sign = entry.pnl > 0 ? '+' : '';
-                    list.innerHTML += `
-                        <div style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 5px; display: flex; justify-content: space-between; border-left: 3px solid ${color};">
-                            <span><b style="color:#fff;">${entry.pair}</b> <span style="color:#aaa;">(${entry.type})</span><br><i style="color:#aaa;">${entry.note}</i></span>
-                            <span style="color: ${color}; font-weight: bold; font-size: 13px;">${sign}$${entry.pnl}</span>
-                        </div>`;
-                });
-            }
-            totalPnLDisplay.innerText = `Total PnL: $${total.toFixed(2)}`;
-            totalPnLDisplay.style.color = total >= 0 ? '#089981' : '#f23645';
-        }
-
-        function clearJournal() {
-            Telegram.WebApp.showConfirm("Yakin ingin menghapus seluruh riwayat jurnal Anda?", function(confirmed) {
-                if(confirmed) {
-                    journalData = [];
-                    localStorage.setItem('tradingJournal', JSON.stringify(journalData));
-                    renderJournal();
-                    Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-                }
-            });
-        }
-        
-        function addJournalEntry() {
-            let pair = document.getElementById('j-pair').value.toUpperCase();
-            let type = document.getElementById('j-type').value;
-            let pnl = document.getElementById('j-pnl').value;
-            let note = document.getElementById('j-note').value || "-";
-            
-            if(!pair || !pnl) {
-                Telegram.WebApp.showAlert("Pair dan PnL wajib diisi!");
-                return;
-            }
-            
-            journalData.unshift({ pair, type, pnl: parseFloat(pnl).toFixed(2), note, date: new Date().toISOString() });
-            localStorage.setItem('tradingJournal', JSON.stringify(journalData));
-            
-            document.getElementById('j-pair').value = "";
-            document.getElementById('j-pnl').value = "";
-            document.getElementById('j-note').value = "";
-            
-            Telegram.WebApp.HapticFeedback.impactOccurred('light');
-            renderJournal();
-        }
-
-        renderJournal();
 
         function showTab(t, elem) {
             document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -1001,7 +1037,7 @@
         }
 
         // ==========================================
-        // FITUR BARU: SEARCH FILTER EDUKASI (AKORDION)
+        // FITUR PENCARIAN EDUKASI (AKORDION)
         // ==========================================
         function filterEdukasi() {
             let input = document.getElementById('searchEdu').value.toUpperCase();
@@ -1040,7 +1076,7 @@
         }
 
         // ==========================================
-        // SISTEM PERPUSTAKAAN AI & ROASTING ANAK TK
+        // SISTEM PERPUSTAKAAN AI
         // ==========================================
         let aiLibraryData = JSON.parse(localStorage.getItem('aiLibrary')) || [];
         let currentAiTitle = "";
@@ -1098,7 +1134,7 @@
             content.innerHTML = item.content;
             document.getElementById('btn-save-ai').style.display = 'none';
             document.getElementById('btn-belum-paham').style.display = 'none'; 
-            document.getElementById('followup-container').style.display = 'none'; // Sembunyikan tanya balik di mode arsip
+            document.getElementById('followup-container').style.display = 'none';
         }
 
         renderLibrary();
@@ -1123,7 +1159,7 @@
             
             btnSave.style.display = 'none';
             btnBelumPaham.style.display = 'none';
-            followupCont.style.display = 'none'; // Sembunyikan saat loading
+            followupCont.style.display = 'none'; 
 
             modal.style.display = 'flex';
             content.innerHTML = "<i>Menganalisis skenario market... Mohon tunggu ⏳</i>";
@@ -1147,7 +1183,7 @@
                     content.innerHTML = currentAiContent;
                     btnSave.style.display = 'block';
                     btnBelumPaham.style.display = 'block'; 
-                    followupCont.style.display = 'block'; // Tampilkan input diskusi
+                    followupCont.style.display = 'block'; 
                     Telegram.WebApp.HapticFeedback.notificationOccurred('success');
                 } else {
                     content.innerHTML = "⚠️ Terjadi kesalahan atau batas limit API tercapai.";
@@ -1157,7 +1193,9 @@
             }
         }
 
-        // FITUR BARU: DISKUSI LANJUTAN (TANYA BALIK) DI POPUP
+        // ==========================================
+        // DISKUSI LANJUTAN (TANYA BALIK) DI POPUP
+        // ==========================================
         async function sendFollowUp() {
             let followUpInput = document.getElementById('ai-followup');
             let followUpQ = followUpInput.value;
@@ -1165,7 +1203,6 @@
 
             const contentDiv = document.getElementById('ai-content');
             
-            // Tambahkan chat user ke layar
             contentDiv.innerHTML += `
                 <div style="margin-top: 15px; background: #1f2630; padding: 10px; border-radius: 8px; border-right: 3px solid #2962ff; text-align: right;">
                     <b style="color: #64b5f6;">Anda:</b><br>${followUpQ}
@@ -1174,7 +1211,7 @@
             `;
             
             followUpInput.value = "";
-            contentDiv.scrollTop = contentDiv.scrollHeight; // Auto scroll ke bawah
+            contentDiv.scrollTop = contentDiv.scrollHeight; 
             Telegram.WebApp.HapticFeedback.impactOccurred('light');
 
             let promptLanjutan = `Konteks pembicaraan sebelumnya tentang: "${lastAskedTopicContext}".\n\nPertanyaan lanjutan dari user: "${followUpQ}".\n\nJawab pertanyaan lanjutan ini secara akurat, gunakan bahasa Indonesia yang mudah dimengerti, tetap profesional layaknya Mentor Trading, dan sertakan analogi jika cocok.`;
@@ -1201,7 +1238,7 @@
                             <b style="color: #089981;">AI Mentor:</b><br>${aiReply}
                         </div>
                     `;
-                    currentAiContent = contentDiv.innerHTML; // Update data jika user ingin save
+                    currentAiContent = contentDiv.innerHTML; 
                     contentDiv.scrollTop = contentDiv.scrollHeight;
                 }
             } catch (e) {
@@ -1209,6 +1246,9 @@
             }
         }
 
+        // ==========================================
+        // MASTER FUNGSI PERINTAH AI
+        // ==========================================
         function askAI(actionType, value) {
             if(!value || value.trim() === '') {
                 Telegram.WebApp.showAlert("Kolom teks tidak boleh kosong!");
@@ -1231,6 +1271,8 @@
                 prompt = `[INSTRUKSI MUTLAK]: Anda Analis Berita Institusional. Kejadian: "${value}". Tugas Anda: \n1. Sentimen pasar? \n2. Dampak USD? \n3. Dampak XAUUSD? \n4. Rekomendasi posisi dengan alasan.`;
             } else if (actionType === 'MADING') {
                 prompt = `[INSTRUKSI MUTLAK]: Anda adalah Analis Market Profesional. Berikan MADING HARIAN (Market Update Hari Ini). Asumsikan Anda merangkum pergerakan dan berita makroekonomi/sentimen terkini yang krusial. Format: \n1. Highlight Berita Utama \n2. Analogi Kehidupan Sehari-hari (agar user paham situasinya) \n3. Arah/Dampak ke USD dan Gold (XAUUSD) hari ini. Gunakan bahasa Indonesia gaul/mentor yang bersahabat.`;
+            } else if (actionType === 'MACRO') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda Analis Global Macro Hedge Fund. Jelaskan: '${value}'. Berikan penjabaran mendalam tentang korelasi intermarket (Bonds, Equities, Currencies, Commodities). Gunakan bahasa Indonesia profesional yang mudah dipahami, berikan analogi jika perlu.`;
             } else if (actionType === 'ROASTING_TK') {
                 prompt = `[INSTRUKSI MUTLAK]: Pengguna menekan tombol 'Belum Paham' karena dia lambat mengerti tentang '${value}'. Jelaskan ulang konsep ini SEPERTI MENJELASKAN KEPADA ANAK TK (gunakan analogi mainan, permen, atau hal super sepele). WAJIB tambahkan sedikit ROASTINGAN/sindiran lucu di awal karena dia lama pahamnya. Gunakan bahasa Indonesia gaul/santai.`;
             }
