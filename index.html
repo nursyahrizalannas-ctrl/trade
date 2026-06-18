@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Enterprise Trading Pro - Ultimate Edition</title>
+    <title>Enterprise Trading Pro - Ultimate</title>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,311 +11,286 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* === 1. ENTERPRISE DESIGN SYSTEM === */
+        /* === DESIGN SYSTEM === */
         :root {
-            --bg-base: #07090D;
-            --bg-card: #11151C;
-            --bg-surface: #1A212D;
-            --primary: #2962FF;
-            --accent: #00E676;
-            --danger: #FF1744;
-            --warning: #FFAB00;
-            --gold: #FFD700;
-            --purple: #D500F9;
-            --text-main: #F0F4F8;
-            --text-muted: #8A94A6;
-            --border: rgba(255, 255, 255, 0.08);
-            --radius: 12px;
+            --bg-base: #07090D; --bg-card: #11151C; --bg-surface: #1A212D;
+            --primary: #2962FF; --accent: #00E676; --danger: #FF1744;
+            --warning: #FFAB00; --gold: #FFD700; --purple: #D500F9;
+            --text-main: #F0F4F8; --text-muted: #8A94A6;
+            --border: rgba(255, 255, 255, 0.08); --radius: 12px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-base); color: var(--text-main); font-size: 14px; padding-bottom: 75px; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-base); color: var(--text-main); font-size: 14px; padding-bottom: 80px; overflow-x: hidden; }
         h1, h2, h3, h4, h5 { color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
         p { color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
         
-        /* === 2. UI COMPONENTS === */
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        /* UI COMPONENTS */
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
         .flex-row { display: flex; justify-content: space-between; align-items: center; }
         
-        .btn { padding: 0.8rem 1rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; width: 100%; font-size: 13px; }
+        .btn { padding: 0.8rem 1rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; width: 100%; font-size: 13px; color: white; }
         .btn:active { transform: scale(0.96); }
-        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary { background: var(--primary); }
+        .btn-success { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-answer { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 10px; text-align: left; padding: 12px; font-weight: normal; }
-        .btn-answer:hover, .btn-answer:active { background: rgba(41, 98, 255, 0.2); border-color: var(--primary); }
+        .btn-answer { background: var(--bg-surface); border: 1px solid var(--border); margin-bottom: 10px; text-align: left; padding: 12px; font-weight: normal; }
         
         .badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .badge-bullish { background: rgba(0, 230, 118, 0.15); color: var(--accent); border: 1px solid rgba(0, 230, 118, 0.3); }
-        .badge-bearish { background: rgba(255, 23, 68, 0.15); color: var(--danger); border: 1px solid rgba(255, 23, 68, 0.3); }
-        .badge-neutral { background: rgba(255, 171, 0, 0.15); color: var(--warning); border: 1px solid rgba(255, 171, 0, 0.3); }
-
-        .form-control { width: 100%; padding: 0.85rem; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 10px; outline: none; }
+        .badge-bullish { background: rgba(0, 230, 118, 0.15); color: var(--accent); }
+        .badge-bearish { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         
-        /* === 3. NAVIGATION & LAYOUT === */
+        .form-control { width: 100%; padding: 0.85rem; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 10px; }
+        
+        /* NAV & LAYOUT */
         .header { position: sticky; top: 0; background: rgba(7, 9, 13, 0.9); backdrop-filter: blur(10px); padding: 15px; z-index: 100; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: rgba(17, 21, 28, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 100; }
-        .nav-item { color: var(--text-muted); text-align: center; font-size: 11px; cursor: pointer; transition: 0.3s; flex: 1; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; display: block; }
+        .nav-item { color: var(--text-muted); text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--primary); }
-        .nav-item.active i { transform: translateY(-2px); }
-
-        .view-page { display: none; padding: 15px; animation: fadeUp 0.3s ease forwards; }
+        
+        .view-page { display: none; padding: 15px; animation: fadeUp 0.3s ease; }
         .view-page.active { display: block; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* === 4. SPECIFIC MODULES === */
-        /* AI Roasting Banner */
-        .roast-banner { background: rgba(255, 23, 68, 0.1); border-left: 4px solid var(--danger); padding: 12px; margin-bottom: 15px; border-radius: 8px; animation: fadeUp 0.5s ease; }
-        .roast-banner p { font-size: 12.5px; color: #ffb4b4; margin: 0; font-style: italic; }
-
-        /* Dashboard Ticker & AI Box */
-        .ticker-wrap { height: 46px; overflow: hidden; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .ai-analysis-box { background: linear-gradient(145deg, #1A212D 0%, #11151C 100%); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        
-        /* Academy Details */
+        /* ACADEMY DETAILS */
         details.edu-module { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
-        details.edu-module summary { padding: 15px; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
-        details.edu-module summary::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--text-muted); transition: 0.3s; font-size: 12px; }
-        details.edu-module[open] summary::after { transform: rotate(180deg); }
-        .edu-content { padding: 0 15px 15px 15px; color: var(--text-muted); font-size: 13.5px; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 5px; padding-top: 15px; }
-        .edu-content b { color: var(--text-main); }
-        
-        /* Chart Tabs */
-        .chart-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-        .chart-tab { flex: 1; padding: 8px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; color: var(--text-muted); cursor: pointer; }
-        .chart-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        details.edu-module summary { padding: 15px; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .edu-content { padding: 0 15px 15px 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6; border-top: 1px solid var(--border); margin-top: 5px; padding-top: 15px; }
 
-        /* Macro Interactive News */
-        .news-item { background: var(--bg-surface); padding: 15px; border-radius: 8px; border-left: 4px solid var(--text-muted); margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .news-item:active { transform: scale(0.98); }
-        .news-item.impact-high { border-left-color: var(--danger); }
+        /* CHATBOT FAB & UI */
+        .fab-bot { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; background: linear-gradient(135deg, #1A212D, #000); border: 2px solid var(--gold); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); z-index: 99; transition: 0.3s; }
+        .fab-bot:active { transform: scale(0.9); }
         
-        /* Modal Bottom Sheet */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s; }
-        .modal-overlay.active { display: block; opacity: 1; }
-        .modal-content { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--bg-card); border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 20px; z-index: 1001; transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.1, 1); max-height: 85vh; overflow-y: auto; }
-        .modal-content.active { bottom: 0; }
-        .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 15px auto; }
-        
-        /* Timeline */
-        .timeline { border-left: 2px solid var(--border); padding-left: 20px; margin-left: 10px; position: relative; }
+        #bot-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 200; display: none; flex-direction: column; }
+        #bot-modal.active { display: flex; }
+        .bot-header { padding: 15px; background: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .chat-area { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .chat-bubble { max-width: 85%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+        .bot-msg { background: var(--bg-surface); border: 1px solid var(--border); border-top-left-radius: 0; align-self: flex-start; }
+        .user-msg { background: var(--primary); color: white; border-top-right-radius: 0; align-self: flex-end; }
+        .chat-input { padding: 15px; background: var(--bg-card); border-top: 1px solid var(--border); display: flex; gap: 10px; }
+
+        /* TIMELINE MACRO */
+        .timeline { border-left: 2px solid var(--border); padding-left: 20px; margin-left: 10px; }
         .timeline-item { position: relative; margin-bottom: 20px; }
         .timeline-item::before { content: ''; position: absolute; left: -27px; top: 0; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; border: 2px solid var(--bg-card); }
-        .timeline-date { font-size: 11px; color: var(--warning); font-weight: bold; margin-bottom: 5px; }
+        
+        /* JOURNAL LIST */
+        .journal-item { background: var(--bg-surface); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-left: 3px solid var(--border); }
+        .journal-item.profit { border-left-color: var(--accent); }
+        .journal-item.loss { border-left-color: var(--danger); }
     </style>
 </head>
 <body>
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
     <header class="header">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 38px; height: 38px; background: linear-gradient(135deg, var(--primary), #D500F9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">P</div>
+            <div style="width: 35px; height: 35px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">P</div>
             <div>
-                <h4 style="margin:0; font-size: 15px;" id="user-name">Pro Trader</h4>
-                <div style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-crown text-warning"></i> Rank: <span id="header-rank" style="color:var(--text-main); font-weight:bold;">Kroco MC 🤡</span></div>
+                <h4 style="margin:0; font-size: 14px;" id="user-name">Pro Trader</h4>
+                <div style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-crown text-warning"></i> Rank: <span id="header-rank">Kroco MC 🤡</span></div>
             </div>
-        </div>
-        <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">Daily PnL</div>
-            <div class="badge badge-bullish">+$142.50</div>
         </div>
     </header>
 
-    <!-- ================= VIEW 1: DASHBOARD ================= -->
+    <!-- FAB BOT (BUKU EMAS) -->
+    <div class="fab-bot" onclick="Bot.toggle()"><i class="fa-solid fa-book" style="color: var(--gold);"></i></div>
+
+    <!-- VIEW: DASHBOARD -->
     <main id="view-dashboard" class="view-page active">
-        
-        <!-- Roasting AI Message Banner -->
-        <div class="roast-banner" id="roast-container">
-            <h5 style="color: var(--danger); font-size: 13px; margin-bottom: 4px;"><i class="fa-solid fa-robot"></i> System Message:</h5>
-            <p id="roast-message">Memuat analisa kepribadian...</p>
+        <!-- AI Roasting -->
+        <div style="background: rgba(255, 23, 68, 0.1); border-left: 4px solid var(--danger); padding: 12px; margin-bottom: 15px; border-radius: 8px;">
+            <h5 style="color: var(--danger); font-size: 12px; margin-bottom: 4px;"><i class="fa-solid fa-robot"></i> System Roasting:</h5>
+            <p id="roast-message" style="font-size: 12.5px; color: #ffb4b4; margin: 0; font-style: italic;">Memuat sentimen brutal...</p>
         </div>
 
-        <!-- Ticker Harga Makro Utama -->
-        <div class="ticker-wrap">
+        <!-- Ticker -->
+        <div style="height: 46px; overflow: hidden; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px;">
             <div class="tradingview-widget-container">
                 <div class="tradingview-widget-container__widget"></div>
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                { "symbols": [{"proName": "OANDA:XAUUSD", "title": "Gold"}, {"proName": "CAPITALCOM:DXY", "title": "US Dollar"}, {"proName": "BINANCE:BTCUSDT", "title": "Bitcoin"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "id" }
+                { "symbols": [{"proName": "OANDA:XAUUSD", "title": "Gold"}, {"proName": "CAPITALCOM:DXY", "title": "US Dollar"}], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive" }
                 </script>
             </div>
         </div>
 
-        <!-- AI Market Summary -->
-        <h4 style="margin-bottom: 10px;"><i class="fa-solid fa-microchip text-primary"></i> Alpha AI Market Brief</h4>
-        <div class="ai-analysis-box">
-            <div class="flex-row" style="margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                <div style="text-align: center; flex: 1; border-right: 1px solid var(--border);">
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Sentimen US Dollar (DXY)</div>
-                    <span class="badge badge-bullish"><i class="fa-solid fa-arrow-trend-up"></i> STRONG BULLISH</span>
-                </div>
-                <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Sentimen Emas (XAUUSD)</div>
-                    <span class="badge badge-bearish"><i class="fa-solid fa-arrow-trend-down"></i> BEARISH PRESSURE</span>
-                </div>
-            </div>
-            <p style="font-size: 13px; margin:0; line-height: 1.6; color: #D1D4DC;">
-                <b>Kondisi Makro Saat Ini:</b> Imbal hasil US Treasury melonjak menyusul data ketenagakerjaan AS yang solid. 
-                Sikap <i>Hawkish</i> The Fed menyedot likuiditas global masuk ke Dolar. Akibatnya, Emas mengalami tekanan likuidasi agresif.
-            </p>
-        </div>
-
-        <h4 style="margin-top: 20px; margin-bottom: 10px;"><i class="fa-solid fa-layer-group text-primary"></i> Enterprise Core Modules</h4>
+        <h4 style="margin-bottom: 10px;"><i class="fa-solid fa-layer-group text-primary"></i> Main Modules</h4>
         <div class="grid-3">
-            <button class="btn btn-outline" style="height: 90px;" onclick="App.nav('view-academy')"><i class="fa-solid fa-graduation-cap text-warning" style="font-size:24px; margin-bottom:8px;"></i><br>Pro Academy</button>
-            <button class="btn btn-outline" style="height: 90px;" onclick="App.nav('view-chart')"><i class="fa-solid fa-chart-line text-primary" style="font-size:24px; margin-bottom:8px;"></i><br>Multi-Chart</button>
-            <button class="btn btn-outline" style="height: 90px;" onclick="App.nav('view-macro')"><i class="fa-solid fa-globe text-danger" style="font-size:24px; margin-bottom:8px;"></i><br>Macro Insight</button>
-            <button class="btn btn-outline" style="height: 90px;" onclick="App.nav('view-journal')"><i class="fa-solid fa-book-journal-whills text-success" style="font-size:24px; margin-bottom:8px;"></i><br>Trade Journal</button>
-            <button class="btn btn-outline" style="height: 90px;" onclick="App.nav('view-tools')"><i class="fa-solid fa-calculator text-info" style="font-size:24px; margin-bottom:8px;"></i><br>Calculators</button>
-            <!-- Tombol Modul Kuis yang baru -->
-            <button class="btn btn-outline" style="height: 90px; border-color: rgba(213, 0, 249, 0.4);" onclick="Quiz.start()"><i class="fa-solid fa-skull text-purple" style="font-size:24px; margin-bottom:8px;"></i><br>Ujian Mental</button>
+            <button class="btn btn-outline" style="height: 85px;" onclick="App.nav('view-academy')"><i class="fa-solid fa-graduation-cap text-warning" style="font-size:22px; margin-bottom:8px;"></i><br>Academy</button>
+            <button class="btn btn-outline" style="height: 85px;" onclick="App.nav('view-chart')"><i class="fa-solid fa-chart-line text-primary" style="font-size:22px; margin-bottom:8px;"></i><br>Chart</button>
+            <button class="btn btn-outline" style="height: 85px;" onclick="App.nav('view-macro')"><i class="fa-solid fa-globe text-danger" style="font-size:22px; margin-bottom:8px;"></i><br>Macro</button>
+            <button class="btn btn-outline" style="height: 85px;" onclick="App.nav('view-journal')"><i class="fa-solid fa-book-journal-whills text-success" style="font-size:22px; margin-bottom:8px;"></i><br>Journal</button>
+            <button class="btn btn-outline" style="height: 85px;" onclick="App.nav('view-tools')"><i class="fa-solid fa-money-bill-transfer text-info" style="font-size:22px; margin-bottom:8px;"></i><br>Converter</button>
+            <button class="btn btn-outline" style="height: 85px; border-color: rgba(213, 0, 249, 0.4);" onclick="App.nav('view-quiz-select')"><i class="fa-solid fa-skull text-purple" style="font-size:22px; margin-bottom:8px;"></i><br>Exam Pro</button>
         </div>
     </main>
 
-    <!-- ================= VIEW 2: 20 ACADEMY MODULES ================= -->
+    <!-- VIEW: 50 ACADEMY MATERIALS -->
     <main id="view-academy" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book-open text-warning"></i> Ultimate Trading Academy</h3>
-        <p class="text-muted" style="font-size: 13px;">Kurikulum komprehensif dari pengenalan dasar hingga penguasaan institusional (Smart Money Concept).</p>
+        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book-open text-warning"></i> Ultimate Academy (50 Bab)</h3>
+        <p style="font-size: 13px;">Kurikulum komprehensif dari dasar hingga penguasaan kelembagaan.</p>
+        <div id="academy-container"></div>
+    </main>
+
+    <!-- VIEW: QUIZ SELECTION & RENDER -->
+    <main id="view-quiz-select" class="view-page">
+        <h3 style="margin-bottom: 15px; color: var(--purple);"><i class="fa-solid fa-skull"></i> Ujian Kelayakan Institusi</h3>
+        <p style="font-size: 13px;">Pilih tingkat kesulitan. Soal akan diacak dari bank data.</p>
         
-        <h4 style="color: var(--accent); margin-top: 20px;">Tahap 1 & 2: Basic - Technical</h4>
-        <details class="edu-module"><summary>1. Pips, Lot, dan Leverage</summary><div class="edu-content">Dasar perhitungan risiko, leverage memungkinkan modal kecil memutar volume besar.</div></details>
-        <details class="edu-module"><summary>2. Support & Resistance</summary><div class="edu-content">Lantai dan Atap historis. Semakin sering disentuh, atap/lantai tersebut semakin rapuh.</div></details>
-        <details class="edu-module"><summary>3. Chart Patterns & Tren</summary><div class="edu-content">Pola repetitif psikologi massa. Jangan pernah Buy saat struktur membentuk Lower Low.</div></details>
-
-        <h4 style="color: var(--purple); margin-top: 20px;">Tahap 3: Smart Money (SMC)</h4>
-        <details class="edu-module"><summary>4. Market Structure (BOS & CHoCH)</summary><div class="edu-content"><b>BOS:</b> Validasi tren berlanjut. <b>CHoCH:</b> Tanda pertama institusi membalikkan arah tren.</div></details>
-        <details class="edu-module"><summary>5. Order Blocks & FVG</summary><div class="edu-content">Jejak algoritma bank menaruh pesanan raksasa (OB) dan kekosongan harga (Imbalance/FVG).</div></details>
-        <details class="edu-module"><summary>6. Premium vs Discount Zones</summary><div class="edu-content">Tarik fibo 50%. Institusi HANYA Buy di zona Discount (Bawah) dan Sell di Premium (Atas).</div></details>
-
-        <h4 style="color: var(--danger); margin-top: 20px;">Tahap 4: Makroekonomi</h4>
-        <details class="edu-module"><summary>7. Korelasi DXY vs XAUUSD</summary><div class="edu-content">Inversi absolut. Jika US Dollar (DXY) menguat, Emas (XAUUSD) otomatis akan hancur.</div></details>
-        <details class="edu-module"><summary>8. Kebijakan Bank Sentral (The Fed)</summary><div class="edu-content"><b>Hawkish:</b> Naikkan suku bunga (DXY Meroket). <b>Dovish:</b> Potong suku bunga (DXY Hancur).</div></details>
-
-        <!-- Kuis Entry Point di Bawah Akademi -->
-        <div class="card" style="margin-top: 30px; border-color: var(--purple); text-align: center; background: linear-gradient(180deg, #1A212D 0%, #11151C 100%);">
-            <h4 class="text-main" style="color:var(--purple);"><i class="fa-solid fa-award"></i> Ujian Kelayakan Institusi</h4>
-            <p style="font-size: 13px;">Merasa udah jago setelah baca teori? Buktikan di sini. Jawab 10 soal untuk naik pangkat, atau terima kenyataan kalau kamu cuma donatur broker.</p>
-            <button class="btn" style="background: var(--purple); color: white;" onclick="Quiz.start()">Mulai Eksekusi Mental</button>
+        <div class="card" onclick="Quiz.start('beginner')" style="cursor:pointer; border-color: var(--accent);">
+            <h4><i class="fa-solid fa-baby"></i> Level 1: Pemula</h4>
+            <p style="font-size:12px; margin:0;">Dasar forex, pips, leverage, dan candlestick.</p>
+        </div>
+        <div class="card" onclick="Quiz.start('intermediate')" style="cursor:pointer; border-color: var(--warning);">
+            <h4><i class="fa-solid fa-user-tie"></i> Level 2: Menengah</h4>
+            <p style="font-size:12px; margin:0;">Technical analysis, chart pattern, indikator.</p>
+        </div>
+        <div class="card" onclick="Quiz.start('pro')" style="cursor:pointer; border-color: var(--danger);">
+            <h4><i class="fa-solid fa-user-ninja"></i> Level 3: Profesional & Makro</h4>
+            <p style="font-size:12px; margin:0;">Smart Money Concept, Fundamental, DXY, Psikologi Bencana.</p>
         </div>
     </main>
 
-    <!-- ================= VIEW KUIS (MODUL BARU) ================= -->
-    <main id="view-quiz" class="view-page">
+    <main id="view-quiz-active" class="view-page">
         <div class="flex-row" style="margin-bottom: 20px;">
-            <h3 style="margin: 0; color: var(--purple);"><i class="fa-solid fa-stopwatch"></i> Exam Pro</h3>
+            <h3 style="margin: 0; color: var(--purple);">Exam Pro</h3>
             <span class="badge badge-neutral" id="quiz-progress">1 / 10</span>
         </div>
-        
-        <!-- Area Render Kuis -->
         <div class="card" id="quiz-question-container">
             <h4 id="q-text" style="line-height: 1.5; margin-bottom: 20px; font-size: 15px;">Memuat soal...</h4>
-            <div id="q-options">
-                <!-- Opsi dirender via JS -->
-            </div>
+            <div id="q-options"></div>
         </div>
-
-        <!-- Area Hasil Kuis (Awalnya Sembunyi) -->
         <div class="card" id="quiz-result-container" style="display: none; text-align: center;">
             <h2 id="r-score" style="font-size: 3rem; color: var(--accent); margin-bottom: 5px;">0/10</h2>
-            <h4 style="margin-bottom: 15px;">Skor Pengetahuan Anda</h4>
-            
-            <div style="background: var(--bg-surface); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Pangkat Baru Anda:</div>
-                <h3 id="r-rank" style="color: var(--gold); margin: 0;">Memuat Pangkat...</h3>
-            </div>
-            
-            <p id="r-message" style="font-style: italic; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Pesan roasting...</p>
-            
-            <button class="btn btn-primary" onclick="Quiz.finishAndReturn()">Terima Nasib & Kembali</button>
+            <h4>Skor Pengetahuan</h4>
+            <p id="r-message" style="font-style: italic; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
+            <button class="btn btn-primary" onclick="App.nav('view-dashboard')">Selesai</button>
         </div>
     </main>
 
-    <!-- ================= VIEW 3: LIVE CHART ================= -->
+    <!-- VIEW: LIVE CHART -->
     <main id="view-chart" class="view-page">
-        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-chart-line text-primary"></i> Pro Terminal Chart</h3>
-        <div class="chart-tabs">
-            <div class="chart-tab active" onclick="loadChart('OANDA:XAUUSD', this)">🥇 XAUUSD</div>
-            <div class="chart-tab" onclick="loadChart('CAPITALCOM:DXY', this)">💵 DXY</div>
-            <div class="chart-tab" onclick="loadChart('BINANCE:BTCUSDT', this)">🪙 BTC</div>
+        <div class="grid-3" style="margin-bottom: 10px;">
+            <button class="btn btn-outline" style="padding: 5px; font-size:12px;" onclick="loadChart('OANDA:XAUUSD')">🥇 XAUUSD</button>
+            <button class="btn btn-outline" style="padding: 5px; font-size:12px;" onclick="loadChart('CAPITALCOM:DXY')">💵 DXY</button>
+            <button class="btn btn-outline" style="padding: 5px; font-size:12px;" onclick="loadChart('BINANCE:BTCUSDT')">🪙 BTC</button>
         </div>
-        <div class="card" style="padding: 0; overflow: hidden; height: 60vh;">
-            <div id="tv_chart_container" style="height: 100%; width: 100%;"></div>
-        </div>
+        <div class="card" style="padding: 0; height: 65vh;"><div id="tv_chart_container" style="height: 100%; width: 100%;"></div></div>
     </main>
 
-    <!-- ================= VIEW 4: MACRO & NEWS ================= -->
+    <!-- VIEW: MACRO & NEWS -->
     <main id="view-macro" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-bolt text-danger"></i> Macro Intelligence</h3>
-        <div class="card" style="border-left: 4px solid var(--warning);">
-            <h4 class="text-warning"><i class="fa-solid fa-calendar-days"></i> 30-Days Forward Outlook</h4>
-            <p style="font-size: 13px; margin-bottom: 15px;">Sistem analisis murni berbasis data fundamental masa lalu vs ekspektasi rilis mendatang.</p>
+        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-bolt text-danger"></i> Macro Intelligence Radar</h3>
+        
+        <div class="card" style="border-left: 4px solid var(--primary);">
+            <h4 class="text-primary"><i class="fa-solid fa-link"></i> Rantai Berkesinambungan (Konteks Global)</h4>
+            <p style="font-size: 13px; margin-bottom: 15px;">Analisis AI menyambungkan rentetan data masa lalu dengan radar masa depan untuk melihat gambaran besar <i>(Big Picture)</i>.</p>
             <div class="timeline">
-                <div class="timeline-item"><div class="timeline-date">Bulan Lalu</div><div style="font-size: 13px; color: var(--text-main);">Inflasi AS <i>sticky</i> di angka 3.4%. Batalnya pemotongan suku bunga.</div></div>
-                <div class="timeline-item"><div class="timeline-date">Minggu Ini</div><div style="font-size: 13px; color: var(--text-main);">Proyeksi NFP tetap kuat di atas 200k. Dolar akan melanjutkan reli.</div></div>
+                <div class="timeline-item">
+                    <div style="font-size: 11px; color: var(--text-muted); font-weight: bold;">Bulan Lalu (Data Aktual)</div>
+                    <div style="font-size: 13px;"><b>NFP Kuat & CPI Mengakar:</b> Ekonomi AS terbukti panas. The Fed memutuskan menahan pemotongan suku bunga. Akibatnya likuiditas kabur dari Emas dan masuk ke Dolar. Emas tertekan $100+.</div>
+                </div>
+                <div class="timeline-item">
+                    <div style="font-size: 11px; color: var(--warning); font-weight: bold;">Minggu Ini (Radar Saat Ini)</div>
+                    <div style="font-size: 13px;"><b>Fokus Ritel (Retail Sales):</b> Jika minggu ini Retail Sales anjlok, ini adalah pertanda pertama konsumen AS mulai sekarat karena suku bunga tinggi. Dolar akan <i>pullback</i> (koreksi turun sementara).</div>
+                </div>
+                <div class="timeline-item" style="margin-bottom: 0;">
+                    <div style="font-size: 11px; color: var(--danger); font-weight: bold;">Bulan Depan (Proyeksi Kuartal)</div>
+                    <div style="font-size: 13px;">Jika pelemahan ritel berlanjut ke data pengangguran, sentimen <i>Dovish</i> akan bangkit. Ini adalah zona di mana Institusi mulai mencicil <b>BUY EMAS</b> secara diam-diam (Fase Akumulasi).</div>
+                </div>
             </div>
         </div>
-        <h4 style="margin-bottom: 10px;">Interactive News Radar</h4>
-        <div class="news-item impact-high" onclick="openMacroModal('NFP')">
-            <div class="flex-row"><b>🇺🇸 Non-Farm Payrolls (NFP)</b> <span class="badge badge-bearish">HIGH</span></div>
+
+        <h4 style="margin-bottom: 10px;">Radar Berita Rilis Tertinggi</h4>
+        <div class="card" style="padding:15px; border-left: 4px solid var(--danger);">
+            <div class="flex-row" style="margin-bottom: 5px;">
+                <b>🇺🇸 Core PCE (Inflasi Personal)</b> <span class="badge badge-bearish">HIGH IMPACT</span>
+            </div>
+            <p style="font-size: 12px; margin:0;"><b>Analisis:</b> Indikator inflasi yang paling dilihat The Fed (bahkan di atas CPI). Jika PCE > Forecast = Suku Bunga tetap tinggi = DXY <i class="fa-solid fa-arrow-up"></i> | XAU <i class="fa-solid fa-arrow-down"></i></p>
         </div>
-        <div class="news-item impact-high" onclick="openMacroModal('CPI')">
-            <div class="flex-row"><b>🇺🇸 Core CPI (Inflasi)</b> <span class="badge badge-bearish">HIGH</span></div>
+        <div class="card" style="padding:15px; border-left: 4px solid var(--danger);">
+            <div class="flex-row" style="margin-bottom: 5px;">
+                <b>🇺🇸 FOMC Rate Decision</b> <span class="badge badge-bearish">EXTREME</span>
+            </div>
+            <p style="font-size: 12px; margin:0;"><b>Analisis:</b> Penentuan suku bunga mutlak. Hati-hati pada 30 menit setelah rilis saat Powell (Ketua The Fed) berpidato. Whipsaw (gerakan dua arah) bisa menyapu Stop Loss Anda seketika.</p>
         </div>
     </main>
 
-    <!-- MODAL BERITA MACRO -->
-    <div class="modal-overlay" id="modal-overlay" onclick="closeMacroModal()"></div>
-    <div class="modal-content" id="modal-content">
-        <div class="modal-handle"></div>
-        <h3 id="modal-title" style="margin-bottom: 15px; color: var(--primary);">Judul Berita</h3>
-        <div style="background: var(--bg-surface); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-            <p id="modal-context" style="font-size: 13px; margin: 0; color: var(--text-main); line-height: 1.6;">Penjelasan...</p>
+    <!-- VIEW: TRADE JOURNAL DYNAMIC -->
+    <main id="view-journal" class="view-page">
+        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book-journal-whills text-success"></i> Trade Journal Pro</h3>
+        
+        <!-- Stats -->
+        <div class="grid-3" style="margin-bottom: 15px;">
+            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-trades" style="font-size: 1.2rem; font-weight:bold;">0</div><div style="font-size:11px; color:var(--text-muted);">Trades</div></div>
+            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-winrate" style="font-size: 1.2rem; font-weight:bold; color:var(--primary);">0%</div><div style="font-size:11px; color:var(--text-muted);">Win Rate</div></div>
+            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-pnl" style="font-size: 1.2rem; font-weight:bold;">$0</div><div style="font-size:11px; color:var(--text-muted);">Net PnL</div></div>
         </div>
-        <div class="grid-2" style="margin-bottom: 15px;">
-            <div style="background: rgba(41, 98, 255, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted);">Efek ke US Dollar</div>
-                <div id="modal-dxy" style="font-size: 13px; font-weight: bold; color: white;">...</div>
+        
+        <div class="card" style="padding: 10px; margin-bottom: 20px;"><canvas id="journalChart" height="150"></canvas></div>
+
+        <!-- Form Input -->
+        <h4 style="margin-bottom: 10px;">Input Posisi Baru</h4>
+        <div class="card">
+            <div class="grid-2">
+                <input type="text" id="j-pair" class="form-control" placeholder="Pair (XAUUSD)" autocomplete="off">
+                <select id="j-type" class="form-control" style="appearance: none;">
+                    <option value="BUY">BUY</option><option value="SELL">SELL</option>
+                </select>
             </div>
-            <div style="background: rgba(255, 215, 0, 0.1); padding: 12px; border-radius: 8px; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted);">Efek ke Emas (XAU)</div>
-                <div id="modal-xau" style="font-size: 13px; font-weight: bold; color: white;">...</div>
+            <input type="number" id="j-amount" class="form-control" placeholder="Profit/Loss ($) -> Pakai minus (-) jika Loss">
+            <button class="btn btn-primary" onclick="Journal.add()">Simpan ke Jurnal</button>
+        </div>
+
+        <h4 style="margin-bottom: 10px;">Riwayat Eksekusi</h4>
+        <div id="journal-list"></div>
+    </main>
+
+    <!-- VIEW: CURRENCY CONVERTER -->
+    <main id="view-tools" class="view-page">
+        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-money-bill-transfer text-info"></i> Global Currency Converter</h3>
+        <div class="card">
+            <p style="font-size: 12px; margin-bottom: 15px;">Konversi berbasis rate sintesis makro.</p>
+            <input type="number" id="conv-amt" class="form-control" value="100" oninput="Converter.calc()">
+            <div class="grid-2" style="margin-bottom: 15px;">
+                <div>
+                    <label style="font-size:11px; color:var(--text-muted);">Dari</label>
+                    <select id="conv-from" class="form-control" onchange="Converter.calc()"><option value="USD">USD - US Dollar</option><option value="EUR">EUR - Euro</option><option value="GBP">GBP - Pound</option><option value="IDR">IDR - Rupiah</option></select>
+                </div>
+                <div>
+                    <label style="font-size:11px; color:var(--text-muted);">Ke</label>
+                    <select id="conv-to" class="form-control" onchange="Converter.calc()"><option value="IDR">IDR - Rupiah</option><option value="USD">USD - US Dollar</option><option value="EUR">EUR - Euro</option><option value="GBP">GBP - Pound</option></select>
+                </div>
+            </div>
+            <div style="background: var(--bg-surface); padding: 15px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Hasil Konversi</div>
+                <h2 id="conv-res" style="color: var(--accent); margin: 0;">Loading...</h2>
             </div>
         </div>
-        <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="closeMacroModal()">Tutup</button>
+    </main>
+
+    <!-- MODAL BOT (AI CHAT) -->
+    <div id="bot-modal">
+        <div class="bot-header">
+            <div>
+                <h4 style="margin:0; font-size:15px; color:var(--gold);"><i class="fa-solid fa-book"></i> Oracle Guide AI</h4>
+                <div style="font-size:11px; color:var(--text-muted);">Asisten Pengetahuan & Makro</div>
+            </div>
+            <i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="Bot.toggle()"></i>
+        </div>
+        <div class="chat-area" id="bot-chat-area">
+            <div class="chat-bubble bot-msg">Salam Trader. Saya Oracle. Tanyakan bebas mengenai istilah trading, fundamental, atau minta roasting. (Ketik 'bantuan' untuk panduan)</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="bot-input" class="form-control" style="margin:0; border-radius:20px; padding:10px 15px;" placeholder="Tanya tentang SMC, Makro..." onkeypress="if(event.key === 'Enter') Bot.send()">
+            <button class="btn btn-primary" style="width:50px; border-radius:50%;" onclick="Bot.send()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
     </div>
 
-    <!-- ================= VIEW 5: TRADING JOURNAL ================= -->
-    <main id="view-journal" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book-journal-whills text-success"></i> Trade Journal</h3>
-        <div class="grid-3" style="margin-bottom: 15px;">
-            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-trades" style="font-size: 1.5rem; font-weight:bold;">12</div><div style="font-size:11px; color:var(--text-muted);">Trades</div></div>
-            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-winrate" style="font-size: 1.5rem; font-weight:bold; color:var(--primary);">...</div><div style="font-size:11px; color:var(--text-muted);">Win Rate</div></div>
-            <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-pnl" style="font-size: 1.5rem; font-weight:bold; color:var(--accent);">+$450.00</div><div style="font-size:11px; color:var(--text-muted);">Net PnL</div></div>
-        </div>
-        <div class="card" style="padding: 10px;"><canvas id="journalChart" height="150"></canvas></div>
-    </main>
-
-    <!-- ================= VIEW 6: CALCULATOR ================= -->
-    <main id="view-tools" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-gears text-info"></i> Execution Tools</h3>
-        <div class="card">
-            <h4 class="text-primary">Kalkulator Lot Presisi</h4>
-            <p style="font-size: 12px;">Hitung lot agar tidak kehabisan margin konyol.</p>
-            <div class="grid-2">
-                <div><label style="font-size:12px; color:var(--text-muted);">Saldo ($)</label><input type="number" id="calc-bal" class="form-control" value="1000"></div>
-                <div><label style="font-size:12px; color:var(--text-muted);">Risiko (%)</label><input type="number" id="calc-risk" class="form-control" value="1"></div>
-            </div>
-            <div><label style="font-size:12px; color:var(--text-muted);">Stop Loss (Pips)</label><input type="number" id="calc-sl" class="form-control" value="30"></div>
-            <button class="btn btn-primary" onclick="calcLot()">Kalkulasi Lot</button>
-            <div id="calc-res" style="display:none; margin-top:15px; text-align:center; padding:10px; background:rgba(0,230,118,0.1); border-radius:8px;">
-                <h2 class="text-accent" id="calc-lot-out" style="color:var(--accent); margin-bottom:5px;">0.00 Lot</h2>
-                <div style="font-size:12px;" class="text-danger">Maks Risiko: $<span id="calc-risk-out">0</span></div>
-            </div>
-        </div>
-    </main>
-
-    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <div class="nav-item active" data-target="view-dashboard" onclick="App.nav('view-dashboard')"><i class="fa-solid fa-house"></i><span>Home</span></div>
         <div class="nav-item" data-target="view-chart" onclick="App.nav('view-chart')"><i class="fa-solid fa-chart-line"></i><span>Chart</span></div>
@@ -327,186 +302,166 @@
     <script>
         const tg = window.Telegram.WebApp;
         
-        // --- DATA USER & ROASTING SYSTEM ---
-        let userData = { winrate: 0, score: 0, rank: 'Kroco MC 🤡', hasPlayed: false };
+        // --- DATA 50 MATERI AKADEMI ---
+        const academyData = [
+            // Kategori 1: Dasar Pemula (1-10)
+            {cat: "1. Basic Foundation", list: [
+                {t: "1. Apa itu Forex?", d: "Pasar pertukaran mata uang global bernilai triliunan dolar. Trading CFD berarti menebak arah harga tanpa memiliki fisik uangnya."},
+                {t: "2. Bullish & Bearish", d: "Bull (Banteng) menyerang ke atas = Harga Naik. Bear (Beruang) mencakar ke bawah = Harga Turun."},
+                {t: "3. Pips (Point in Percentage)", d: "Unit terkecil pergerakan harga. Pada EURUSD di 1.1050, angka '0' terakhir adalah Pips."},
+                {t: "4. Lot (Volume Trading)", d: "Ukuran transaksi. 1 Lot Standard = $10 per pip. 0.01 Lot (Micro) = $0.10 per pip."},
+                {t: "5. Leverage (Daya Ungkit)", d: "Pinjaman broker. Leverage 1:500 berarti dengan modal $10, Anda memiliki daya beli $5,000 di pasar."},
+                {t: "6. Margin & Margin Call", d: "Margin: Jaminan uang ke broker. Margin Call (MC): Peringatan broker saat saldo Anda hampir habis menahan floating minus."},
+                {t: "7. Spread & Komisi", d: "Spread adalah selisih harga Beli dan Jual dari broker (Keuntungan broker). Selalu perhitungkan spread saat entry."},
+                {t: "8. Order Type (Market vs Pending)", d: "Market Execution: Beli sekarang. Pending Order (Buy Limit/Sell Limit): Pasang jaring di harga diskon/pucuk."},
+                {t: "9. Stop Loss & Take Profit", d: "Stop Loss (Sabuk Pengaman): Batas rugi otomatis. Take Profit: Batas untung otomatis. Trading tanpa SL adalah bunuh diri."},
+                {t: "10. Anatomi Candlestick", d: "Body = Kekuatan dominasi momentum. Ekor (Wick) = Penolakan harga (Rejection)."}
+            ]},
+            // Kategori 2: Teknikal Dasar (11-20)
+            {cat: "2. Technical Analysis", list: [
+                {t: "11. Support (Lantai)", d: "Area psikologis di bawah harga saat ini di mana pembeli menahan harga jatuh lebih dalam."},
+                {t: "12. Resistance (Atap)", d: "Area psikologis di atas harga saat ini di mana penjual menahan harga naik lebih tinggi."},
+                {t: "13. Support Becomes Resistance (SBR)", d: "Lantai yang berhasil dijebol ke bawah, secara psikologis akan berubah fungsi menjadi Atap yang kuat."},
+                {t: "14. Trend is Your Friend", d: "Tren Naik = Higher High & Higher Low. Jangan berenang melawan arus utama. Buy saat koreksi di tren naik."},
+                {t: "15. Trendlines & Channel", d: "Garis miring yang memetakan jalur harga. Tembusnya trendline mengindikasikan pelemahan momentum."},
+                {t: "16. Chart Pattern: Double Top/Bottom", d: "Pola pembalikan arah klasik berbentuk huruf M (Top) atau W (Bottom)."},
+                {t: "17. Chart Pattern: Head & Shoulders", d: "Pola reversal mematikan yang menandakan transisi tren akibat gagalnya membuat titik tertinggi baru."},
+                {t: "18. Moving Average (MA)", d: "Indikator harga rata-rata historis (misal MA50, MA200). Digunakan institusi sebagai dynamic support/resistance."},
+                {t: "19. Fibonacci Retracement", d: "Alat pengukur koreksi harga. Area emas pemantulan berada di level 61.8% dan 78.6% (Golden Zone)."},
+                {t: "20. Multi-Timeframe Analysis", d: "Gunakan Daily/H4 untuk arah utama. Turun ke H1/M15 HANYA untuk mencari titik masuk presisi (Top-Down Analysis)."}
+            ]},
+            // Kategori 3: Smart Money Concept (21-30)
+            {cat: "3. Smart Money Concept (SMC)", list: [
+                {t: "21. Siapa itu Smart Money?", d: "Bank Sentral, Institusi raksasa, dan Hedge Fund. Mereka yang menggerakkan pasar, retail trader hanyalah plankton (likuiditas)."},
+                {t: "22. Market Structure Shift (BOS)", d: "Break of Structure: Konfirmasi bahwa tren sebelumnya masih sangat kuat karena menembus resisten/support lama."},
+                {t: "23. Change of Character (CHoCH)", d: "Tanda peringatan pertama bahwa institusi mulai membalikkan arah tren utama."},
+                {t: "24. Order Block (OB)", d: "Candle terakhir sebelum pergerakan agresif. Area di mana bank meninggalkan 'Pending Order' miliaran dolar."},
+                {t: "25. Fair Value Gap (FVG / Imbalance)", d: "Kekosongan harga akibat lonjakan instan. Market punya gaya magnet untuk menutup celah gap ini agar stabil."},
+                {t: "26. Liquidity (Bahan Bakar Market)", d: "Kumpulan Stop Loss retail trader. Bank sengaja menyapu level SNR ritel untuk mengambil likuiditas tersebut."},
+                {t: "27. Inducement (Jebakan)", d: "Area support/resistance palsu yang dibuat awal agar ritel masuk duluan, lalu disapu bersih sebelum market bergerak ke arah sebenarnya."},
+                {t: "28. Premium vs Discount Zone", d: "Institusi selalu Beli di harga murang (<50% Fibo) dan Jual di harga mahal (>50% Fibo). Ritel kebalikannya."},
+                {t: "29. Mitigation Block", d: "Order block yang gagal (tembus), lalu diuji kembali (retest) untuk mengurangi kerugian institusi."},
+                {t: "30. Wyckoff Accumulation/Distribution", d: "Siklus harga institusional: Konsolidasi (Akumulasi barang), Mark Up (Terbang), Distribusi (Jual ke ritel), Mark Down (Hancur)."}
+            ]},
+            // Kategori 4: Fundamental & Makro (31-40)
+            {cat: "4. Makroekonomi Global", list: [
+                {t: "31. US Dollar Index (DXY)", d: "Indeks kekuatan Dolar AS terhadap mata uang global. Penggerak mutlak instrumen Forex dan Komoditas."},
+                {t: "32. Korelasi DXY vs XAUUSD", d: "Korelasi negatif sempurna. Jika grafik Dolar terbang naik, grafik Emas dipastikan akan hancur lebur."},
+                {t: "33. Kebijakan Suku Bunga (Interest Rates)", d: "Senjata utama bank sentral. Suku bunga naik = Mata uang meroket. Suku bunga turun = Mata uang melemah."},
+                {t: "34. The Fed (Federal Reserve)", d: "Bank Sentral Amerika. Institusi paling berkuasa di bumi yang menyetir arah Dolar global."},
+                {t: "35. Hawkish vs Dovish", d: "Hawkish: The Fed galak, ketatkan uang (Dolar Naik). Dovish: The Fed ramah, cetak uang (Aset berisiko spt Kripto/Emas melesat)."},
+                {t: "36. Inflasi (CPI / PCE)", d: "Data kenaikan harga barang. Inflasi tinggi memaksa The Fed menahan suku bunga (Hawkish = Dolar Kuat)."},
+                {t: "37. Data Pekerja (NFP - Non Farm Payroll)", d: "Rilis sebulan sekali. Mengukur kesehatan ekonomi. Pekerja bertambah = Ekonomi AS Kuat = Dolar Menguat."},
+                {t: "38. Klaim Pengangguran Mingguan (Unemployment)", d: "Data mingguan orang AS yang menganggur. Makin banyak pengangguran, Dolar makin lemah."},
+                {t: "39. Safe Haven Asset", d: "Aset tempat sembunyi uang saat perang/krisis dunia (Emas, Swiss Franc, Yen Jepang, Dolar AS)."},
+                {t: "40. Risk On vs Risk Off", d: "Risk On: Investor berani beli saham/kripto. Risk Off: Investor panik, uang ditarik masuk ke aset aman (Emas/USD)."}
+            ]},
+            // Kategori 5: Psikologi & Risiko (41-50)
+            {cat: "5. Psikologi & Manajemen Bencana", list: [
+                {t: "41. Risk to Reward Ratio (RRR)", d: "Rasio kerugian vs keuntungan. Jika RRR 1:2, kalah $10 tapi menang $20. Winrate 40% pun Anda masih profit."},
+                {t: "42. Risk of Ruin (Matematika Kebangkrutan)", d: "Risikokan maks 1% per trade. Anda butuh 100x kalah beruntun untuk MC. Risikokan 10%, cukup 10x apes Anda tamat."},
+                {t: "43. FOMO (Fear Of Missing Out)", d: "Penyakit mental masuk pasar di pucuk karena takut ketinggalan kereta. Obatnya: Sabar tunggu harga pullback/diskon."},
+                {t: "44. Revenge Trading (Balas Dendam)", d: "Emosi melipatgandakan ukuran Lot setelah Loss untuk membalikkan modal. 99% berakhir Margin Call."},
+                {t: "45. Overtrading", d: "Kecanduan klik layar. Institusi sabar menunggu setup berhari-hari. Penjudi klik buy/sell tiap menit."},
+                {t: "46. Eksekusi Jurnal Trading", d: "Mencatat alasan Buy/Sell dan emosi saat itu. Tanpa jurnal, Anda hanya menumpang nasib tanpa bahan evaluasi."},
+                {t: "47. Terima Loss Sebagai Biaya Bisnis", d: "Kerugian (Stop Loss) adalah biaya sewa ruko dan gaji karyawan dalam bisnis trading. Tidak mungkin 100% Win."},
+                {t: "48. Sindrom Analisis Kelumpuhan (Paralysis)", d: "Memakai 10 indikator di layar hingga kebingungan sendiri kapan masuk pasar. Keep It Simple."},
+                {t: "49. Mindset Probabilitas", d: "Anda tidak bisa memprediksi masa depan secara pasti, Anda hanya bermain pada pola probabilitas tertinggi."},
+                {t: "50. Rahasia Menjadi 1% Trader Sukses", d: "Konsisten melakukan hal membosankan: Disiplin ukuran Lot, Disiplin Setup, Disiplin Stop Loss."}
+            ]}
+        ];
 
-        const roasts = {
-            lowWr_lowIq: [
-                "Welcome back, Donatur Broker! Udah siap margin call lagi hari ini? Buku nggak dibaca, pantesan saldo merah terus.",
-                "Deposit terus, WD kaga pernah. Mending uang lu disedekahin aja bos, daripada ngasih makan bandar.",
-                "Nggak capek jadi penyumbang likuiditas market? Belajar woy, jangan cuma mencet Buy/Sell pakai insting babon!"
+        // --- DATA POOL KUIS ---
+        const quizPool = {
+            beginner: [
+                { q: "Berapa Pips jika EURUSD bergerak dari 1.1000 ke 1.1050?", opts: ["50 Pips", "5 Pips", "500 Pips", "0.5 Pips"], a: 0 },
+                { q: "Apa itu Spread?", opts: ["Keuntungan murni trader", "Selisih harga jual & beli broker", "Bonus deposit", "Pinjaman modal"], a: 1 },
+                { q: "Trend yang terus membuat pucuk dan lembah lebih tinggi disebut?", opts: ["Sideways", "Downtrend", "Uptrend", "Breakout"], a: 2 },
+                { q: "Jika Anda memprediksi harga akan turun, posisi apa yang diambil?", opts: ["BUY", "HOLD", "SELL", "WAIT"], a: 2 },
+                { q: "Apa singkatan dari SL dan TP?", opts: ["Stop Limit, Take Point", "Stop Loss, Take Profit", "Sell Limit, Trade Point", "Sinyal Lemah, Teknik Pasti"], a: 1 },
+                { q: "Satuan volume transaksi di Forex disebut?", opts: ["Kilo", "Lembar", "Lot", "Pips"], a: 2 },
+                { q: "Ekor/Wick panjang di bagian bawah candlestick mengindikasikan?", opts: ["Dominasi seller", "Penolakan agresif buyer", "Pasar tutup", "Tidak ada arti"], a: 1 },
+                { q: "Jenis order untuk membeli di harga lebih murah dari sekarang disebut?", opts: ["Buy Stop", "Sell Limit", "Buy Limit", "Market Execution"], a: 2 },
+                { q: "Apa fungsi dari Margin Call (MC)?", opts: ["Menambah modal", "Broker menutup paksa posisi karena dana habis", "Sinyal VIP", "Profit maksimal"], a: 1 },
+                { q: "Warna standar umum untuk candlestick Bullish adalah?", opts: ["Merah", "Hitam", "Hijau", "Abu-abu"], a: 2 },
+                { q: "Pasangan mata uang mana yang disebut 'Major Pair'?", opts: ["EURTRY", "GBPUSD", "ZARJPY", "SGDMYR"], a: 1 },
+                { q: "Leverage 1:100 berarti?", opts: ["Modal dikalikan 100", "Daya beli 100x lipat dari modal", "Kerugian 100x lipat", "Komisi 100%"], a: 1 }
             ],
-            lowWr_highIq: [
-                "Wah, si Profesor Trading dateng! Teorinya sih selangit (nilai kuis tinggi), tapi riwayat trading lu kok merah semua?",
-                "Pinter sih nebak soal, tapi giliran eksekusi di market tangan lu gemeteran kan? Percuma pintar kalau mental tempe!",
-                "Ternyata otak lu lumayan jalan. Sayang psikologi lu sekelas anak TK pas ngadepin floating minus."
+            intermediate: [
+                { q: "Apa nama pola chart reversal berbentuk huruf M?", opts: ["Double Bottom", "Head and Shoulders", "Double Top", "Wedge"], a: 2 },
+                { q: "Level emas (Golden Ratio) pada Fibonacci Retracement adalah?", opts: ["23.6% & 38.2%", "50% & 100%", "61.8% & 78.6%", "10% & 20%"], a: 2 },
+                { q: "Apa arti Support yang tertembus (SBR)?", opts: ["Kembali jadi Support", "Berubah fungsi jadi Resistance kuat", "Tren berakhir", "Tidak berguna"], a: 1 },
+                { q: "Di Timeframe (TF) manakah tren utama paling valid dilihat?", opts: ["M1", "M5", "Daily (D1)", "Tick Chart"], a: 2 },
+                { q: "Indikator Moving Average (MA) fungsi utamanya untuk melihat?", opts: ["Arah Tren rata-rata", "Overbought", "Volume transaksi broker", "Suku bunga"], a: 0 },
+                { q: "Pola candlestick Doji menggambarkan?", opts: ["Tren berlanjut agresif", "Keraguan/keseimbangan buyer & seller", "Kehancuran market", "Sinyal buy mutlak"], a: 1 },
+                { q: "Apa itu Risk to Reward Ratio (RRR)?", opts: ["Rasio profit broker", "Perbandingan batas rugi (SL) vs target untung (TP)", "Jumlah indikator di chart", "Winrate harian"], a: 1 },
+                { q: "Menambahkan indikator terlalu banyak di chart memicu penyakit psikologi?", opts: ["FOMO", "Revenge Trading", "Analysis Paralysis", "Overtrading"], a: 2 },
+                { q: "Trading melawan arus tren kuat biasanya berakhir dengan?", opts: ["Profit besar", "Margin Call / Stop Loss", "Spread melebar", "Swap positif"], a: 1 },
+                { q: "Garis miring yang menghubungkan titik-titik higher low dalam uptrend disebut?", opts: ["Resistance", "Fibonacci", "Trendline Support", "Moving Average"], a: 2 },
+                { q: "Manakah pola candlestick Reversal Continuation?", opts: ["Bullish Flag", "Head & Shoulders", "Double Top", "Triple Bottom"], a: 0 },
+                { q: "Emosi membalas dendam setelah rugi disebut?", opts: ["Disiplin", "Revenge Trading", "FOMO", "Scaling in"], a: 1 }
             ],
-            highWr_lowIq: [
-                "Lagi hoki ya bos winrate lumayan? Awas, hari ini lu untung, besok market ambil balik karena lu murni modal hoki tanpa ilmu!",
-                "Winrate gede tapi otak kosong (skor kuis jeblok). Paling lu cuma ngekor sinyal grup VIP kan? Gak usah sok keras.",
-                "Gue heran orang dengan pemahaman cetek kaya lu bisa profit. Ingat, hoki pemula nggak akan bertahan di siklus makro yang ganas."
-            ],
-            highWr_highIq: [
-                "Tumben porto ijo dan otak dipake. Tapi jangan sombong, bandar selalu punya cara buat ngehukum orang overconfidence.",
-                "Oke, gue akuin lu lumayan jago sekarang. Tapi ingat, di market, satu klik gegabah bisa bikin lu gembel lagi.",
-                "Selamat datang, shadow banker. Jangan lengah, karena market adalah monster yang memakan ego trader arogan."
+            pro: [
+                { q: "Dalam SMC, apa singkatan dari BOS?", opts: ["Break of Structure", "Base Order Sell", "Buy On Support", "Bank Order System"], a: 0 },
+                { q: "Apa tanda pertama Market Maker membalikkan arah harga menurut SMC?", opts: ["MA Crossover", "Change of Character (CHoCH)", "RSI Oversold", "NFP Rilis"], a: 1 },
+                { q: "Kekosongan/ketidakseimbangan harga ekstrim (Gap 3 Candle) disebut?", opts: ["Liquidity", "Order Block", "Fair Value Gap (FVG)", "Mitigation"], a: 2 },
+                { q: "Jika DXY (US Dollar Index) menguat tajam, apa efek absolut ke XAUUSD?", opts: ["XAUUSD Naik", "XAUUSD Hancur (Bearish)", "Sideways", "Tidak berkorelasi"], a: 1 },
+                { q: "Kebijakan The Fed yang MENAIKKAN suku bunga secara agresif disebut?", opts: ["Dovish", "Quantitative Easing", "Hawkish", "Fiscal Policy"], a: 2 },
+                { q: "Di mana posisi Bank/Institusi jika ingin melakukan SELL (Short)?", opts: ["Di bawah 50% Fibo (Discount)", "Di pucuk zona Premium (>50% Fibo)", "Saat Breakout Support", "Sembarang tempat"], a: 1 },
+                { q: "Jika rilis Data Inflasi AS (CPI) lebih tinggi dari Forecast (Hot), reaksi Dolar?", opts: ["Melemah tajam", "Menguat tajam (Bullish)", "Stabil", "Menurun perlahan"], a: 1 },
+                { q: "Liquidity Grab adalah proses di mana institusi...", opts: ["Membagikan profit", "Menyapu Stop Loss retail untuk mengisi order raksasa mereka", "Menghentikan pergerakan pasar", "Membeli saham"], a: 1 },
+                { q: "Risiko kebangkrutan (Risk of Ruin) nyaris 0% jika Anda menggunakan manajemen lot...", opts: ["10% per trade", "5% per trade", "1% per trade", "All In (Full Margin)"], a: 2 },
+                { q: "Institusi memanfaatkan jebakan Support/Resistance ritel yang disebut?", opts: ["Golden Cross", "Inducement (IDM)", "Death Cross", "Bollinger Band"], a: 1 },
+                { q: "Jika NFP AS kuat (lapangan kerja bertambah), maka...", opts: ["Ekonomi AS resesi", "The Fed memotong bunga", "Dolar Menguat & Emas Turun", "Emas terbang tinggi"], a: 2 },
+                { q: "Fase Akumulasi dalam Teori Wyckoff adalah masa di mana institusi...", opts: ["Menjual ke retail di harga pucuk", "Mengumpulkan barang di dasar tanpa terdeteksi", "Melikuidasi seluruh posisi", "Merilis berita NFP"], a: 1 }
             ]
         };
 
-        function initUserData() {
-            // Load dari local storage
-            const saved = localStorage.getItem('tradingProStats');
-            if(saved) userData = JSON.parse(saved);
-            else {
-                // Generate random mock winrate awal (30% sd 85%) jika user baru
-                userData.winrate = Math.floor(Math.random() * 55) + 30; 
-                saveUserData();
-            }
+        // --- USER & ROASTING DATA ---
+        let userData = { winrate: 0, quizScore: 0, rank: 'Kroco MC 🤡', hasPlayed: false };
 
+        function initData() {
+            const saved = localStorage.getItem('tradingProUser');
+            if(saved) userData = JSON.parse(saved);
+            else { userData.winrate = Math.floor(Math.random() * 50) + 20; localStorage.setItem('tradingProUser', JSON.stringify(userData)); }
+            
+            document.getElementById('header-rank').innerText = userData.rank;
             document.getElementById('j-winrate').innerText = userData.winrate + '%';
             
-            // Set Header Rank
-            updateRankUI();
-
-            // Lakukan Roasting
-            generateRoast();
+            doRoast();
+            RenderAcademy();
+            Journal.load();
         }
 
-        function saveUserData() {
-            localStorage.setItem('tradingProStats', JSON.stringify(userData));
-        }
-
-        function updateRankUI() {
-            document.getElementById('header-rank').innerText = userData.rank;
-        }
-
-        function generateRoast() {
-            let category = [];
-            const isLowWr = userData.winrate < 50;
-            const isLowIq = userData.score < 6;
-
-            if(!userData.hasPlayed) {
-                document.getElementById('roast-message').innerText = "Lu belum pernah ikut ujian sertifikasi. Status lu masih murni Donatur Broker. Uji nyali lu di menu Ujian Mental!";
-                return;
+        function doRoast() {
+            let msg = "Teruslah deposit, bandar butuh uang buat beli Ferrari baru.";
+            if(userData.hasPlayed) {
+                if(userData.winrate < 50 && userData.quizScore < 6) msg = "Buku kaga dibaca (nilai kuis hancur), trading ngawur (winrate merah). Fix lu donatur abadi broker.";
+                else if(userData.winrate < 50 && userData.quizScore >= 6) msg = "Pinter teori SMC doang, pas eksekusi tangan tremor kan lu? Dasar analis nanggung.";
+                else if(userData.winrate >= 50 && userData.quizScore < 6) msg = "Menang hoki doang lu bos. Gak ngerti fundamental tapi porto ijo. Awas besok disapu market.";
+                else msg = "Gue akuin lu ngerti market dan eksekusi lu jago. Tapi jangan lengah, market suka ngehukum orang sombong.";
             }
-
-            if(isLowWr && isLowIq) category = roasts.lowWr_lowIq;
-            else if(isLowWr && !isLowIq) category = roasts.lowWr_highIq;
-            else if(!isLowWr && isLowIq) category = roasts.highWr_lowIq;
-            else category = roasts.highWr_highIq;
-
-            const randomRoast = category[Math.floor(Math.random() * category.length)];
-            document.getElementById('roast-message').innerText = randomRoast;
+            document.getElementById('roast-message').innerText = msg;
         }
 
-        // --- QUIZ MODULE ---
-        const quizData = [
-            { q: "Apa kepanjangan dari BOS dalam Smart Money Concept?", options: ["Break of Support", "Buy Order System", "Break of Structure", "Base on Supply"], a: 2 },
-            { q: "Jika data Inflasi (CPI) AS meroket sangat tinggi, apa yang secara historis terjadi pada XAUUSD (Emas)?", options: ["Emas meroket naik", "Emas tertekan turun (Bearish)", "Tidak ada efek", "Broker akan error"], a: 1 },
-            { q: "Di manakah institusi besar biasanya mengeksekusi order 'BUY' besar-besaran?", options: ["Di pucuk tren", "Di zona Premium (>50% Fibo)", "Di zona Discount (<50% Fibo)", "Saat RSI overbought"], a: 2 },
-            { q: "Apa arti kebijakan 'Hawkish' dari The Fed?", options: ["Memotong suku bunga (Cetak uang)", "Menaikkan suku bunga (Mengetatkan Dolar)", "Menjaga harga Emas", "Membagikan stimulus"], a: 1 },
-            { q: "FVG (Fair Value Gap) terjadi akibat apa?", options: ["Pergerakan lambat market sideway", "Ketidakseimbangan pesanan (Imbalance) yg ekstrem", "Gangguan server MetaTrader", "Retail trader memborong lot kecil"], a: 1 },
-            { q: "Berapa persentase risiko ideal per trade untuk terhindar dari kebangkrutan total (Risk of Ruin)?", options: ["1% - 2%", "10% - 20%", "50%", "All in full margin"], a: 0 },
-            { q: "Pola candlestick ekor panjang di bawah (Long Lower Wick) di area Support menandakan apa?", options: ["Seller sangat dominan", "Penolakan agresif oleh Buyer", "Market akan tutup", "Sinyal Sell kuat"], a: 1 },
-            { q: "Ketika data tenaga kerja AS (NFP) rilis dengan angka sangat kuat (jauh di atas forecast), efeknya ke US Dollar (DXY)?", options: ["DXY Melemah", "DXY Meroket kuat", "DXY Sideways", "DXY Dihapus"], a: 1 },
-            { q: "Korelasi antara DXY (Dolar AS) dan XAUUSD (Emas) bersifat?", options: ["Sejalan (Keduanya naik bersama)", "Inversi Absolut (Jungkat-jungkit berlawanan)", "Tidak saling kenal", "Korelasi musiman"], a: 1 },
-            { q: "Apa tujuan utama dari penyakit psikologi 'Revenge Trading' (Balas dendam sehabis loss)?", options: ["Membalikkan keadaan jadi profit", "Menghancurkan sisa saldo akun dengan cepat", "Melatih mental baja", "Menunjukkan siapa bosnya ke broker"], a: 1 }
-        ];
-
-        const Quiz = {
-            currentQ: 0,
-            tempScore: 0,
-            
-            start() {
-                tg.HapticFeedback.impactOccurred('medium');
-                this.currentQ = 0;
-                this.tempScore = 0;
-                
-                document.getElementById('quiz-question-container').style.display = 'block';
-                document.getElementById('quiz-result-container').style.display = 'none';
-                
-                App.nav('view-quiz');
-                this.renderQ();
-            },
-            
-            renderQ() {
-                document.getElementById('quiz-progress').innerText = `${this.currentQ + 1} / 10`;
-                const q = quizData[this.currentQ];
-                document.getElementById('q-text').innerText = q.q;
-                
-                let optsHTML = '';
-                q.options.forEach((opt, idx) => {
-                    optsHTML += `<button class="btn btn-answer" onclick="Quiz.answer(${idx})">${['A','B','C','D'][idx]}. ${opt}</button>`;
+        function RenderAcademy() {
+            let html = "";
+            academyData.forEach(cat => {
+                html += `<h4 style="color: var(--primary); margin-top: 15px;">${cat.cat}</h4>`;
+                cat.list.forEach(item => {
+                    html += `<details class="edu-module"><summary>${item.t}</summary><div class="edu-content">${item.d}</div></details>`;
                 });
-                document.getElementById('q-options').innerHTML = optsHTML;
-            },
-            
-            answer(idx) {
-                tg.HapticFeedback.selectionChanged();
-                if(idx === quizData[this.currentQ].a) {
-                    this.tempScore++;
-                }
-                
-                this.currentQ++;
-                if(this.currentQ >= 10) {
-                    this.showResult();
-                } else {
-                    this.renderQ();
-                }
-            },
-            
-            showResult() {
-                tg.HapticFeedback.notificationOccurred('success');
-                userData.score = this.tempScore;
-                userData.hasPlayed = true;
-                
-                // Kalkulasi Pangkat
-                let rank = "Kroco MC 🤡";
-                if(this.tempScore >= 4 && this.tempScore <= 6) rank = "Trader Spekulan 🎲";
-                else if(this.tempScore >= 7 && this.tempScore <= 9) rank = "Analyst Nanggung 📊";
-                else if(this.tempScore === 10) rank = "Shadow Banker 🐋";
-                
-                userData.rank = rank;
-                saveUserData();
-                
-                // Update UI Result
-                document.getElementById('quiz-question-container').style.display = 'none';
-                document.getElementById('quiz-result-container').style.display = 'block';
-                
-                document.getElementById('r-score').innerText = `${this.tempScore}/10`;
-                document.getElementById('r-rank').innerText = rank;
-                
-                let msg = "";
-                if(this.tempScore < 4) msg = "Miris. Pengetahuan lu setara sama monyet nebak koin. Mending pensiun aja sebelum rumah digadaikan.";
-                else if(this.tempScore < 7) msg = "Lumayan lah buat sekelas tukang tebak-tebakan. Tapi dengan modal ini doang, bandar masih bisa ngunyah lu mentah-mentah.";
-                else if(this.tempScore < 10) msg = "Oke, lu ngerti cara kerja market. Sayangnya, lu cuma analis nanggung. Di market, hampir bener = Loss.";
-                else msg = "Sempurna. Lu pantas duduk satu meja sama bandar. Sekarang buktikan di live account tanpa nangis!";
-                
-                document.getElementById('r-message').innerText = msg;
-                updateRankUI(); // Update header rank directly
-            },
-            
-            finishAndReturn() {
-                // Refresh the roast before going back to dashboard
-                generateRoast();
-                App.nav('view-dashboard');
-            }
-        };
+            });
+            document.getElementById('academy-container').innerHTML = html;
+        }
 
-        // --- ROUTER & CORE APP ---
+        // --- APP ROUTER ---
         const App = {
             init() {
                 tg.ready(); tg.expand(); tg.setHeaderColor('#07090D'); tg.setBackgroundColor('#07090D');
                 if (tg.initDataUnsafe?.user) document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
-                
-                // Initialize Data & Load Random Roast
-                initUserData();
-
-                // Initialize default chart (XAUUSD)
-                loadChart('OANDA:XAUUSD', document.querySelector('.chart-tab.active'));
-                
-                // Draw Dummy Journal
-                Journal.drawChart(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], [0, 50, -20, 150, 450]);
+                initData();
+                loadChart('OANDA:XAUUSD');
             },
             nav(viewId) {
                 tg.HapticFeedback.selectionChanged();
@@ -514,22 +469,23 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 
                 document.getElementById(viewId).classList.add('active');
-                const botNav = document.querySelector(`.nav-item[data-target="${viewId}"]`);
+                
+                // Map sub-views to main nav items
+                let navTarget = viewId;
+                if(viewId.startsWith('view-quiz')) navTarget = 'view-dashboard'; // keep home active
+                
+                const botNav = document.querySelector(`.nav-item[data-target="${navTarget}"]`);
                 if(botNav) botNav.classList.add('active');
                 window.scrollTo(0,0);
             }
         };
 
-        // --- TRADINGVIEW CHART ---
+        // --- CHART SCRIPT ---
         let tvWidget = null;
-        function loadChart(symbol, element) {
-            if(element) {
-                document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
-                element.classList.add('active');
-                tg.HapticFeedback.impactOccurred('light');
-            }
+        function loadChart(symbol) {
+            tg.HapticFeedback.impactOccurred('light');
             tvWidget = new TradingView.widget({
-                "autosize": true, "symbol": symbol, "interval": "15", "timezone": "Asia/Jakarta",
+                "autosize": true, "symbol": symbol, "interval": "60", "timezone": "Asia/Jakarta",
                 "theme": "dark", "style": "1", "locale": "id", "enable_publishing": false,
                 "backgroundColor": "#11151C", "gridColor": "#1A212D", "hide_top_toolbar": false,
                 "hide_legend": false, "save_image": false, "container_id": "tv_chart_container",
@@ -537,65 +493,245 @@
             });
         }
 
-        // --- MACRO NEWS MODAL ---
-        const macroDatabase = {
-            'NFP': {
-                title: "🇺🇸 Non-Farm Payrolls (NFP)", context: "NFP menghitung jumlah tenaga kerja baru. Ini indikator kesehatan ekonomi paling brutal. Ekonomi yang mempekerjakan banyak orang adalah ekonomi yang sehat.",
-                dxy: "Aktual > Forecast = DXY BULLISH", xau: "NFP Kuat = XAUUSD BEARISH"
+        // --- DYNAMIC QUIZ LOGIC ---
+        const Quiz = {
+            questions: [], curr: 0, score: 0,
+            
+            start(level) {
+                tg.HapticFeedback.impactOccurred('medium');
+                // Shuffle and pick 10
+                let pool = [...quizPool[level]];
+                pool.sort(() => Math.random() - 0.5);
+                this.questions = pool.slice(0, 10);
+                
+                this.curr = 0; this.score = 0;
+                document.getElementById('quiz-question-container').style.display = 'block';
+                document.getElementById('quiz-result-container').style.display = 'none';
+                
+                App.nav('view-quiz-active');
+                this.render();
             },
-            'CPI': {
-                title: "🇺🇸 Core CPI (Inflasi)", context: "Inflasi tanpa energi dan pangan. The Fed HANYA melihat data ini untuk memotong/naikkan suku bunga.",
-                dxy: "Inflasi Naik = DXY BULLISH", xau: "Inflasi Naik = XAUUSD BEARISH"
+            
+            render() {
+                document.getElementById('quiz-progress').innerText = `${this.curr + 1} / 10`;
+                const q = this.questions[this.curr];
+                document.getElementById('q-text').innerText = q.q;
+                
+                let optsHTML = '';
+                q.opts.forEach((opt, idx) => {
+                    optsHTML += `<button class="btn btn-answer" onclick="Quiz.answer(${idx})">${['A','B','C','D'][idx]}. ${opt}</button>`;
+                });
+                document.getElementById('q-options').innerHTML = optsHTML;
+            },
+            
+            answer(idx) {
+                tg.HapticFeedback.selectionChanged();
+                if(idx === this.questions[this.curr].a) this.score++;
+                
+                this.curr++;
+                if(this.curr >= 10) this.showResult();
+                else this.render();
+            },
+            
+            showResult() {
+                tg.HapticFeedback.notificationOccurred('success');
+                userData.hasPlayed = true;
+                userData.quizScore = this.score;
+                
+                let rank = "Kroco MC 🤡";
+                if(this.score >= 5 && this.score <= 7) rank = "Trader Spekulan 🎲";
+                else if(this.score >= 8 && this.score <= 9) rank = "Analyst Pro 📊";
+                else if(this.score === 10) rank = "Shadow Banker 🐋";
+                
+                userData.rank = rank;
+                localStorage.setItem('tradingProUser', JSON.stringify(userData));
+                
+                document.getElementById('quiz-question-container').style.display = 'none';
+                document.getElementById('quiz-result-container').style.display = 'block';
+                
+                document.getElementById('r-score').innerText = `${this.score}/10`;
+                document.getElementById('r-message').innerText = `Pangkat Baru: ${rank}`;
+                
+                document.getElementById('header-rank').innerText = rank;
+                doRoast(); // Update roast for next dashboard view
             }
         };
 
-        function openMacroModal(eventId) {
-            tg.HapticFeedback.impactOccurred('medium');
-            const data = macroDatabase[eventId];
-            document.getElementById('modal-title').innerText = data.title;
-            document.getElementById('modal-context').innerText = data.context;
-            document.getElementById('modal-dxy').innerText = data.dxy;
-            document.getElementById('modal-xau').innerText = data.xau;
-            document.getElementById('modal-overlay').classList.add('active');
-            document.getElementById('modal-content').classList.add('active');
-        }
-        function closeMacroModal() {
-            document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('modal-content').classList.remove('active');
-        }
-
-        // --- CALCULATOR ---
-        function calcLot() {
-            tg.HapticFeedback.impactOccurred('light');
-            const bal = parseFloat(document.getElementById('calc-bal').value);
-            const risk = parseFloat(document.getElementById('calc-risk').value);
-            const sl = parseFloat(document.getElementById('calc-sl').value);
-            if(isNaN(bal) || isNaN(risk) || isNaN(sl) || sl<=0) return;
-            
-            const riskUsd = bal * (risk/100);
-            const lot = riskUsd / (sl * 10); 
-            
-            document.getElementById('calc-lot-out').innerText = lot.toFixed(2) + ' Lot';
-            document.getElementById('calc-risk-out').innerText = riskUsd.toFixed(2);
-            document.getElementById('calc-res').style.display = 'block';
-        }
-
-        // --- JOURNAL CHART ---
+        // --- JOURNAL LOGIC ---
         const Journal = {
+            trades: [], chartInstance: null,
+            
+            load() {
+                const saved = localStorage.getItem('tradingProJournal');
+                if(saved) this.trades = JSON.parse(saved);
+                this.updateUI();
+            },
+            
+            add() {
+                const pair = document.getElementById('j-pair').value.toUpperCase();
+                const type = document.getElementById('j-type').value;
+                const pnl = parseFloat(document.getElementById('j-amount').value);
+                
+                if(!pair || isNaN(pnl)) { tg.HapticFeedback.notificationOccurred('error'); return; }
+                
+                tg.HapticFeedback.notificationOccurred('success');
+                const date = new Date().toLocaleDateString('id-ID');
+                this.trades.push({ date, pair, type, pnl });
+                
+                // Simpan & Reset
+                localStorage.setItem('tradingProJournal', JSON.stringify(this.trades));
+                document.getElementById('j-pair').value = '';
+                document.getElementById('j-amount').value = '';
+                
+                this.updateUI();
+            },
+            
+            updateUI() {
+                // Kalkulasi Stats
+                const total = this.trades.length;
+                let wins = 0; let net = 0;
+                
+                let chartLabels = ['Start']; let chartData = [0];
+                let runNet = 0;
+                
+                let listHTML = '';
+                
+                // Loop backwards for list (newest first), forwards for chart
+                this.trades.forEach((t, i) => {
+                    if(t.pnl > 0) wins++;
+                    net += t.pnl;
+                    
+                    runNet += t.pnl;
+                    chartLabels.push(`T${i+1}`);
+                    chartData.push(runNet);
+                });
+                
+                // Build List UI (Reverse)
+                [...this.trades].reverse().forEach(t => {
+                    const cls = t.pnl >= 0 ? 'profit' : 'loss';
+                    const sign = t.pnl >= 0 ? '+' : '';
+                    const color = t.pnl >= 0 ? 'var(--accent)' : 'var(--danger)';
+                    listHTML += `
+                        <div class="journal-item ${cls}">
+                            <div>
+                                <b style="font-size:13px;">${t.pair}</b>
+                                <div style="font-size:10px; color:var(--text-muted);">${t.date} | ${t.type}</div>
+                            </div>
+                            <div style="font-weight:bold; color:${color};">${sign}$${t.pnl.toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('j-trades').innerText = total;
+                let wr = total > 0 ? Math.round((wins/total)*100) : 0;
+                document.getElementById('j-winrate').innerText = wr + '%';
+                
+                // Update User Winrate based on real journal
+                if(total > 0) {
+                    userData.winrate = wr;
+                    localStorage.setItem('tradingProUser', JSON.stringify(userData));
+                    doRoast();
+                }
+
+                document.getElementById('j-pnl').innerText = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
+                document.getElementById('j-pnl').style.color = net >= 0 ? 'var(--accent)' : 'var(--danger)';
+                
+                if(listHTML === '') listHTML = '<p style="text-align:center; font-size:12px;">Belum ada data eksekusi.</p>';
+                document.getElementById('journal-list').innerHTML = listHTML;
+                
+                this.drawChart(chartLabels, chartData);
+            },
+            
             drawChart(labels, data) {
                 const ctx = document.getElementById('journalChart').getContext('2d');
+                if(this.chartInstance) this.chartInstance.destroy();
+                
                 let grad = ctx.createLinearGradient(0,0,0,150);
-                grad.addColorStop(0, 'rgba(0, 230, 118, 0.4)'); grad.addColorStop(1, 'transparent');
-                new Chart(ctx, {
+                grad.addColorStop(0, 'rgba(41, 98, 255, 0.4)'); grad.addColorStop(1, 'transparent');
+                
+                this.chartInstance = new Chart(ctx, {
                     type: 'line',
-                    data: { labels: labels, datasets: [{ data: data, borderColor: '#00E676', backgroundColor: grad, fill: true, tension: 0.4, borderWidth: 2 }] },
+                    data: { labels: labels, datasets: [{ data: data, borderColor: '#2962FF', backgroundColor: grad, fill: true, tension: 0.3, borderWidth: 2 }] },
                     options: { responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}}, scales: { x:{display:false}, y:{grid:{color:'#1A212D'}} } }
                 });
             }
         };
 
-        // Mulai Aplikasi
-        window.addEventListener('DOMContentLoaded', () => { App.init(); });
+        // --- CONVERTER LOGIC ---
+        const Converter = {
+            rates: { "USD": 1, "EUR": 0.93, "GBP": 0.79, "IDR": 16250 },
+            calc() {
+                const amt = parseFloat(document.getElementById('conv-amt').value);
+                const from = document.getElementById('conv-from').value;
+                const to = document.getElementById('conv-to').value;
+                
+                if(isNaN(amt)) { document.getElementById('conv-res').innerText = "0.00"; return; }
+                
+                // Convert to USD base first, then to target
+                const usdBase = amt / this.rates[from];
+                const res = usdBase * this.rates[to];
+                
+                // Formatting
+                let formatRes = "";
+                if(to === "IDR") formatRes = "Rp " + res.toLocaleString('id-ID', {maximumFractionDigits: 0});
+                else if(to === "USD") formatRes = "$ " + res.toFixed(2);
+                else if(to === "EUR") formatRes = "€ " + res.toFixed(2);
+                else if(to === "GBP") formatRes = "£ " + res.toFixed(2);
+                
+                document.getElementById('conv-res').innerText = formatRes;
+            }
+        };
+
+        // --- CHATBOT LOGIC ---
+        const Bot = {
+            toggle() {
+                const modal = document.getElementById('bot-modal');
+                modal.classList.toggle('active');
+                if(modal.classList.contains('active')) tg.HapticFeedback.impactOccurred('light');
+            },
+            
+            send() {
+                const inp = document.getElementById('bot-input');
+                const text = inp.value.trim();
+                if(!text) return;
+                
+                tg.HapticFeedback.selectionChanged();
+                this.appendMsg(text, 'user');
+                inp.value = '';
+                
+                // Simple AI logic simulation
+                setTimeout(() => {
+                    let reply = this.process(text.toLowerCase());
+                    this.appendMsg(reply, 'bot');
+                }, 600);
+            },
+            
+            process(text) {
+                if(text.includes('bantuan') || text.includes('help')) return "Tanyakan tentang SMC, FVG, DXY, Inflasi, Margin, atau ketik 'roasting' untuk cacian mental.";
+                if(text.includes('roasting')) return "Udah stop trading aja. Saldo $10 lagak lu nanya analisis makro. Fokus kerja nyari modal sana!";
+                if(text.includes('smc')) return "Smart Money Concept: Membaca jejak institusi. Cari BOS (Break of Structure), tunggu harga kembali ke Order Block atau FVG, baru eksekusi searah tren.";
+                if(text.includes('fvg') || text.includes('imbalance')) return "FVG (Fair Value Gap) adalah celah kosong dari 3 rentetan candle akibat dorongan ekstrim. Harga *hampir selalu* kembali untuk menutup celah ini bagai magnet.";
+                if(text.includes('dxy') || text.includes('dolar')) return "DXY adalah raja. Tren DXY naik = Emas hancur. Selalu lihat grafik DXY di chart harian sebelum entry Gold/Major pairs.";
+                if(text.includes('emas') || text.includes('xau')) return "Emas (XAUUSD) bereaksi liar terhadap Inflasi (CPI) dan Suku Bunga The Fed. Jika The Fed potong bunga (Dovish), Emas akan terbang.";
+                if(text.includes('margin') || text.includes('mc')) return "Margin Call terjadi karena lu egois pakai lot gajah tanpa Stop Loss. Risk 1% per trade adalah kunci ga kehabisan napas di market.";
+                if(text.includes('halo') || text.includes('hi')) return "Halo. Fokuslah pada chart, bukan pada profit instan. Ada pertanyaan seputar market hari ini?";
+                
+                return "Sistem Oracle masih mencerna pertanyaan ini. Di market, tidak semua hal butuh jawaban pasti, yang penting adalah manajemen risikonya. Coba gunakan keyword: SMC, FVG, DXY, Roasting.";
+            },
+            
+            appendMsg(text, sender) {
+                const area = document.getElementById('bot-chat-area');
+                const cls = sender === 'user' ? 'user-msg' : 'bot-msg';
+                area.innerHTML += `<div class="chat-bubble ${cls}">${text}</div>`;
+                area.scrollTop = area.scrollHeight;
+            }
+        };
+
+        // Init App & Set default converter value
+        window.addEventListener('DOMContentLoaded', () => { 
+            App.init(); 
+            Converter.calc();
+        });
     </script>
 </body>
 </html>
