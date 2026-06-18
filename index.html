@@ -121,6 +121,7 @@
 
     <div class="tabs">
         <button class="tab-btn active" onclick="showTab('main', this)">📊 Dashboard</button>
+        <button class="tab-btn" onclick="showTab('mading', this)">📅 Mading Terupdate</button>
         <button class="tab-btn" onclick="showTab('edu', this)">📚 Ensiklopedia Lengkap</button>
         <button class="tab-btn" onclick="showTab('combo', this)">🔄 Analisis Combo</button>
     </div>
@@ -153,14 +154,44 @@
         
         <div style="background: #17212b; padding: 15px; border-radius: 8px; text-align: center;">
             <h3 style="color:#089981; margin-top:0;">Antipraktis Logic Dashboard</h3>
-            <p style="color:#aaa; font-size:13px;">Sistem ini murni menggunakan <b>Data Pakem Institusional</b> tanpa AI. Semua jawaban 100% konsisten, cepat, dan mendetail sesuai kaidah fundamental makroekonomi.</p>
+            <p style="color:#aaa; font-size:13px;">Sistem menggunakan data pakem institusi. Untuk melihat arah kalender fundamental harian aktual beserta metrik bullish/bearish, buka menu <b>📅 Mading Terupdate</b>.</p>
+        </div>
+    </div>
+
+    <!-- TAB MADING KALENDER EKONOMI (AUTOMATIC REALTIME UPDATED) -->
+    <div id="mading" class="content">
+        <div style="background: #17212b; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #089981;">
+            <h4 style="color: #089981; margin: 0 0 5px 0; border: none;">📰 Mading Kalender Ekonomi Real-time (High & Medium)</h4>
+            <p style="margin: 0; font-size: 11px; color: #ccc; line-height: 1.4;">
+                Widget di bawah ini otomatis terupdate otomatis dari bursa pasar global tanpa AI. 
+                <br>💡 <b>Logika Aturan Membaca:</b> 
+                <br>• Jika rilis data AS berwarna <b>Hijau (Aktual > Forecast)</b> = <b>USD Bullish / Gold Bearish</b> 📉
+                <br>• Jika rilis data AS berwarna <b>Merah (Aktual < Forecast)</b> = <b>USD Bearish / Gold Bullish</b> 📈
+            </p>
+        </div>
+        
+        <!-- Widget Live Kalender TradingView -->
+        <div style="height: 65vh; background: #131722; border-radius: 8px; overflow: hidden; border: 1px solid #363c4e;">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+              {
+              "colorTheme": "dark",
+              "isTransparent": true,
+              "width": "100%",
+              "height": "100%",
+              "locale": "id",
+              "importanceFilter": "0,1",
+              "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF"
+            }
+              </script>
+            </div>
         </div>
     </div>
 
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
             <h4 style="color:#ffb300; margin-top: 15px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🌍 4 Pilar Global Macro</h4>
-            <p style="font-size: 11px; color:#ccc; margin-bottom:15px;">Analisis institusi menggerakkan pasar bukan hanya dari chart, tetapi berdasarkan 4 Pilar Global Macro berikut:</p>
             <div class="macro-card"><h5>📊 1. Data Ekonomi Rill (Economic Health)</h5><p>Melihat kesehatan ekonomi (GDP, Inflasi, Pekerja). Negara kuat menarik aliran dana investasi.</p></div>
             <div class="macro-card"><h5>🏦 2. Kebijakan Bank Sentral (Central Banks)</h5><p>Respons Bank Sentral terhadap data. Perbedaan arah suku bunga adalah penggerak utama Forex.</p></div>
             <div class="macro-card"><h5>📉 3. Pasar Obligasi (Bond Yields)</h5><p>Pergerakan imbal hasil obligasi negara. Jika yield meroket, Emas tertekan, USD menguat.</p></div>
@@ -177,7 +208,6 @@
             <input type="text" id="searchEdu" placeholder="🔍 Cari Indikator... (Cth: NFP, CPI, GDP)" onkeyup="filterEdukasi()" style="margin-bottom: 15px; border: 1px solid #089981;">
 
             <div id="edu-accordion-container">
-                <!-- SEMUA TOMBOL DIKEMBALIKAN 100% SESUAI ORIGINAL PROMPT, DIGANTI JADI askStatic -->
                 <details>
                     <summary style="color: #64b5f6;">🌍 Markets</summary>
                     <div class="edu-grid">
@@ -635,9 +665,7 @@
         const quizData = [
             { q: "Jika Data Inflasi (CPI) AS meroket tajam dari perkiraan, apa yang biasa The Fed lakukan?", opts: ["Menurunkan Suku Bunga", "Menaikkan Suku Bunga", "Membeli Obligasi", "Mencetak Uang"], ans: 1 },
             { q: "Data NFP rilis JAUH lebih rendah (buruk) dari perkiraan. Apa dampak umumnya ke Gold (XAUUSD)?", opts: ["Gold Terjun Bebas", "Gold Akan Naik (Bullish)", "Gold Sideways", "Tidak Ada Efek"], ans: 1 },
-            { q: "Ketika US Treasury Yield 10Y naik drastis, apa yang umumnya terjadi pada Emas (XAUUSD)?", opts: ["Emas Terbang Ratusan Pips", "Emas Turun / Tertekan", "Tidak Ada Hubungan", "Harga Emas di-Lock"], ans: 1 },
-            { q: "Money Supply M2 mencakup apa saja?", opts: ["Hanya Uang Fisik", "Uang Fisik + Tabungan Lancar", "Hutang Pemerintah", "Cadangan Devisa Negara"], ans: 1 },
-            { q: "Jika The Fed memutuskan untuk 'Hawkish', apa dampaknya pada US Dollar?", opts: ["Melemah", "Menguat", "Stagnan", "Tidak Terpengaruh"], ans: 1 },
+            { q: "Ketika US Treasury Yield 10Y naik drastis, apa yang umumnya terjadi pada Emas (XAUUSD)?", opts: ["Emas Terbang Ratusan Pips", "Emas Turun / Tertekan", "Tidak Ada Hubungan", "Harga Emas di-Lock"], ans: 1 }
         ];
 
         function initQuiz() {
@@ -746,184 +774,118 @@
             }
         }
 
-        // ==========================================
-        // DATABASE KHUSUS DATA MAYOR (SANGAT DETAIL)
-        // ==========================================
+        // DATABASE MAYOR STATIS
         const majorDatabase = {
-            "GDP": `<h3>1. Penjelasan Mendalam (Definisi)</h3>
-Gross Domestic Product (PDB) adalah raja dari semua indikator ekonomi. Mengukur total nilai semua barang dan jasa yang diproduksi. Indikator absolut pertumbuhan suatu negara.
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Rapor nilai akhir semester. Nilai naik berarti pintar dan dapat "hadiah" modal (USD dibeli). Nilai turun berarti harus dihukum atau diberi pelonggaran (The Fed potong suku bunga).</div>
-<h3>2. Logika Smart Money (Institusi)</h3>
-GDP kuat = The Fed aman untuk menahan/menaikkan suku bunga. GDP hancur = The Fed harus potong suku bunga.
+            "GDP": `<h3>1. Penjelasan Mendalam (Definisi)</h3>Gross Domestic Product (PDB) adalah indikator kesehatan absolut pertumbuhan ekonomi makro negara.
+<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Rapor nilai akhir semester. Nilai naik berarti ekonomi subur, investor memburu Dolar (USD Bullish / Gold Bearish).</div>
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b><br>Ekonomi sangat kuat. <b>USD Menguat (Bullish)</b>, Emas (XAUUSD) <b>Tertekan/Turun (Bearish)</b>.</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b><br>Risiko Resesi. <b>USD Melemah (Bearish)</b>, Emas (XAUUSD) <b>Meroket (Bullish)</b>.</div>`,
+<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> USD Menguat (Bullish), Emas Tertekan (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> USD Melemah (Bearish), Emas Meroket (Bullish).</div>`,
 
-            "Non Farm Payrolls": `<h3>1. Penjelasan Mendalam (Definisi)</h3>
-Total pekerja baru di luar pertanian & pemerintah (NFP). Ini adalah "The Mother of All News".
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Pabrik yang menempel pengumuman "Dicari 300.000 Karyawan Baru". Artinya pabrik sedang meledak untung.</div>
-<h3>2. Logika Smart Money (Institusi)</h3>
-Pekerja banyak = Uang banyak beredar = Inflasi naik = Suku bunga harus dinaikkan The Fed.
+            "Non Farm Payrolls (NFP)": `<h3>1. Penjelasan Mendalam</h3>Total tenaga kerja baru AS di luar sektor pertanian. "The Mother of All News".
+<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Pabrik besar merekrut ratusan ribu pegawai baru menandakan bisnis sedang ekspansi gila-gilaan.</div>
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b><br>Ketenagakerjaan On Fire. <b>USD Terbang (Bullish)</b>, Emas <b>Anjlok (Bearish)</b>.</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b><br>Peringatan kelesuan ekonomi. <b>USD Hancur (Bearish)</b>, Emas <b>Terbang Tinggi (Bullish)</b>.</div>`,
+<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> USD Terbang Tinggi (Bullish), Emas Ambruk (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> USD Hancur (Bearish), Emas Terbang (Bullish).</div>`,
 
-            "CPI": `<h3>1. Penjelasan Mendalam (Definisi)</h3>
-Consumer Price Index. Pengukur Inflasi nomor 1. Saat ini merupakan data paling ditakuti.
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Sekantong beras bulan lalu Rp100rb, sekarang Rp105rb. Itulah inflasi CPI.</div>
-<h3>2. Logika Smart Money (Institusi)</h3>
-Inflasi meroket -> The Fed WAJIB menaikkan bunga -> Bunga tinggi bikin USD menarik, Emas tak menarik.
+            "CPI": `<h3>1. Penjelasan Mendalam</h3>Consumer Price Index (Inflasi Konsumen). Data paling krusial penentu kebijakan suku bunga.
+<div class="analogy-box"><b>💡 Analogi:</b> Kenaikan harga sembako bulanan pasar. Inflasi naik memaksa bank sentral menaikkan bunga.</div>
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b><br>Inflasi Memanas. <b>USD Meroket (Bullish)</b>, Emas <b>Terjun Bebas (Bearish)</b>.</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b><br>Inflasi Mereda. <b>USD Anjlok (Bearish)</b>, Emas <b>Meroket Tajam (Bullish)</b>.</div>`,
+<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> Inflasi Panas. USD Meroket Keras (Bullish), Emas Terjun Bebas (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Inflasi Turun. USD Anjlok (Bearish), Emas Meroket Tajam (Bullish).</div>`,
 
-            "Fed Interest Rate": `<h3>1. Penjelasan Mendalam (Definisi)</h3>
-Keputusan Suku Bunga The Fed. Ini harga dasar untuk "Uang".
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Bank memberi bunga tabungan 5% vs 0.5%. Kalau 5%, orang taruh uang di Bank (beli USD). Kalau 0.5%, orang beli Emas atau Saham.</div>
-<h3>2. Logika Institusi</h3>
-Uang Triliunan dolar di dunia selalu mengalir ke aset yang paling aman dengan bunga tertinggi.
+            "Fed Interest Rate": `<h3>1. Penjelasan Mendalam</h3>Keputusan Suku Bunga Acuan AS. Menentukan biaya dasar peminjaman uang di dunia.
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Rate Hike (Naik):</b><br>Sikap Hawkish. <b>USD Meroket</b>, Emas <b>Hancur</b>.</div>
-<div class="impact-box"><b>Rate Cut (Turun):</b><br>Sikap Dovish. <b>USD Terpuruk</b>, Emas <b>Berpesta (Naik tajam)</b>.</div>`,
+<div class="impact-box good"><b>Rate Hike (Naik):</b> USD Menguat Agresif (Bullish), Emas Hancur Lebur (Bearish).</div>
+<div class="impact-box"><b>Rate Cut (Turun):</b> USD Terpuruk (Bearish), Emas Berpesta Meroket (Bullish).</div>`,
 
-            "US Treasury Yield 10Y": `<h3>1. Penjelasan Mendalam</h3>
-Imbal hasil Obligasi Pemerintah AS. Musuh utama Emas.
-<div class="analogy-box"><b>💡 Analogi:</b> Pemerintah AS memberi bunga besar bagi yang mau meminjami mereka uang.</div>
-<h3>2. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Yield Naik:</b><br>Uang pintar mengalir ke Obligasi. <b>USD Kuat</b>, Emas <b>Tertekan</b>.</div>
-<div class="impact-box"><b>Yield Turun:</b><br>Obligasi tak menarik. <b>USD Lemah</b>, Emas <b>Terbang</b>.</div>`
+            "US Treasury Yield 10Y": `<h3>1. Penjelasan Mendalam</h3>Imbal hasil obligasi 10 tahun AS. Musuh alami nomor satu bagi pergerakan harga Emas.
+<h3>3. Dampak Harga Pakem</h3>
+<div class="impact-box good"><b>Yield Meroket Naik:</b> USD Menguat, Emas (XAUUSD) Sangat Tertekan/Turun (Bearish).</div>
+<div class="impact-box"><b>Yield Jatuh Runtuh:</b> USD Melemah, Emas Bebas Terbang Tinggi (Bullish).</div>`
         };
 
         const comboDatabase = {
             "Paket NFP (NFP, Average Hourly Earnings, Unemployment Rate)": `<h3>Analisis Skenario Rilis Paket NFP</h3>
-<b>1. Sinergi Sempurna:</b> NFP Tinggi + Pengangguran Turun + Gaji Naik. <br><b>Hasil: USD meroket tanpa ampun, Emas hancur lebur.</b><br><br>
-<b>2. Divergen (Whipsaw):</b> NFP Tinggi (Bagus) TETAPI Pengangguran Naik (Buruk).<br><b>Hasil:</b> Robot akan beli USD seketika (NFP rilis), lalu Institusi berbalik jual USD (melihat pengangguran). Emas akan turun tajam sesaat lalu terbang ke atas (membentuk ekor panjang).`,
+<b>1. Sinergi Sempurna:</b> NFP Naik + Pengangguran Turun + Gaji Naik. <br><b>Dampak: USD Bullish Mutlak, Emas Bearish Mutlak.</b><br><br>
+<b>2. Skenario Divergen (Whipsaw):</b> NFP Bagus tapi Pengangguran Naik.<br><b>Dampak:</b> Volatilitas bolak balik (Kocokan bandar). Turun tajam lalu berbalik naik meroket menjebol batas atas.`,
             
             "Paket CPI (Core CPI & CPI)": `<h3>Analisis Skenario Rilis Paket CPI</h3>
-<b>1. Hierarki Institusi:</b> Core CPI (Inti) adalah Raja. Jauh lebih penting dari CPI Reguler.<br><br>
-<b>2. Sinergi Sempurna:</b> Core dan CPI Reguler kompak merah/panas. <br><b>Hasil: USD Spike Naik, Emas Drop drastis.</b><br><br>
-<b>3. Divergen:</b> Reguler turun (Minyak murah), tapi Core tetap tinggi. <br><b>Hasil:</b> Awalnya market mungkin jual USD (jebakan), lalu berbalik Beli USD agresif karena inti inflasi belum selesai.`,
+<b>1. Aturan Pakem:</b> Core CPI MoM adalah Pemimpin Arah Tren Utama hari tersebut.<br><br>
+<b>2. Sinergi Sempurna:</b> Semua data rilis di atas forecast (Panas).<br><b>Dampak: USD Bullish Kuat, Emas Bearish Ekstrem.</b>`,
 
-            "Paket FOMC (Rate Decision, Dot Plot, Press Conference)": `<h3>Analisis Paket Rilis The Fed (FOMC)</h3>
-<b>Fase 1 (01:00 WIB) - Keputusan Angka Suku Bunga:</b> Reaksi awal berdasarkan rilis angka. Sesuai ekspektasi atau mengejutkan.<br>
-<b>Fase 2 (01:00 WIB) - Dot Plot:</b> Proyeksi masa depan dari anggota dewan. Jika titiknya naik, USD meroket.<br>
-<b>Fase 3 (01:30 WIB) - Pidato Jerome Powell:</b> INI ADALAH PENENTU. Powell sering kali memutarbalikkan arah market dari Fase 1. Tunggu pidato selesai untuk ikut tren besar.`,
-
-            "Paket GDP (Advance GDP & Price Index)": `<h3>Analisis Rilis GDP & Price Index</h3>
-Rilis Data Advance GDP (rilis pertama) memiliki bobot kejut paling masif dibanding Preliminary atau Final.<br><br>
-<b>Sinergi:</b> GDP naik melampaui forecast & GDP Price Index (komponen inflasi GDP) juga naik = Pertumbuhan ekonomi panas berinflasi. Ini adalah sinyal luar biasa <b>Hawkish bagi USD (Emas Terjun)</b>.`,
-
-            "Advance GDP q/q + Initial Jobless Claims (Sering rilis bersamaan di hari Kamis)": `<h3>Skenario Bentrok Hari Kamis (GDP vs Jobless)</h3>
-<b>Hierarki Skala:</b> GDP adalah data skala raksasa (PDB Nasional). Jobless Claims adalah data mingguan (Skala mikro mingguan).<br><br>
-<b>Skenario Divergen:</b> Jika GDP bagus tapi Jobless jelek, Emas mungkin sempat melonjak naik sedikit (1-2 menit) merespons Jobless, tapi kemudian <b>Gravitasi GDP</b> akan mengambil alih, menyeret Emas turun mengikuti sentimen USD yang kuat dari GDP.`
+            "Paket FOMC (Rate Decision, Dot Plot, Press Conference)": `<h3>Analisis Rilis Paket FOMC</h3>
+<b>Fase 1 (Suku Bunga):</b> Bot merespons instan angka tabel.<br>
+<b>Fase 2 (Dot Plot):</b> Mengukur arah proyeksi masa depan dewan.<br>
+<b>Fase 3 (Pidato Powell):</b> Penentu arah akhir sesungguhnya. Sering membalikkan total arah Fase 1.`
         };
 
-        // ==========================================
-        // DYNAMIC GENERATOR ENGINE
-        // (Merakit jawaban logis otomatis untuk ratusan data)
-        // ==========================================
+        // DYNAMIC ENGINE GENERATOR UNTUK INDIKATOR MINOR
         function generateDynamicResponse(title) {
-            let desc = `<b>${title}</b> adalah salah satu metrik spesifik yang dipantau oleh bank sentral dan institusi investasi untuk melihat kesehatan ekonomi di sektor terkait.`;
-            let analogy = `Ibarat panel indikator di dasbor mobil. Jika angkanya sehat, mobil bisa dipacu lebih cepat. Jika merah, supir (The Fed) harus mengerem.`;
-            let isGoodForUSD = true; // Default: Angka Besar = Ekonomi Kuat = USD Bagus
+            let desc = `<b>${title}</b> adalah metrik pendukung makroekonomi yang dipantau institusi finansial global.`;
+            let analogy = `Ibarat panel dasbor instrumen kecil. Memberitahu kondisi spesifik satu suku cadang ekonomi.`;
+            let isGoodForUSD = true;
 
             let txt = title.toLowerCase();
 
-            // Kategori PMI & Index
             if (txt.includes("pmi") || txt.includes("index") || txt.includes("activity")) {
-                desc = `<b>${title}</b> adalah hasil survei ke para manajer manukfaktur atau jasa. Angka referensinya adalah 50. Di atas 50 = Ekspansi. Di bawah 50 = Kontraksi.`;
-                analogy = `Ibarat bertanya ke koki restoran: "Bulan depan mau belanja bahan baku banyak nggak?". Kalau koki jawab "Iya" (Angka >50), berarti restoran diprediksi makin ramai.`;
-            } 
-            // Kategori Sales & Konsumsi
-            else if (txt.includes("sales") || txt.includes("spending") || txt.includes("consumer") || txt.includes("retail")) {
-                desc = `<b>${title}</b> mengukur kekuatan belanja ritel masyarakat. Karena 70% ekonomi negara maju ditopang oleh konsumsi, data ini sangatlah krusial.`;
-                analogy = `Ibarat antrean kasir di mall. Jika mall penuh dan kasir sibuk (Angka naik), roda ekonomi negara itu sedang berputar sangat kencang.`;
-            }
-            // Kategori Pengangguran & Klaim (Kebalikan: Naik = Buruk)
-            else if (txt.includes("claims") || txt.includes("unemploy") || txt.includes("layoffs") || txt.includes("cuts")) {
-                desc = `<b>${title}</b> memantau seberapa banyak orang yang di-PHK, kehilangan pekerjaan, atau antre meminta bantuan sosial ke pemerintah.`;
-                analogy = `Ibarat memantau antrean orang sakit di IGD Rumah Sakit. Semakin panjang antreannya (Klaim naik), semakin buruk keadaan wilayah tersebut.`;
+                desc = `<b>${title}</b> mengukur tingkat ekspansi bisnis (>50) atau kontraksi (<50).`;
+                analogy = `Mewawancarai manajer pabrik apakah mereka menambah stok produksi atau tidak.`;
+            } else if (txt.includes("sales") || txt.includes("spending") || txt.includes("retail")) {
+                desc = `<b>${title}</b> mengukur volume transaksi ritel daya beli konsumsi masyarakat.`;
+                analogy = `Melihat ramai tidaknya keranjang belanja antrean kasir pusat perbelanjaan.`;
+            } else if (txt.includes("claims") || txt.includes("unemploy")) {
+                desc = `<b>${title}</b> menghitung laju pertambahan pengangguran pengaju santunan sosial.`;
+                analogy = `Melihat panjangnya antrean pencari kerja di dinas ketenagakerjaan negara.`;
                 isGoodForUSD = false;
-            }
-            // Kategori Pekerja Masuk & Gaji
-            else if (txt.includes("employment") || txt.includes("payrolls") || txt.includes("wages") || txt.includes("earnings") || txt.includes("hiring")) {
-                desc = `<b>${title}</b> mengukur jumlah penambahan lapangan kerja baru atau tingkat kenaikan gaji (upah). Ini adalah pendorong utama inflasi dari sisi permintaan.`;
-                analogy = `Ibarat perusahaan-perusahaan besar yang berlomba-lomba merekrut staf baru dan menaikkan gaji. Karyawan yang punya uang pasti akan membelanjakannya.`;
-            }
-            // Kategori Properti / Housing
-            else if (txt.includes("housing") || txt.includes("home") || txt.includes("permits") || txt.includes("mortgage") || txt.includes("building")) {
-                desc = `<b>${title}</b> memantau kesehatan sektor properti. Sektor ini sangat sensitif terhadap suku bunga. Keruntuhan perumahan sering kali jadi tanda awal krisis (seperti tahun 2008).`;
-                analogy = `Membangun atau membeli rumah butuh utang bank besar (KPR). Jika data ini naik, artinya masyarakat sangat percaya diri (pede) dengan kemampuan finansial mereka ke depan.`;
-            }
-            // Kategori Inventory / Stock (Oversupply: Naik = Buruk)
-            else if (txt.includes("inventory") || txt.includes("stock") || txt.includes("inventories")) {
-                desc = `<b>${title}</b> mengukur tumpukan barang yang menganggur di gudang pabrik, ritel, atau cadangan minyak mentah.`;
-                analogy = `Ibarat pedagang baju. Kalau gudangnya penuh dengan baju yang tak laku (Inventory numpuk), dia terpaksa harus banting harga (diskon). Ini tanda konsumsi melambat.`;
+            } else if (txt.includes("housing") || txt.includes("home") || txt.includes("permits")) {
+                desc = `<b>${title}</b> memantau kesehatan siklus penjualan sektor properti komersial.`;
+                analogy = `Seberapa banyak orang berani mengajukan kredit jangka panjang (KPR) ke perbankan.`;
+            } else if (txt.includes("inventory") || txt.includes("stock") || txt.includes("oil")) {
+                desc = `<b>${title}</b> mengukur kapasitas pasokan/stok sisa cadangan komoditas di gudang industri.`;
+                analogy = `Gudang terlalu penuh menandakan barang tidak laku terjual, memicu penurunan harga aset tersebut.`;
                 isGoodForUSD = false;
-            }
-            // Kategori Perdagangan (Trade & Debt)
-            else if (txt.includes("export") || txt.includes("import") || txt.includes("trade balance") || txt.includes("current account")) {
-                desc = `<b>${title}</b> melihat arus keluar-masuk barang antar negara. Ekspor kuat membawa uang asing masuk ke negara tersebut, memperkuat mata uang lokal.`;
-                analogy = `Ibarat kas toko Anda. Uang yang masuk dari jualan (Ekspor) harus lebih besar dari uang belanja barang (Import) agar toko Anda untung besar (Surplus).`;
-            }
-            // Kategori Hutang & Pajak (Debt & Tax)
-            else if (txt.includes("debt") || txt.includes("tax") || txt.includes("deficit") || txt.includes("borrowing")) {
-                desc = `<b>${title}</b> mengukur seberapa besar utang yang ditanggung pemerintah/masyarakat, atau tarif pajak. Utang terlalu besar menjadi beban ekonomi.`;
-                analogy = `Ibarat tagihan kartu kredit yang menumpuk. Meski hari ini bisa foya-foya, bulan depan cicilannya akan mencekik daya beli.`;
-                if(txt.includes("debt") || txt.includes("deficit")) isGoodForUSD = false;
             }
 
-            let html = `<h3>1. Penjelasan Singkat (Definisi)</h3>
-${desc}
+            let html = `<h3>1. Penjelasan Singkat (Definisi)</h3>${desc}
 <div class="analogy-box"><b>💡 Analogi Sederhana:</b> ${analogy}</div>
-<h3>2. Cara Institusi Merespons</h3>
-Bagi "Uang Pintar" (Smart Money), data indikator ini akan digabungkan dengan tren inflasi untuk memprediksi manuver The Fed (Suku Bunga). Rilis data ini biasanya memicu volatilitas instan yang dimanfaatkan algo-bot untuk scalping.
 <h3>3. Dampak Harga Pakem (Rule of Thumb)</h3>`;
 
             if (isGoodForUSD) {
-                html += `<div class="impact-box good"><b>Jika Aktual > Forecast (Angka Besar/Hijau):</b><br>Sektor ini berekspansi/Kuat. <b>Mata Uang (USD) Menguat (Bullish)</b>, Aset lawan seperti Emas (XAUUSD) akan <b>Turun/Tertekan (Bearish)</b>.</div>
-<div class="impact-box"><b>Jika Aktual < Forecast (Angka Rendah/Merah):</b><br>Sektor ini melesu/Kelemahan Ekonomi. <b>Mata Uang (USD) Melemah (Bearish)</b>, Emas (XAUUSD) akan <b>Naik (Bullish)</b>.</div>`;
+                html += `<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> Sektor Kuat. <b>USD Menguat (Bullish)</b>, Emas (XAUUSD) <b>Tertekan (Bearish)</b>.</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Sektor Lemah. <b>USD Melemah (Bearish)</b>, Emas (XAUUSD) <b>Meroket (Bullish)</b>.</div>`;
             } else {
-                html += `<div class="impact-box"><b>Jika Aktual > Forecast (Angka Naik = Buruk/Merah):</b><br>Karena sifat datanya (Klaim Pengangguran/Stok Barang Numpuk), angka yang besar berarti buruk. <b>USD Melemah (Bearish)</b>, Emas <b>Naik (Bullish)</b>.</div>
-<div class="impact-box good"><b>Jika Aktual < Forecast (Angka Turun = Bagus/Hijau):</b><br>Lebih sedikit yang nganggur/stok laris manis. Ekonomi sehat. <b>USD Menguat (Bullish)</b>, Emas <b>Tertekan (Bearish)</b>.</div>`;
+                html += `<div class="impact-box"><b>Aktual > Forecast (Merah untuk Pasar):</b> Sektor Memburuk. <b>USD Bearish</b>, Emas <b>Bullish (Naik)</b>.</div>
+<div class="impact-box good"><b>Aktual < Forecast (Hijau untuk Pasar):</b> Sektor Sehat. <b>USD Bullish</b>, Emas <b>Bearish (Turun)</b>.</div>`;
             }
-
             return html;
         }
 
-        // ==========================================
-        // MASTER FUNGSI TOMBOL
-        // ==========================================
+        // FUNGSI UTAMA INTERAKSI
         function askStatic(category, title) {
             const modal = document.getElementById('data-modal');
             const content = document.getElementById('data-content');
             
-            document.getElementById('data-modal-title').innerText = category === 'COMBO_NEWS' ? `🔄 Skenario Combo: ${title}` : `📖 ${title}`;
+            document.getElementById('data-modal-title').innerText = (category === 'COMBO_NEWS' || category === 'COMBO') ? `🔄 Skenario Combo: ${title}` : `📖 ${title}`;
             
             let answer = "";
-
             if (category === 'COMBO_NEWS' || category === 'COMBO') {
                 answer = comboDatabase[title];
                 if (!answer) {
-                    answer = `<h3>Analisis Skenario Rilis: ${title}</h3>
-<p>Dalam rilis data ganda atau combo, institusi tidak melihat semua angka secara rata, mereka mencari <b>"Deviasi Terbesar"</b> (kejutan paling menyimpang dari prediksi).</p>
-<b>1. Hierarki Prioritas:</b> Data Inflasi dan Tenaga Kerja akan SELALU menelan data minor jika dirilis bersamaan.<br><br>
-<b>2. Skenario Sinergi (Kompak):</b> Jika seluruh data yang rilis di menit yang sama menunjukkan hasil hijau (kuat), maka trend panjang terbentuk hari itu. Jangan pernah melawan arah market.<br><br>
-<b>3. Skenario Divergen (Campur Aduk):</b> Jika satu data bagus tapi data lainnya hancur, Smart Money akan membuat market <b>Whipsaw</b> (naik tajam lalu dibanting turun tajam). Strategi terbaik: Hindari entry saat rilis, tunggu 15-30 menit hingga arah jelas.`;
+                    answer = `<h3>Analisis Skenario Rilis Combo: ${title}</h3>
+<p>Institusi fokus pada komponen rilis data yang menghasilkan <b>Deviasi Terbesar</b> (kejutan angka terjauh dari forecast).</p>
+<b>• Skenario Sinergi:</b> Semua data serempak searah hijau/merah. Tren kuat satu sisi searah pakem tanpa manipulasi.<br>
+<b>• Skenario Divergen:</b> Data rilis bertabrakan (ada yang bagus, ada yang jelek). Melahirkan pola manipulasi <b>Whipsaw Bearish/Bullish beruntun</b> untuk membersihkan SL trader retail.`;
                 }
             } else {
                 answer = majorDatabase[title];
-                // Jika tidak ada di manual database, jalankan Dynamic Generator Engine
-                if (!answer) {
-                    answer = generateDynamicResponse(title);
-                }
+                if (!answer) { answer = generateDynamicResponse(title); }
             }
 
             content.innerHTML = answer;
             modal.style.display = 'flex';
             Telegram.WebApp.HapticFeedback.impactOccurred('medium');
         }
-
     </script>
 </body>
 </html>
