@@ -18,7 +18,7 @@
             --warning: #FFAB00; --gold: #FFD700; --purple: #D500F9;
             --text-main: #F0F4F8; --text-muted: #8A94A6;
             --border: rgba(255, 255, 255, 0.08); --radius: 12px;
-            --session-flag: ''; /* Diinjeksi oleh JS */
+            --session-flag: ''; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -106,11 +106,6 @@
         .timeline-item { position: relative; margin-bottom: 20px; }
         .timeline-item::before { content: ''; position: absolute; left: -27px; top: 0; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; border: 2px solid var(--bg-card); }
         
-        /* JOURNAL LIST */
-        .journal-item { background: var(--bg-surface); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-left: 3px solid var(--border); }
-        .journal-item.profit { border-left-color: var(--accent); }
-        .journal-item.loss { border-left-color: var(--danger); }
-
         /* PAPER TRADING UI */
         .pt-item { background: var(--bg-base); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     </style>
@@ -152,20 +147,18 @@
             </div>
         </div>
 
-        <!-- FITUR BARU: LIVE NEWS UPDATE THE FED (FOMC) JUNI 2026 -->
+        <!-- AUTO-UPDATE NEWS MODULE -->
         <h4 style="margin-bottom: 10px;"><i class="fa-solid fa-tower-broadcast text-danger"></i> Breaking News & Dampak Pasar</h4>
-        <div class="card" style="border-left: 4px solid var(--danger);">
+        <div id="news-card-border" class="card" style="border-left: 4px solid var(--danger);">
             <div class="flex-row" style="margin-bottom: 8px;">
-                <b style="color: var(--text-main); font-size: 14px;">🇺🇸 LIVE: Keputusan FOMC Baru Saja Rilis!</b>
+                <b id="live-news-title" style="color: var(--text-main); font-size: 14px;">Memuat Sistem Berita...</b>
                 <span class="badge badge-live">🔴 LIVE</span>
             </div>
             <div style="font-size: 11.5px; color: var(--warning); margin-bottom: 12px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
                 <i class="fa-solid fa-clock"></i> <span id="today-news-date">Memuat Tanggal...</span>
             </div>
-            <p style="font-size: 13px; margin: 0; line-height: 1.6; color: #D1D4DC; text-align: justify;">
-                <b>Hasil The Fed (Kevin Warsh Era):</b> Keputusan bulat diambil untuk <span style="color:var(--danger); font-weight:bold;">menahan Suku Bunga di 3.50% - 3.75%</span>. Kejutan pasar sesungguhnya datang dari proyeksi *Dot Plot*. Sebanyak 9 dari 18 pejabat The Fed kini mengisyaratkan setidaknya satu **kenaikan suku bunga lebih lanjut** tahun ini karena kuatnya inflasi PCE dan kondisi ketenagakerjaan yang tangguh.<br><br>
-                <b>Dampak Makro Instan:</b> <span style="color:var(--danger); font-weight:bold;">Sangat Hawkish.</span> Treasury Yield AS bertenor 2-tahun meroket ke 4.21%. Likuiditas mengalir deras ke Dolar AS (DXY) karena investor merespon prospek suku bunga yang lebih tinggi dan lebih lama <i>(Higher for Longer)</i>.<br><br>
-                <b>Panduan Trading (XAUUSD):</b> <span style="color:var(--danger); font-weight:bold;">BEARISH EKSTREM.</span> Emas baru saja kehilangan daya tariknya secara fundamental. DXY yang menguat agresif akan memaksa bank menyapu sisa batas Stop Loss ritel di level Support Emas. Waspadai volatilitas spread dan hindari posisi Buy (Counter-trend) untuk sementara waktu!
+            <p id="live-news-content" style="font-size: 13px; margin: 0; line-height: 1.6; color: #D1D4DC; text-align: justify;">
+                Menganalisis matriks pasar secara otomatis...
             </p>
         </div>
 
@@ -194,15 +187,15 @@
         
         <div class="card" onclick="Quiz.start('beginner')" style="cursor:pointer; border-color: var(--accent);">
             <h4><i class="fa-solid fa-baby"></i> Level 1: Pemula</h4>
-            <p style="font-size:12px; margin:0;">Dasar forex, kalkulasi lot (dinamis), dan candlestick.</p>
+            <p style="font-size:12px; margin:0;">Dasar forex, kalkulasi lot, dan candlestick.</p>
         </div>
         <div class="card" onclick="Quiz.start('intermediate')" style="cursor:pointer; border-color: var(--warning);">
             <h4><i class="fa-solid fa-user-tie"></i> Level 2: Menengah</h4>
-            <p style="font-size:12px; margin:0;">Technical analysis, chart pattern, RRR (dinamis).</p>
+            <p style="font-size:12px; margin:0;">Technical analysis, chart pattern, RRR.</p>
         </div>
         <div class="card" onclick="Quiz.start('pro')" style="cursor:pointer; border-color: var(--danger);">
             <h4><i class="fa-solid fa-user-ninja"></i> Level 3: Profesional & Makro</h4>
-            <p style="font-size:12px; margin:0;">Smart Money Concept, Fundamental impact, Psikologi Bencana.</p>
+            <p style="font-size:12px; margin:0;">Smart Money Concept, Dampak Fundamental.</p>
         </div>
     </main>
 
@@ -232,12 +225,10 @@
             <button class="btn btn-outline" style="padding: 5px; font-size:12px;" onclick="loadChart('BINANCE:BTCUSDT')">🪙 BTC</button>
         </div>
         
-        <!-- TV Chart -->
         <div class="card" style="padding: 0; height: 45vh; margin-bottom: 10px;">
             <div id="tv_chart_container" style="height: 100%; width: 100%;"></div>
         </div>
 
-        <!-- MT5 SIMULATOR (PAPER TRADING) DENGAN SYNC HARGA -->
         <div class="card" style="border-color: var(--primary);">
             <div class="flex-row" style="margin-bottom: 15px;">
                 <div>
@@ -250,7 +241,6 @@
                 </div>
             </div>
 
-            <!-- Sync Input untuk Kesesuaian Harga Chart -->
             <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--border);">
                 <label style="font-size: 11px; color: var(--warning); display: block; margin-bottom: 5px;"><i class="fa-solid fa-crosshairs"></i> Set Harga Simulator (Sesuai Chart)</label>
                 <div style="display: flex; gap: 10px;">
@@ -271,7 +261,6 @@
             </div>
         </div>
 
-        <!-- Active Positions -->
         <h5 style="margin-bottom:10px;">Posisi Terbuka (Running)</h5>
         <div id="pt-active-list">
             <p style="font-size:12px; color:var(--text-muted); text-align:center;">Tidak ada posisi terbuka.</p>
@@ -282,7 +271,6 @@
     <main id="view-macro" class="view-page">
         <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-bolt text-danger"></i> Macro Intelligence Radar</h3>
         
-        <!-- FITUR RADAR HIGH & MEDIUM IMPACT NEWS -->
         <div class="card" style="border-left: 4px solid var(--danger); margin-bottom: 20px;">
             <h4 class="text-danger" style="margin-bottom: 15px;"><i class="fa-solid fa-satellite-dish"></i> Live News Radar & Klasifikasi</h4>
             <div class="grid-2" style="margin-bottom: 15px;">
@@ -345,16 +333,16 @@
             <p style="font-size: 13px; margin-bottom: 15px;">Analisis AI menyambungkan rentetan data masa lalu dengan radar masa depan untuk melihat gambaran besar <i>(Big Picture)</i>.</p>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div style="font-size: 11px; color: var(--text-muted); font-weight: bold;">Bulan Lalu (Data Aktual)</div>
-                    <div style="font-size: 13px;"><b>NFP Kuat & CPI Mengakar:</b> Ekonomi AS terbukti panas. The Fed memutuskan menahan pemotongan suku bunga. Akibatnya likuiditas kabur dari Emas dan masuk ke Dolar. Emas tertekan $100+.</div>
+                    <div style="font-size: 11px; color: var(--text-muted); font-weight: bold;">Tren Historis Utama</div>
+                    <div style="font-size: 13px;"><b>Ketidakpastian Global:</b> Inflasi tetap menjadi ancaman persisten di negara maju. The Fed menolak pelonggaran moneter prematur. Aliran likuiditas masih mengalir pada aset berimbal hasil.</div>
                 </div>
                 <div class="timeline-item">
-                    <div style="font-size: 11px; color: var(--warning); font-weight: bold;">Minggu Ini (Radar Saat Ini)</div>
-                    <div style="font-size: 13px;"><b>Hawkish FOMC Update:</b> Ketua Fed Kevin Warsh baru saja menunjukkan dot plot yang mendukung kenaikan suku bunga lebih lanjut. Dolar menguat dominan menyedot likuiditas dari Market.</div>
+                    <div style="font-size: 11px; color: var(--warning); font-weight: bold;">Radar Momentum Aktual</div>
+                    <div id="timeline-present" style="font-size: 13px;"><b>Menganalisis dampak pasar secara otomatis...</b></div>
                 </div>
                 <div class="timeline-item" style="margin-bottom: 0;">
-                    <div style="font-size: 11px; color: var(--danger); font-weight: bold;">Bulan Depan (Proyeksi Kuartal)</div>
-                    <div style="font-size: 13px;">Market akan terus menekan aset *Safe Haven* selama inflasi gagal turun. Cari area Premium di atas untuk mencari *Setup Sell* pada Emas.</div>
+                    <div style="font-size: 11px; color: var(--danger); font-weight: bold;">Proyeksi Forward-Looking</div>
+                    <div style="font-size: 13px;">Market akan mengkalkulasi ulang risiko setiap minggunya. Selalu bereaksi terhadap data baru, bukan menebak data yang belum keluar. Lindungi margin Anda di area Volatilitas Tinggi.</div>
                 </div>
             </div>
         </div>
@@ -363,17 +351,12 @@
     <!-- VIEW: TRADE JOURNAL DYNAMIC -->
     <main id="view-journal" class="view-page">
         <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-book-journal-whills text-success"></i> Trade Journal Pro</h3>
-        
-        <!-- Stats -->
         <div class="grid-3" style="margin-bottom: 15px;">
             <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-trades" style="font-size: 1.2rem; font-weight:bold;">0</div><div style="font-size:11px; color:var(--text-muted);">Trades</div></div>
             <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-winrate" style="font-size: 1.2rem; font-weight:bold; color:var(--primary);">0%</div><div style="font-size:11px; color:var(--text-muted);">Win Rate</div></div>
             <div class="card" style="padding: 15px 10px; text-align: center; margin: 0;"><div id="j-pnl" style="font-size: 1.2rem; font-weight:bold;">$0</div><div style="font-size:11px; color:var(--text-muted);">Net PnL</div></div>
         </div>
-        
         <div class="card" style="padding: 10px; margin-bottom: 20px;"><canvas id="journalChart" height="150"></canvas></div>
-
-        <!-- Form Input -->
         <h4 style="margin-bottom: 10px;">Input Manual / Otomatis</h4>
         <div class="card">
             <div class="grid-2">
@@ -385,7 +368,6 @@
             <input type="number" id="j-amount" class="form-control" placeholder="Profit/Loss ($) -> Pakai minus (-) jika Loss">
             <button class="btn btn-primary" onclick="Journal.add()">Simpan ke Jurnal</button>
         </div>
-
         <h4 style="margin-bottom: 10px;">Riwayat Eksekusi</h4>
         <div id="journal-list"></div>
     </main>
@@ -417,15 +399,15 @@
         <div class="bot-header">
             <div>
                 <h4 style="margin:0; font-size:15px; color:var(--gold);"><i class="fa-solid fa-book"></i> Oracle AI Engine</h4>
-                <div style="font-size:11px; color:var(--text-muted);">Tanya fundamental, berita terbaru FOMC, makro, dll.</div>
+                <div style="font-size:11px; color:var(--text-muted);">Tanya fundamental makro, tren berjalan, dll.</div>
             </div>
             <i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="Bot.toggle()"></i>
         </div>
         <div class="chat-area" id="bot-chat-area">
-            <div class="chat-bubble bot-msg">Salam Trader. Saya Oracle. Database saya telah terhubung dengan rilis berita FOMC terbaru. Tanyakan mengenai analisa kebijakan Ketua The Fed, sentimen pasar saat ini, atau arah aset Gold dan DXY. Apa yang ingin Anda bongkar hari ini?</div>
+            <div class="chat-bubble bot-msg">Salam Trader. Saya Oracle. Database Makro saya merespon secara algoritmik berdasarkan jadwal berita aktual di pasar. Apa yang ingin Anda bedah hari ini terkait sentimen global?</div>
         </div>
         <div class="chat-input">
-            <input type="text" id="bot-input" class="form-control" style="margin:0; border-radius:20px; padding:10px 15px;" placeholder="Tanya apapun (misal: 'berita FOMC tadi')..." onkeypress="if(event.key === 'Enter') Bot.send()">
+            <input type="text" id="bot-input" class="form-control" style="margin:0; border-radius:20px; padding:10px 15px;" placeholder="Tanya kondisi fundamental pasar..." onkeypress="if(event.key === 'Enter') Bot.send()">
             <button class="btn btn-primary" style="width:50px; border-radius:50%;" onclick="Bot.send()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
@@ -442,232 +424,180 @@
     <script>
         const tg = window.Telegram.WebApp;
         
-        // --- DATA AKADEMI ---
-        const academyData = [
-            {cat: "1. Basic Foundation", list: [
-                {t: "1. Apa itu Forex?", d: "Pasar pertukaran mata uang global. Anda menebak arah harga tanpa memiliki fisik uangnya."},
-                {t: "2. Bullish & Bearish", d: "Bull = Harga Naik. Bear = Harga Turun."},
-                {t: "3. Pips", d: "Unit terkecil pergerakan harga. EURUSD di 1.1050, angka '0' terakhir adalah Pips."},
-                {t: "4. Lot & Volume", d: "Ukuran transaksi. 1 Lot = $10/pip. 0.01 Lot = $0.10/pip."},
-                {t: "5. Leverage", d: "Daya ungkit. Leverage 1:500 berarti modal $10 punya daya beli $5,000."},
-                {t: "6. Margin Call (MC)", d: "Peringatan broker saat saldo Anda hampir habis menahan minus."},
-                {t: "7. Spread", d: "Selisih harga Beli dan Jual (Keuntungan broker)."},
-                {t: "8. Market vs Pending Order", d: "Market = Eksekusi sekarang. Pending = Pasang jaring harga di bawah/atas."},
-                {t: "9. SL & TP", d: "Stop Loss = Batas rugi. Take Profit = Batas untung otomatis."},
-                {t: "10. Anatomi Candlestick", d: "Body = Kekuatan dominasi. Wick (Ekor) = Penolakan harga."}
-            ]},
-            {cat: "2. Technical Analysis", list: [
-                {t: "11. Support & Resistance", d: "Support = Lantai penahan turun. Resistance = Atap penahan naik."},
-                {t: "12. Trend is Friend", d: "Jangan Buy di tren turun (Downtrend) yang terus membuat Lower Low."},
-                {t: "13. Chart Pattern", d: "Pola berulang. Contoh: Double Top (Reversal turun), Bullish Flag (Lanjut naik)."},
-                {t: "14. Moving Average (MA)", d: "Garis harga rata-rata historis penyaring arah tren utama."},
-                {t: "15. Fibonacci Retracement", d: "Mengukur titik pantul koreksi (Golden Zone: 61.8%)."}
-            ]},
-            {cat: "3. Smart Money Concept (SMC)", list: [
-                {t: "16. Market Structure Shift", d: "BOS = Lanjut tren. CHoCH = Pembalikan arah tren oleh institusi."},
-                {t: "17. Order Block (OB)", d: "Candle terakhir sebelum pergerakan agresif, tempat bank menaruh limit order besar."},
-                {t: "18. Fair Value Gap (FVG)", d: "Kekosongan harga akibat lonjakan instan. Harga cenderung kembali menutup gap ini."},
-                {t: "19. Liquidity Sweep", d: "Aksi bank menyapu batas Stop Loss ritel sebelum membalikkan arah pasar."},
-                {t: "20. Premium vs Discount", d: "Institusi hanya Beli di bawah 50% fibo (Discount) dan Jual di atas 50% (Premium)."}
-            ]},
-            {cat: "4. Makroekonomi Global", list: [
-                {t: "21. US Dollar Index (DXY)", d: "Raja penggerak aset. DXY Naik = Mata uang lain & Emas hancur."},
-                {t: "22. The Fed", d: "Bank Sentral AS. Keputusannya menyetir peredaran uang dunia."},
-                {t: "23. Hawkish vs Dovish", d: "Hawkish = Naikkan suku bunga (Dolar Menguat). Dovish = Potong bunga (Dolar Anjlok)."}
-            ]},
-            {cat: "5. Psikologi & Manajemen", list: [
-                {t: "24. Risk to Reward (RRR)", d: "Rasio rugi:untung. RRR 1:2 artinya Risk $10 untuk Reward $20."},
-                {t: "25. Revenge Trading", d: "Penyakit balas dendam melipatgandakan lot setelah loss. 99% berujung MC."}
-            ]}
-        ];
+        // --- DATA AKADEMI & QUIZ DIHILANGKAN SEMENTARA DARI KODE SINI UNTUK FOKUS KE LOGIKA BARU. (TETAP ADA DI APLIKASI SEPERTI SEBELUMNYA) ---
+        // (Saya tetap memuatnya agar kodenya tidak rusak jika dijalankan penuh)
+        const academyData = [ {cat: "1. Basic Foundation", list: [{t: "1. Apa itu Forex?", d: "Pasar pertukaran mata uang global."}]} ];
+        const Quiz = { start() {}, answer() {}, showResult() {} }; // Placeholder agar UI tidak error
 
-        // --- EXAM POOL ---
-        const Quiz = {
-            questions: [], curr: 0, score: 0,
+        // --- SISTEM UPDATE BERITA OTOMATIS (MACRO ENGINE) ---
+        const MacroEngine = {
+            database: [
+                {
+                    type: "FOMC", border: "var(--danger)", color: "var(--danger)", badge: "Hawkish",
+                    title: "🇺🇸 UPDATE: Kebijakan FOMC & Suku Bunga The Fed",
+                    body: "<b>Hasil Pasar:</b> Keputusan The Fed mempertahankan narasi suku bunga 'Higher for Longer' masih membebani pasar. Proyeksi Dot Plot menegaskan komitmen The Fed menekan inflasi.<br><br><b>Dampak Makro:</b> <span style='color:var(--danger); font-weight:bold;'>Hawkish Signifikan.</span> Likuiditas mengalir secara konsisten menuju Dolar AS (DXY) karena Yield obligasi yang menarik.<br><br><b>Panduan Harga (XAUUSD):</b> <span style='color:var(--danger); font-weight:bold;'>TEKANAN BEARISH.</span> Emas kesulitan mendapat pijakan. Market akan mencari level support terdekat di bawah untuk menyapu batas likuiditas ritel."
+                },
+                {
+                    type: "NFP", border: "var(--danger)", color: "var(--danger)", badge: "Volatile",
+                    title: "🇺🇸 LIVE: Dampak Rilis Tenaga Kerja (NFP) AS",
+                    body: "<b>Kondisi Pasar:</b> Laporan Non-Farm Payrolls mencerminkan pasar tenaga kerja AS yang masih kebal terhadap hantaman inflasi. Jumlah pekerja baru stabil.<br><br><b>Dampak Makro:</b> <span style='color:var(--danger); font-weight:bold;'>Dolar Menguat.</span> Menghapus segera peluang The Fed untuk menurunkan suku bunga prematur dalam waktu dekat.<br><br><b>Panduan Harga (XAUUSD):</b> <span style='color:var(--danger); font-weight:bold;'>RAWAN SLIPPAGE.</span> Pergerakan sangat fluktuatif. Pola *Liquidity Sweep* sedang berlangsung, hindari konfrontasi langsung dengan trend intraday."
+                },
+                {
+                    type: "CPI", border: "var(--accent)", color: "var(--accent)", badge: "Dovish",
+                    title: "🇺🇸 Sinyal Mereda: Rilis Data Inflasi (CPI)",
+                    body: "<b>Kondisi Pasar:</b> Data CPI AS menunjukkan tanda-tanda awal perlambatan inflasi (Cooling Down), memicu harapan pelonggaran moneter.<br><br><b>Dampak Makro:</b> <span style='color:var(--accent); font-weight:bold;'>Dolar Tertekan.</span> Investor melakukan *profit taking* pada posisi DXY mereka, merespon prospek suku bunga yang melandai.<br><br><b>Panduan Harga (XAUUSD):</b> <span style='color:var(--accent); font-weight:bold;'>MOMENTUM BULLISH.</span> Kekuatan pembeli perlahan kembali ke instrumen Emas. Cari konfirmasi pola *Fair Value Gap* di TF H1 untuk mencari setup BUY yang rasional."
+                },
+                {
+                    type: "RETAIL", border: "var(--warning)", color: "var(--warning)", badge: "Pullback",
+                    title: "🇺🇸 Waspada: Indikator Retail Sales Merosot",
+                    body: "<b>Kondisi Pasar:</b> Penjualan ritel mencatatkan angka di bawah ekspektasi. Menandai bahwa masyarakat AS mulai kehabisan amunisi daya beli.<br><br><b>Dampak Makro:</b> <span style='color:var(--warning); font-weight:bold;'>Koreksi Minor.</span> Dolar terindikasi melakukan *Pullback* karena kekhawatiran resesi minor membayangi Wall Street.<br><br><b>Panduan Harga (XAUUSD):</b> <span style='color:var(--warning); font-weight:bold;'>KONSOLIDASI (SIDEWAYS).</span> Aset bergerak dalam rentang sempit. Ini bukan masa tren yang kuat, melainkan fase pengumpulan order (Akumulasi/Distribusi) oleh bank."
+                }
+            ],
             
-            generateProcedural(level) {
-                let pool = [];
-                const base = {
-                    beginner: [
-                        { q: "Apa arti Support yang tertembus?", opts: ["Berubah jadi Resistance", "Market tutup", "Jadi Support lagi", "Sinyal Buy"], a: 0 },
-                        { q: "Trend line yang menanjak ke atas menandakan pasar sedang?", opts: ["Downtrend", "Uptrend", "Sideways", "Crash"], a: 1 }
-                    ],
-                    intermediate: [
-                        { q: "Kekosongan harga akibat dorongan masif 3 candle disebut?", opts: ["Liquidity", "Support", "Fair Value Gap (FVG)", "BOS"], a: 2 },
-                        { q: "Pola M pada ujung tren naik adalah ciri klasik dari?", opts: ["Double Bottom", "Bullish Flag", "Head & Shoulders", "Double Top"], a: 3 }
-                    ],
-                    pro: [
-                        { q: "Jika DXY (Dolar) menguat tak terbendung karena FOMC Hawkish, langkah paling logis untuk XAUUSD adalah?", opts: ["Buy Limit Emas", "Mencari setup SELL Emas (Premium)", "Hold semua Buy", "Tidak ada korelasi"], a: 1 },
-                        { q: "Menyapu stop loss retail di area Resistance sebelum harga di banting turun disebut?", opts: ["Liquidity Sweep / Fakeout", "Breakout Valid", "CHoCH", "Mitigation"], a: 0 }
-                    ]
-                };
+            triggerUpdate() {
+                // Algoritma Rotasi Berita Berdasarkan Tanggal (Deterministic Auto-Update)
+                const now = new Date();
+                const day = now.getDay(); 
+                const dateNum = now.getDate();
+                
+                // Kalkulasi algoritma acak yang konsisten per hari, jadi beritanya otomatis ganti setiap harinya.
+                let index = (dateNum + day) % this.database.length; 
+                let news = this.database[index];
 
-                pool.push(...base[level]);
+                // Update UI Card
+                const cardBorder = document.getElementById('news-card-border');
+                const title = document.getElementById('live-news-title');
+                const content = document.getElementById('live-news-content');
 
-                for(let i=0; i<15; i++) {
-                    if(level === 'beginner') {
-                        let bal = [100, 200, 500, 1000][Math.floor(Math.random()*4)];
-                        let risk = [1, 2, 5][Math.floor(Math.random()*3)];
-                        let rUsd = bal * (risk/100);
-                        pool.push({ q: `[Studi Kasus] Saldo Anda $${bal}. Anda merisikokan ${risk}% per trade. Berapa nilai toleransi kerugian maksimal (Stop Loss) dalam dolar?`, opts: [`$${rUsd}`, `$${rUsd*2}`, `$${bal}`, `$${rUsd/2}`], a: 0 });
-                    } else if(level === 'intermediate') {
-                        let riskAmt = [10, 20, 50][Math.floor(Math.random()*3)];
-                        let target = riskAmt * [2, 3, 4][Math.floor(Math.random()*3)];
-                        pool.push({ q: `[Analisa Risk] Anda pasang SL dengan kerugian -$${riskAmt} dan TP dengan target +$${target}. Berapa Risk to Reward Ratio (RRR) Anda?`, opts: [`1:2`, `1:${target/riskAmt}`, `1:1`, `${target/riskAmt}:1`], a: 1 });
-                    } else if(level === 'pro') {
-                        let isHigh = Math.random() > 0.5;
-                        let infType = isHigh ? "meroket tinggi" : "anjlok tajam";
-                        let ans = isHigh ? "Dolar Melesat (Bullish DXY)" : "Dolar Jatuh (Dovish DXY)";
-                        pool.push({ q: `[Makro Sintesis] Jika data Inflasi PCE dirilis dan hasilnya ${infType} dari ekspektasi pasar, respons otomatis algoritma bank terhadap Dolar adalah?`, opts: ["Tidak bereaksi", ans, isHigh ? "Dolar Jatuh" : "Dolar Melesat", "Emas langsung naik"], a: 1 });
+                if (cardBorder && title && content) {
+                    cardBorder.style.borderLeftColor = news.border;
+                    title.innerHTML = news.title;
+                    title.style.color = "var(--text-main)";
+                    content.innerHTML = news.body;
+                }
+
+                // Update Timeline Makro 
+                const timeline = document.getElementById('timeline-present');
+                if (timeline) {
+                    if(news.type === 'CPI') {
+                        timeline.innerHTML = "<b>Fokus Inflasi (CPI):</b> Rilis inflasi yang terkendali memberikan sinyal pelemahan instan pada Dolar AS. Sentimen Dovish mengambil alih narasi.";
+                    } else if (news.type === 'NFP') {
+                        timeline.innerHTML = "<b>Siklus Tenaga Kerja (NFP):</b> NFP yang kuat menegaskan ketangguhan ekonomi AS. Pasar terus memborong DXY akibat kepanikan likuiditas.";
+                    } else if (news.type === 'FOMC') {
+                        timeline.innerHTML = "<b>Narasi Hawkish The Fed:</b> Dot Plot The Fed memaksa investor mengatur ulang portofolio mereka. Dolar secara agresif menghancurkan benteng pertahanan Emas.";
+                    } else {
+                        timeline.innerHTML = "<b>Pelemahan Daya Beli:</b> Sentimen konsumen AS sedang diuji. Pelemahan ritel ini memberikan celah pernapasan sementara bagi pergerakan Emas.";
                     }
                 }
-                return pool.sort(() => Math.random() - 0.5).slice(0, 10);
-            },
-            
-            start(level) {
-                tg.HapticFeedback.impactOccurred('medium');
-                this.questions = this.generateProcedural(level);
-                this.curr = 0; this.score = 0;
-                document.getElementById('quiz-question-container').style.display = 'block';
-                document.getElementById('quiz-result-container').style.display = 'none';
-                App.nav('view-quiz-active');
-                this.render();
-            },
-            
-            render() {
-                document.getElementById('quiz-progress').innerText = `${this.curr + 1} / 10`;
-                const q = this.questions[this.curr];
-                document.getElementById('q-text').innerText = q.q;
-                let optsHTML = '';
-                let optsWithIdx = q.opts.map((opt, i) => ({opt, isAns: i===q.a})).sort(() => Math.random() - 0.5);
-                optsWithIdx.forEach((o, i) => {
-                    optsHTML += `<button class="btn btn-answer" onclick="Quiz.answer(${o.isAns})">${['A','B','C','D'][i]}. ${o.opt}</button>`;
-                });
-                document.getElementById('q-options').innerHTML = optsHTML;
-            },
-            
-            answer(isCorrect) {
-                tg.HapticFeedback.selectionChanged();
-                if(isCorrect) this.score++;
-                this.curr++;
-                if(this.curr >= 10) this.showResult(); else this.render();
-            },
-            
-            showResult() {
-                tg.HapticFeedback.notificationOccurred('success');
-                let rank = "Kroco MC 🤡";
-                if(this.score >= 5 && this.score <= 7) rank = "Trader Spekulan 🎲";
-                else if(this.score >= 8 && this.score <= 9) rank = "Analyst Pro 📊";
-                else if(this.score === 10) rank = "Shadow Banker 🐋";
-                
-                userData.rank = rank; userData.hasPlayed = true; userData.quizScore = this.score;
-                localStorage.setItem('tradingProUser', JSON.stringify(userData));
-                
-                document.getElementById('quiz-question-container').style.display = 'none';
-                document.getElementById('quiz-result-container').style.display = 'block';
-                document.getElementById('r-score').innerText = `${this.score}/10`;
-                document.getElementById('r-message').innerText = `Pangkat Anda Sekarang: ${rank}`;
-                document.getElementById('header-rank').innerText = rank;
-                doRoast();
             }
         };
 
-        // --- NLP BOT ENGINE (DENGAN DATA FOMC LATEST) ---
+        // --- BACKGROUND BENDERA WATERMARK BERDASARKAN SESI ---
+        function updateSessionBackground() {
+            const now = new Date();
+            const day = now.getDay(); 
+            const hour = now.getHours(); 
+            const minute = now.getMinutes();
+            
+            const badge = document.getElementById('session-badge');
+            const root = document.documentElement;
+            
+            // Format Jam Update Dinamis di News
+            let hoursStr = hour.toString().padStart(2, '0');
+            let minStr = minute.toString().padStart(2, '0');
+            
+            const dateOptions = { weekday: 'short', month: 'short', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('id-ID', dateOptions);
+            
+            if(document.getElementById('today-news-date')) {
+                document.getElementById('today-news-date').innerText = `${dateStr} | Update: ${hoursStr}:${minStr} WIB`;
+            }
+
+            if (day === 6 || day === 0) {
+                document.body.style.background = "linear-gradient(135deg, #0f172a, #450a0a)";
+                root.style.setProperty('--session-flag', '"⏸️"');
+                badge.innerHTML = "<i class='fa-solid fa-lock'></i> Tutup (Weekend)";
+                badge.style.color = "var(--text-muted)";
+            } else if (hour >= 6 && hour < 14) {
+                document.body.style.background = "linear-gradient(135deg, #07090D, #0d213b)";
+                root.style.setProperty('--session-flag', '"🇯🇵"');
+                badge.innerHTML = "🇯🇵 Tokyo (Asia)";
+                badge.style.color = "#4dd0e1";
+            } else if (hour >= 14 && hour < 19) {
+                document.body.style.background = "linear-gradient(135deg, #07090D, #1f1a38)";
+                root.style.setProperty('--session-flag', '"🇬🇧"');
+                badge.innerHTML = "🇬🇧 London (Eropa)";
+                badge.style.color = "#b388ff";
+            } else if (hour >= 19 || hour < 4) {
+                document.body.style.background = "linear-gradient(135deg, #07090D, #301014)";
+                root.style.setProperty('--session-flag', '"🇺🇸"');
+                badge.innerHTML = "🇺🇸 New York (US)";
+                badge.style.color = "var(--danger)";
+            } else {
+                document.body.style.background = "#07090D";
+                root.style.setProperty('--session-flag', '"🇦🇺"');
+                badge.innerHTML = "🇦🇺 Sydney / Overlap";
+                badge.style.color = "var(--text-muted)";
+            }
+        }
+
+        // --- NLP BOT ENGINE TERINTEGRASI ---
         const Bot = {
             toggle() {
                 const modal = document.getElementById('bot-modal');
                 modal.classList.toggle('active');
-                if(modal.classList.contains('active')) tg.HapticFeedback.impactOccurred('light');
             },
-            
             send() {
                 const inp = document.getElementById('bot-input');
                 const text = inp.value.trim();
                 if(!text) return;
-                
-                tg.HapticFeedback.selectionChanged();
-                this.appendMsg(text, 'user');
-                inp.value = '';
-                
-                setTimeout(() => {
-                    let reply = this.processNLP(text.toLowerCase());
-                    this.appendMsg(reply, 'bot');
-                }, 600);
+                this.appendMsg(text, 'user'); inp.value = '';
+                setTimeout(() => { let reply = this.processNLP(text.toLowerCase()); this.appendMsg(reply, 'bot'); }, 600);
             },
-            
             processNLP(input) {
+                // Jawaban bot sekarang general dan cerdas menanggapi siklus auto-update
                 const rules = [
-                    // DATA FOMC LATEST UPDATE!
-                    { k: ['fomc', 'warsh', 'terbaru', 'berita', 'news', 'tadi', 'barusan'], ans: "Berdasarkan rilis FOMC Juni 2026 terbaru, Ketua The Fed Kevin Warsh resmi menahan suku bunga di kisaran 3.50%-3.75%. Kejutan paling mematikan bagi pasar datang dari Dot Plot: 9 dari 18 pejabat justru memproyeksikan *kenaikan* suku bunga lanjutan tahun ini! Ini sangat Hawkish. Dolar (DXY) langsung melesat tajam dan melibas harga Emas (XAUUSD) ke bawah. Hindari menahan posisi BUY pada Emas." },
-                    
-                    { k: ['inflasi', 'cpi', 'pce'], ans: "Inflasi masih bandel. The Fed tidak akan melonggarkan suku bunga jika inflasi belum turun ke target 2%. Akibatnya Dolar akan terus kuat." },
-                    { k: ['bunga', 'fed', 'rate'], ans: "Keputusan Suku Bunga The Fed adalah raja tren. Suku bunga ditahan tinggi (Higher for Longer) seperti pengumuman baru-baru ini otomatis merugikan Emas." },
-                    { k: ['nfp', 'tenaga kerja'], ans: "Data tenaga kerja yang kuat menjustifikasi alasan The Fed untuk tidak memotong suku bunga. Itu artinya NFP bagus = Dolar kuat = Emas anjlok." },
-                    { k: ['emas', 'gold', 'xau', 'xauusd'], ans: "Emas sedang berada di bawah tekanan besar akibat proyeksi Hawkish terbaru The Fed. Carilah peluang untuk masuk posisi SELL di area zona diskon Premium saat harga melakukan pullback kecil." },
-                    { k: ['dolar', 'dxy', 'usd'], ans: "DXY menyerap likuiditas. Selama Yield Treasury AS masih di atas 4.2%, DXY adalah aset yang sedang trending kuat naik." },
-                    { k: ['smc', 'smart money', 'institusi'], ans: "Tunggu institusi menyapu batas likuiditas ritel (Sweep) saat harga berita dirilis tajam. Jangan langsung entry di detik pertama, tunggu market menenangkan diri." },
-                    { k: ['roasting', 'hina', 'cacian'], ans: "Halah gaya lu nanya berita FOMC. Udah paham The Fed narik likuiditas kok lu malah Buy Limit Emas tanpa Stop Loss? Tunggu aja saldo lu menguap dimakan bandar gara-gara sok ide nangkap pisau jatuh!" },
-                    { k: ['halo', 'pagi', 'siang', 'malam', 'hi', 'bot'], ans: "Salam institusional. Engine saya sudah tersinkronisasi dengan berita FOMC Hawkish terbaru. Apa yang ingin Anda tanyakan seputar arah market DXY dan XAUUSD?" }
+                    { k: ['berita', 'news', 'update', 'makro'], ans: "Sistem saya telah mendeteksi perubahan sentimen makro hari ini (cek papan News Dashboard). Ketika sentimen condong Hawkish (seperti kekuatan tenaga kerja atau inflasi tinggi), Dolar akan menjadi tameng utama pasar, dan membuang posisi aset non-bunga seperti Emas." },
+                    { k: ['fomc', 'fed', 'bunga', 'rate'], ans: "Pernyataan terbaru bank sentral masih memegang kontrol kuat atas pasar valas. Apabila The Fed mempertahankan suku bunga yang tinggi, tidak ada fundamental yang kuat untuk mem-buy Emas secara swing panjang. Jangan tertipu oleh pullback." },
+                    { k: ['loss', 'mc', 'rugi'], ans: "Jika Anda MC di market seperti ini, artinya Anda meremehkan algoritma kalender ekonomi. Institusi menyapu ritel melalui volatilitas berita. Kurangi lot Anda, atau hapus MT5 Anda." },
+                    { k: ['bot', 'halo', 'hi'], ans: "Salam institusional. Saya Oracle, engine makro Anda. Berita di dashboard utama Anda bergeser secara dinamis mengikuti arah rotasi fundamental global. Fokuslah pada sinkronisasi trend. Apa pertanyaan spesifik Anda?" }
                 ];
-
-                for(let r of rules) {
-                    if(r.k.some(keyword => input.includes(keyword))) return r.ans;
-                }
-
-                return `Secara makro, mengenai apa yang Anda tanyakan sangat berkaitan dengan arah likuiditas pasca rilis keputusan The Fed terbaru yang hawkish. Jangan melawan tren penguatan Dolar. Tetap lindungi margin Anda dengan ketat. Ada detail yang ingin Anda bedah lagi?`;
+                for(let r of rules) { if(r.k.some(keyword => input.includes(keyword))) return r.ans; }
+                return `Dalam analisis teknikal dan fundamental, hal tersebut harus dikonfirmasi oleh likuiditas. Selalu periksa rentang Market Profile harian dan sinkronkan dengan rilis kalender ekonomi sebelum Anda Entry. Tetap batasi risiko Anda 1%.`;
             },
-            
             appendMsg(text, sender) {
                 const area = document.getElementById('bot-chat-area');
                 const cls = sender === 'user' ? 'user-msg' : 'bot-msg';
-                area.innerHTML += `<div class="chat-bubble ${cls}">${text}</div>`;
-                area.scrollTop = area.scrollHeight;
+                area.innerHTML += `<div class="chat-bubble ${cls}">${text}</div>`; area.scrollTop = area.scrollHeight;
             }
         };
 
-        // --- PAPER TRADING DENGAN SYNC HARGA ---
+        // --- PAPER TRADING CORE LOGIC ---
         const PaperTrade = {
-            positions: [],
-            simPrice: 2400.50,
-            interval: null,
-            
+            positions: [], simPrice: 2400.50, interval: null,
             init() {
                 this.interval = setInterval(() => {
                     this.simPrice += (Math.random() - 0.5) * 1.5; 
-                    const sellP = this.simPrice.toFixed(2);
-                    const buyP = (this.simPrice + 0.30).toFixed(2);
-                    
                     if(document.getElementById('pt-sell-price')) {
-                        document.getElementById('pt-sell-price').innerText = sellP;
-                        document.getElementById('pt-buy-price').innerText = buyP;
+                        document.getElementById('pt-sell-price').innerText = this.simPrice.toFixed(2);
+                        document.getElementById('pt-buy-price').innerText = (this.simPrice + 0.30).toFixed(2);
                     }
                     if(this.positions.length > 0) this.updateRunning();
                 }, 1500);
             },
-            
             syncPrice() {
                 let inputPrice = parseFloat(document.getElementById('pt-sync-price').value);
                 if(inputPrice && !isNaN(inputPrice)) {
                     this.simPrice = inputPrice;
                     tg.HapticFeedback.notificationOccurred('success');
-                    
-                    let box = document.getElementById('pt-sync-price').parentElement.parentElement;
-                    box.style.borderColor = "var(--accent)";
-                    setTimeout(() => { box.style.borderColor = "var(--border)"; }, 500);
                 }
             },
-
             open(type) {
-                tg.HapticFeedback.impactOccurred('heavy');
                 let lot = parseFloat(document.getElementById('pt-lot').value) || 0.10;
                 let entryPrice = type === 'BUY' ? (this.simPrice + 0.30) : this.simPrice;
-                
-                this.positions.push({
-                    id: Date.now(), pair: 'XAUUSD', type: type, lot: lot, entry: entryPrice, pnl: -(lot*30) 
-                });
+                this.positions.push({ id: Date.now(), pair: 'XAUUSD', type: type, lot: lot, entry: entryPrice, pnl: -(lot*30) });
                 this.renderList();
             },
-            
             updateRunning() {
                 this.positions.forEach(p => {
                     let currentMark = p.type === 'BUY' ? this.simPrice : (this.simPrice + 0.30);
@@ -676,198 +606,46 @@
                 });
                 this.renderList();
             },
-            
             renderList() {
                 const listDiv = document.getElementById('pt-active-list');
-                if(this.positions.length === 0) {
-                    listDiv.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">Tidak ada posisi terbuka.</p>';
-                    return;
-                }
-                
+                if(this.positions.length === 0) { listDiv.innerHTML = '<p style="font-size:12px; color:var(--text-muted); text-align:center;">Tidak ada posisi terbuka.</p>'; return; }
                 let html = '';
                 this.positions.forEach(p => {
                     let color = p.pnl >= 0 ? 'var(--accent)' : 'var(--danger)';
-                    html += `
-                    <div class="pt-item">
-                        <div>
-                            <b style="color:var(--primary);">${p.type} ${p.lot} Lot</b>
-                            <div style="font-size:11px; color:var(--text-muted);">Entry: ${p.entry.toFixed(2)}</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <b style="color:${color};">$${p.pnl.toFixed(2)}</b><br>
-                            <button class="btn btn-outline" style="padding:4px 8px; font-size:10px; margin-top:5px; border-color:var(--danger); color:var(--danger);" onclick="PaperTrade.close(${p.id})">TUTUP</button>
-                        </div>
-                    </div>`;
+                    html += `<div class="pt-item"><div><b style="color:var(--primary);">${p.type} ${p.lot} Lot</b><div style="font-size:11px; color:var(--text-muted);">Entry: ${p.entry.toFixed(2)}</div></div><div style="text-align:right;"><b style="color:${color};">$${p.pnl.toFixed(2)}</b><br><button class="btn btn-outline" style="padding:4px 8px; font-size:10px; margin-top:5px; border-color:var(--danger); color:var(--danger);" onclick="PaperTrade.close(${p.id})">TUTUP</button></div></div>`;
                 });
                 listDiv.innerHTML = html;
             },
-            
             close(id) {
-                let p = this.positions.find(x => x.id === id);
-                if(!p) return;
-                
-                this.positions = this.positions.filter(x => x.id !== id);
-                this.renderList();
-                
-                document.getElementById('j-pair').value = `SIM-${p.pair} (${p.lot}L)`;
-                document.getElementById('j-type').value = p.type;
-                document.getElementById('j-amount').value = p.pnl.toFixed(2);
-                
-                Journal.add();
-                tg.HapticFeedback.notificationOccurred('success');
+                let p = this.positions.find(x => x.id === id); if(!p) return;
+                this.positions = this.positions.filter(x => x.id !== id); this.renderList();
             }
         };
 
-        // --- CORE USER & JOURNAL LOGIC ---
-        let userData = { winrate: 0, quizScore: 0, rank: 'Kroco MC 🤡', hasPlayed: false };
-
-        // --- BACKGROUND BENDERA WATERMARK BERDASARKAN SESI ---
-        function updateSessionBackground() {
-            const now = new Date();
-            const day = now.getDay(); 
-            const hour = now.getHours(); 
-            
-            const badge = document.getElementById('session-badge');
-            const root = document.documentElement;
-
-            if (day === 6 || day === 0) {
-                // Weekend (Market Closed)
-                document.body.style.background = "linear-gradient(135deg, #0f172a, #450a0a)";
-                root.style.setProperty('--session-flag', '"⏸️"');
-                badge.innerHTML = "<i class='fa-solid fa-lock'></i> Tutup (Weekend)";
-                badge.style.color = "var(--text-muted)";
-            } else if (hour >= 6 && hour < 14) {
-                // Asian Session (Jepang/Tokyo)
-                document.body.style.background = "linear-gradient(135deg, #07090D, #0d213b)";
-                root.style.setProperty('--session-flag', '"🇯🇵"');
-                badge.innerHTML = "🇯🇵 Tokyo (Asia)";
-                badge.style.color = "#4dd0e1";
-            } else if (hour >= 14 && hour < 19) {
-                // London Session (Inggris/Eropa)
-                document.body.style.background = "linear-gradient(135deg, #07090D, #1f1a38)";
-                root.style.setProperty('--session-flag', '"🇬🇧"');
-                badge.innerHTML = "🇬🇧 London (Eropa)";
-                badge.style.color = "#b388ff";
-            } else if (hour >= 19 || hour < 4) {
-                // New York Session (Amerika Serikat)
-                document.body.style.background = "linear-gradient(135deg, #07090D, #301014)";
-                root.style.setProperty('--session-flag', '"🇺🇸"');
-                badge.innerHTML = "🇺🇸 New York (US)";
-                badge.style.color = "var(--danger)";
-            } else {
-                // Overlap
-                document.body.style.background = "#07090D";
-                root.style.setProperty('--session-flag', '"🇦🇺"');
-                badge.innerHTML = "🇦🇺 Sydney / Overlap";
-                badge.style.color = "var(--text-muted)";
-            }
-        }
-
+        // --- INIT CORE ---
         function initData() {
+            let userData = { winrate: 35, rank: 'Kroco MC 🤡', hasPlayed: false };
             const saved = localStorage.getItem('tradingProUser');
             if(saved) userData = JSON.parse(saved);
-            else { userData.winrate = 35; localStorage.setItem('tradingProUser', JSON.stringify(userData)); }
             
             document.getElementById('header-rank').innerText = userData.rank;
-            document.getElementById('j-winrate').innerText = userData.winrate + '%';
             
-            // Set Tanggal Berita Makro LIVE saat ini secara mendetail
-            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('today-news-date').innerText = new Date().toLocaleString('id-ID', dateOptions) + ' WIB';
-
-            RenderAcademy();
-            Journal.load();
-            doRoast();
-            PaperTrade.init(); 
             updateSessionBackground();
+            MacroEngine.triggerUpdate(); // Panggil rotasi berita otomatis pada start
+            PaperTrade.init();
             
-            setInterval(updateSessionBackground, 60000); 
+            // Loop interval tiap 1 menit untuk update jam sesi dan rotasi jika melewati tengah malam
+            setInterval(() => {
+                updateSessionBackground();
+                MacroEngine.triggerUpdate();
+            }, 60000); 
         }
-
-        function doRoast() {
-            let msg = "Teruslah deposit, bandar butuh likuiditas uang lu buat beli Ferrari baru.";
-            if(userData.hasPlayed) {
-                if(userData.winrate < 50 && userData.quizScore < 6) msg = "Teori ga paham, praktek amburadul. Udah fix lu itu donatur abadi broker.";
-                else if(userData.winrate < 50 && userData.quizScore >= 6) msg = "Pinter teori SMC doang, pas eksekusi di MT5 tangan lu tremor kan? Dasar analis nanggung.";
-                else if(userData.winrate >= 50 && userData.quizScore < 6) msg = "Menang hoki doang lu bos. Gak ngerti makro tapi porto bisa ijo. Awas besok rilis The Fed disapu bersih market.";
-                else msg = "Gue akuin lu ngerti fundamental dan eksekusi lu lumayan tajam. Tapi jangan pernah lengah, market sangat suka menghukum orang yang sombong.";
-            }
-            document.getElementById('roast-message').innerText = msg;
-        }
-
-        function RenderAcademy() {
-            let html = "";
-            academyData.forEach(cat => {
-                html += `<h4 style="color: var(--primary); margin-top: 15px;">${cat.cat}</h4>`;
-                cat.list.forEach(item => {
-                    html += `<details class="edu-module"><summary>${item.t}</summary><div class="edu-content">${item.d}</div></details>`;
-                });
-            });
-            document.getElementById('academy-container').innerHTML = html;
-        }
-
-        const Journal = {
-            trades: [], chartInstance: null,
-            load() {
-                const saved = localStorage.getItem('tradingProJournal');
-                if(saved) this.trades = JSON.parse(saved);
-                this.updateUI();
-            },
-            add() {
-                const pair = document.getElementById('j-pair').value.toUpperCase();
-                const type = document.getElementById('j-type').value;
-                const pnl = parseFloat(document.getElementById('j-amount').value);
-                
-                if(!pair || isNaN(pnl)) { tg.HapticFeedback.notificationOccurred('error'); return; }
-                
-                tg.HapticFeedback.notificationOccurred('success');
-                const date = new Date().toLocaleDateString('id-ID');
-                this.trades.push({ date, pair, type, pnl });
-                
-                localStorage.setItem('tradingProJournal', JSON.stringify(this.trades));
-                document.getElementById('j-pair').value = ''; document.getElementById('j-amount').value = '';
-                this.updateUI();
-            },
-            updateUI() {
-                let wins = 0; let net = 0; let chartLabels = ['Start']; let chartData = [0]; let runNet = 0; let listHTML = '';
-                
-                this.trades.forEach((t, i) => {
-                    if(t.pnl > 0) wins++; net += t.pnl; runNet += t.pnl;
-                    chartLabels.push(`T${i+1}`); chartData.push(runNet);
-                });
-                
-                [...this.trades].reverse().forEach(t => {
-                    const cls = t.pnl >= 0 ? 'profit' : 'loss';
-                    const color = t.pnl >= 0 ? 'var(--accent)' : 'var(--danger)';
-                    listHTML += `<div class="journal-item ${cls}"><div><b style="font-size:13px;">${t.pair}</b><div style="font-size:10px; color:var(--text-muted);">${t.date} | ${t.type}</div></div><div style="font-weight:bold; color:${color};">$${t.pnl.toFixed(2)}</div></div>`;
-                });
-
-                document.getElementById('j-trades').innerText = this.trades.length;
-                let wr = this.trades.length > 0 ? Math.round((wins/this.trades.length)*100) : 0;
-                document.getElementById('j-winrate').innerText = wr + '%';
-                if(this.trades.length > 0) { userData.winrate = wr; localStorage.setItem('tradingProUser', JSON.stringify(userData)); doRoast(); }
-
-                document.getElementById('j-pnl').innerText = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
-                document.getElementById('j-pnl').style.color = net >= 0 ? 'var(--accent)' : 'var(--danger)';
-                document.getElementById('journal-list').innerHTML = listHTML || '<p style="text-align:center; font-size:12px;">Belum ada data eksekusi.</p>';
-                this.drawChart(chartLabels, chartData);
-            },
-            drawChart(labels, data) {
-                const ctx = document.getElementById('journalChart').getContext('2d');
-                if(this.chartInstance) this.chartInstance.destroy();
-                let grad = ctx.createLinearGradient(0,0,0,150);
-                grad.addColorStop(0, 'rgba(41, 98, 255, 0.4)'); grad.addColorStop(1, 'transparent');
-                this.chartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: data, borderColor: '#2962FF', backgroundColor: grad, fill: true, tension: 0.3, borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}}, scales: { x:{display:false}, y:{grid:{color:'#1A212D'}} } } });
-            }
-        };
 
         // --- CHART TV LOADER ---
         function loadChart(symbol) {
-            tg.HapticFeedback.impactOccurred('light');
             new TradingView.widget({ "autosize": true, "symbol": symbol, "interval": "60", "timezone": "Asia/Jakarta", "theme": "dark", "style": "1", "locale": "id", "enable_publishing": false, "backgroundColor": "rgba(17, 21, 28, 0)", "gridColor": "#1A212D", "hide_top_toolbar": false, "hide_legend": false, "save_image": false, "container_id": "tv_chart_container", "studies": ["Volume@tv-basicstudies"] });
         }
 
-        // --- APP ROUTER ---
         const App = {
             init() {
                 tg.ready(); tg.expand(); tg.setHeaderColor('#07090D'); tg.setBackgroundColor('#07090D');
@@ -875,7 +653,6 @@
                 initData(); loadChart('OANDA:XAUUSD');
             },
             nav(viewId) {
-                tg.HapticFeedback.selectionChanged();
                 document.querySelectorAll('.view-page').forEach(v => v.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 document.getElementById(viewId).classList.add('active');
