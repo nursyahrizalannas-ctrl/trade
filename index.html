@@ -3,477 +3,613 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Althaf & Brother - Smart Macro Engine</title>
+    <title>Ultimate Trading Pro - Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* === COLOR PALETTE & VARIABLES === */
         :root {
             --bg-main: #0b0e14;
             --bg-card: #17212b;
             --bg-element: #1f2630;
             --text-main: #ffffff;
             --text-muted: #8a93a0;
-            --border-color: #363c4e;
+            --border: #363c4e;
             --primary: #2962ff;
             --success: #089981;
             --danger: #f23645;
             --warning: #ffb300;
+            --purple: #6a1b9a;
         }
 
+        /* === GLOBAL STYLES === */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-main);
             color: var(--text-main);
             margin: 0;
-            padding: 12px;
-            transition: background-color 0.3s ease;
+            padding: 0;
+            overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
+        * { box-sizing: border-box; }
 
-        /* Navigasi Tab */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            background: var(--bg-card);
-            padding: 6px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-        }
-        .tab-btn {
-            flex: 1;
-            min-width: 45%;
-            padding: 10px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 12px;
-            text-align: center;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(41, 98, 255, 0.3);
+        h1, h2, h3, h4, p { margin: 0; }
+        .text-muted { color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+        .text-success { color: var(--success); }
+        .text-danger { color: var(--danger); }
+        
+        button { border: none; cursor: pointer; outline: none; transition: 0.2s; font-family: inherit; }
+        button:active { transform: scale(0.96); }
+        
+        input, select {
+            width: 100%; padding: 12px; background: var(--bg-main);
+            color: white; border: 1px solid var(--border);
+            border-radius: 8px; margin-bottom: 10px; font-size: 14px;
         }
 
-        /* Konten */
-        .content { display: none; animation: fadeIn 0.4s ease; }
-        .content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-primary { width: 100%; padding: 14px; background: var(--primary); color: white; font-weight: bold; border-radius: 8px; }
+        .btn-success { background: var(--success); color: white; padding: 10px; border-radius: 6px; font-weight: bold; width: 100%; }
+        .btn-danger { background: var(--danger); color: white; padding: 10px; border-radius: 6px; font-weight: bold; width: 100%; }
 
-        /* Komponen UI Umum */
-        .card {
+        /* === HEADER & GAMIFICATION === */
+        header {
             background: var(--bg-card);
             padding: 15px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        h3, h4 { margin-top: 0; color: var(--text-main); }
-        .text-muted { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-element);
-            color: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            outline: none;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-        input:focus { border-color: var(--primary); }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+        .level-badge { background: rgba(255, 179, 0, 0.2); color: var(--warning); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; border: 1px solid var(--warning); }
+        .xp-bar { width: 100px; height: 6px; background: var(--border); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .xp-fill { height: 100%; background: var(--warning); width: 45%; }
 
-        .btn-action {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            color: white;
-            background: var(--primary);
-            transition: transform 0.1s, background 0.2s;
-        }
-        .btn-action:active { transform: scale(0.97); }
-        .btn-danger { background: var(--danger); }
-        .btn-success { background: var(--success); }
+        /* === PAGE SYSTEM === */
+        .page { display: none; padding: 15px; animation: slideIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Grid Kategori Edukasi */
-        details {
-            background: var(--bg-element);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-        summary { font-weight: bold; font-size: 14px; outline: none; list-style-type: none; display: flex; justify-content: space-between; }
-        summary::after { content: '▼'; font-size: 12px; color: var(--text-muted); transition: 0.3s;}
-        details[open] summary::after { transform: rotate(180deg); }
-        
-        .grid-2 {
+        .page-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .btn-back { background: var(--bg-element); color: white; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+        /* === DASHBOARD GRID (10 FITUR) === */
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 15px;
         }
-        .btn-item {
-            padding: 10px;
-            font-size: 11px;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            background: #2b3340;
-            transition: 0.2s;
+        .menu-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        .btn-item:active { transform: scale(0.95); opacity: 0.8; }
+        .menu-icon { font-size: 28px; margin-bottom: 8px; }
+        .menu-title { font-size: 13px; font-weight: 600; color: #e0e0e0; }
+
+        /* === CARDS & CONTAINERS === */
+        .card { background: var(--bg-card); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
+        .flex-row { display: flex; gap: 10px; justify-content: space-between; align-items: center; }
         
-        /* Palet Tombol */
-        .c-red { border-left: 3px solid var(--danger); }
-        .c-green { border-left: 3px solid var(--success); }
-        .c-blue { border-left: 3px solid var(--primary); }
-        .c-yellow { border-left: 3px solid var(--warning); }
+        /* === MODULE: ACADEMY === */
+        details.academy-item { background: var(--bg-element); padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+        details.academy-item summary { font-weight: bold; font-size: 14px; outline: none; list-style: none; display: flex; justify-content: space-between; }
+        details.academy-item summary::after { content: '▼'; font-size: 12px; color: var(--text-muted); }
+        .academy-content { margin-top: 10px; font-size: 13px; color: #ccc; line-height: 1.6; border-top: 1px dashed var(--border); padding-top: 10px; }
 
-        /* Modal Ensiklopedia */
-        #modal-info {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.98); z-index: 1000; padding: 20px; box-sizing: border-box;
-            overflow-y: auto; flex-direction: column;
-        }
-        .modal-header { color: var(--warning); font-size: 20px; font-weight: bold; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; }
-        .modal-body { line-height: 1.7; font-size: 14px; color: #d1d4dc; flex: 1; margin-bottom: 30px; }
-        .modal-body h3 { color: var(--primary); font-size: 16px; margin-top: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; }
-        .box-analogy { background: var(--bg-element); padding: 12px; border-left: 4px solid var(--warning); border-radius: 6px; margin: 10px 0; font-style: italic; }
-        .box-impact { background: rgba(242, 54, 69, 0.1); padding: 12px; border-left: 4px solid var(--danger); border-radius: 6px; margin: 10px 0; }
-        .box-impact.good { background: rgba(8, 153, 129, 0.1); border-left: 4px solid var(--success); }
+        /* === MODULE: AI CHAT === */
+        .chat-box { height: 300px; overflow-y: auto; background: var(--bg-main); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 80%; padding: 10px; border-radius: 8px; font-size: 13px; line-height: 1.4; }
+        .msg.bot { background: var(--bg-element); align-self: flex-start; border-left: 3px solid var(--primary); }
+        .msg.user { background: var(--primary); align-self: flex-end; }
+        .chat-input-area { display: flex; gap: 5px; }
 
-        /* Kuis Overlay */
-        #quiz-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-main); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; box-sizing: border-box; text-align: center;
-        }
-        .quiz-option {
-            width: 100%; padding: 14px; margin: 6px 0;
-            background: var(--bg-element); border: 1px solid var(--border-color);
-            border-radius: 8px; color: white; font-weight: bold; cursor: pointer;
-        }
-        .quiz-option:active { background: var(--primary); }
+        /* === MODULE: JOURNAL === */
+        .journal-stat { text-align: center; background: var(--bg-element); padding: 10px; border-radius: 8px; flex: 1; }
+        .journal-stat h3 { color: var(--warning); margin-bottom: 5px; }
+        .trade-row { display: flex; justify-content: space-between; background: var(--bg-main); padding: 10px; border-radius: 6px; margin-bottom: 5px; font-size: 13px; border-left: 3px solid var(--success); }
+        .trade-row.loss { border-left-color: var(--danger); }
+
+        /* === MODULE: SIGNALS === */
+        .signal-card { border-left: 4px solid var(--primary); }
+        .confidence-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; margin-top: 8px; }
+        .confidence-fill { height: 100%; background: var(--success); width: 85%; }
+
+        /* TV Chart Container */
+        #tvchart { width: 100%; height: 400px; background: var(--bg-element); border-radius: 8px; overflow: hidden; }
     </style>
 </head>
 <body>
 
-    <div id="quiz-overlay">
-        <h2 style="color: var(--warning);">🚀 Althaf & Brother</h2>
-        <p class="text-muted">Asah insting makro Anda sebelum masuk ke market.</p>
-        
-        <div class="card" style="width: 100%; max-width: 400px; text-align: left;">
-            <div id="quiz-stats" style="font-size: 12px; color: var(--success); margin-bottom: 10px; font-weight: bold;"></div>
-            <h4 id="quiz-q" style="line-height: 1.4;">Memuat Pertanyaan...</h4>
-            <div id="quiz-opts"></div>
-        </div>
-    </div>
-
-    <div id="modal-info">
-        <div class="modal-header" id="modal-title">Judul</div>
-        <div class="modal-body" id="modal-content">Konten</div>
-        <button class="btn-action btn-danger" onclick="document.getElementById('modal-info').style.display='none'">TUTUP PANDUAN</button>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-dashboard', this)">📊 Radar</button>
-        <button class="tab-btn" onclick="switchTab('tab-mading', this)">📅 Mading</button>
-        <button class="tab-btn" onclick="switchTab('tab-pedia', this)">📚 Pedia</button>
-        <button class="tab-btn" onclick="switchTab('tab-combo', this)">🔄 Combo</button>
-    </div>
-
-    <div id="tab-dashboard" class="content active">
-        <div class="card" style="text-align: center; border-color: var(--primary);">
-            <h3 style="color: var(--primary);">Antipraktis Smart Engine</h3>
-            <p class="text-muted">Selamat datang di terminal analisis fundamental Althaf & Brother. Sistem memproses sentimen institusi secara otonom berdasarkan waktu nyata di perangkat Anda.</p>
-            <button class="btn-action" onclick="switchTab('tab-mading', document.querySelectorAll('.tab-btn')[1])">Cek Jadwal High Impact Hari Ini</button>
-        </div>
-    </div>
-
-    <div id="tab-mading" class="content">
-        <div class="card c-yellow">
-            <h4 id="mading-date" style="color: var(--warning);">Mading Terkini</h4>
-            <p class="text-muted">Algoritma otomatis mendeteksi fase makro minggu ini untuk persiapan margin Anda.</p>
-        </div>
-        <div id="mading-content"></div>
-    </div>
-
-    <div id="tab-pedia" class="content">
-        <input type="text" id="search-input" placeholder="🔍 Cari Data Makro (Cth: NFP, CPI)..." onkeyup="filterPedia()" style="margin-bottom: 15px;">
-        
-        <div id="pedia-container">
-            <details open>
-                <summary style="color: var(--danger);">🏷️ Inflasi & Harga (Prioritas The Fed)</summary>
-                <div class="grid-2">
-                    <button class="btn-item c-red" onclick="openModal('CPI (Headline)')">CPI (Headline)</button>
-                    <button class="btn-item c-red" onclick="openModal('Core CPI')">Core CPI (Inti)</button>
-                    <button class="btn-item c-red" onclick="openModal('PCE Price Index')">PCE Price Index</button>
-                    <button class="btn-item c-red" onclick="openModal('PPI')">PPI (Produsen)</button>
-                </div>
-            </details>
-
-            <details open>
-                <summary style="color: var(--success);">👷 Tenaga Kerja (Pondasi Ekonomi)</summary>
-                <div class="grid-2">
-                    <button class="btn-item c-green" onclick="openModal('Non Farm Payrolls (NFP)')">NFP</button>
-                    <button class="btn-item c-green" onclick="openModal('Unemployment Rate')">Unemployment Rate</button>
-                    <button class="btn-item c-green" onclick="openModal('Initial Jobless Claims')">Jobless Claims</button>
-                    <button class="btn-item c-green" onclick="openModal('JOLTs Job Openings')">JOLTs Openings</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: var(--warning);">📊 Pertumbuhan & Konsumsi</summary>
-                <div class="grid-2">
-                    <button class="btn-item c-yellow" onclick="openModal('GDP (Utama)')">GDP Utama</button>
-                    <button class="btn-item c-yellow" onclick="openModal('Retail Sales MoM')">Retail Sales</button>
-                    <button class="btn-item c-yellow" onclick="openModal('ISM Manufacturing PMI')">ISM Mfg PMI</button>
-                    <button class="btn-item c-yellow" onclick="openModal('Michigan Consumer Sentiment')">Mich. Sentiment</button>
-                </div>
-            </details>
-
-            <details>
-                <summary style="color: var(--primary);">🏦 Kebijakan Sentral (Moneter)</summary>
-                <div class="grid-2">
-                    <button class="btn-item c-blue" onclick="openModal('Fed Interest Rate')">Fed Funds Rate</button>
-                    <button class="btn-item c-blue" onclick="openModal('ECB Main Refinancing Rate')">ECB Rate (Eropa)</button>
-                    <button class="btn-item c-blue" onclick="openModal('BOE Official Bank Rate')">BOE Rate (Inggris)</button>
-                    <button class="btn-item c-blue" onclick="openModal('BOJ Policy Rate')">BOJ Rate (Jepang)</button>
-                </div>
-            </details>
-        </div>
-    </div>
-
-    <div id="tab-combo" class="content">
-        <div class="card c-red">
-            <h4 style="color: var(--danger);">🔥 Super Combo (Sangat Berbahaya)</h4>
-            <p class="text-muted">Pola rilis data ganda. Institusi memprogram bot HFT untuk menciptakan "Jarum" manipulasi *Stop Loss* sebelum melanjutkan tren utama.</p>
-            <div class="grid-2">
-                <button class="btn-item c-red" onclick="openCombo('Paket NFP (NFP + Unemployment)')">Paket NFP Lengkap</button>
-                <button class="btn-item c-red" onclick="openCombo('Paket CPI (Core + Headline)')">Paket CPI Lengkap</button>
-                <button class="btn-item c-red" onclick="openCombo('Paket FOMC (Rate + Dot Plot + Pidato)')">Paket FOMC Lengkap</button>
+    <!-- GLOBAL HEADER -->
+    <header>
+        <div class="user-info">
+            <div class="avatar" id="user-avatar">👤</div>
+            <div>
+                <div style="font-size: 14px; font-weight: bold;" id="user-name">Trader Pro</div>
+                <div class="level-badge">Level 5: SMC Master</div>
             </div>
         </div>
+        <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted);">Daily XP</div>
+            <div class="xp-bar"><div class="xp-fill"></div></div>
+        </div>
+    </header>
+
+    <!-- DASHBOARD HOME (Main Menu) -->
+    <div id="page-home" class="page active">
+        <div style="margin-bottom: 15px; padding: 0 15px;">
+            <h3 style="color: var(--primary);">Ultimate Trading Hub</h3>
+            <p class="text-muted">Pusat komando analisis makro, teknikal, dan edukasi terpadu.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <button class="menu-card" onclick="openPage('page-academy')">
+                <div class="menu-icon">📚</div>
+                <div class="menu-title">1. Academy</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-chart')">
+                <div class="menu-icon">📈</div>
+                <div class="menu-title">2. Live Chart</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-ai')">
+                <div class="menu-icon">🤖</div>
+                <div class="menu-title">3. AI Assistant</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-macro')">
+                <div class="menu-icon">📰</div>
+                <div class="menu-title">4. Makro & News</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-simulator')">
+                <div class="menu-icon">💹</div>
+                <div class="menu-title">5. Paper Trade</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-journal')">
+                <div class="menu-icon">📉</div>
+                <div class="menu-title">6. Trade Journal</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-signals')">
+                <div class="menu-icon">🎯</div>
+                <div class="menu-title">7. Signal Center</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-tools')">
+                <div class="menu-icon">🧮</div>
+                <div class="menu-title">8. Calculators</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-gamify')">
+                <div class="menu-icon">🏆</div>
+                <div class="menu-title">9. Missions</div>
+            </button>
+            <button class="menu-card" onclick="openPage('page-community')">
+                <div class="menu-icon">👥</div>
+                <div class="menu-title">10. Community</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. ACADEMY PAGE -->
+    <div id="page-academy" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>📚 Belajar Trading</h3>
+        </div>
         
-        <div class="card c-yellow">
-            <h4 style="color: var(--warning);">🟡 Combo Menengah</h4>
-            <div class="grid-2">
-                <button class="btn-item c-yellow" onclick="openCombo('Paket GDP (Advance + Price Index)')">Paket GDP</button>
-                <button class="btn-item c-yellow" onclick="openCombo('Paket Retail Sales')">Paket Retail</button>
-                <button class="btn-item c-yellow" onclick="openCombo('NFP vs CAD Jobs')">NFP vs CAD Jobs</button>
+        <details class="academy-item">
+            <summary>1. Dasar Trading (Lot, Pip, Leverage)</summary>
+            <div class="academy-content">
+                <b>Lot:</b> Satuan volume transaksi (1 Lot Standard = 100,000 unit).<br>
+                <b>Pip:</b> Point in Percentage, pergerakan desimal ke-4 (0.0001).<br>
+                <b>Leverage:</b> Daya ungkit daya beli dari broker (contoh 1:500).
             </div>
+        </details>
+        <details class="academy-item">
+            <summary>2. Smart Money Concept (SMC)</summary>
+            <div class="academy-content">
+                Analisis jejak uang besar (Bank/Institusi).<br>
+                <b>BOS (Break of Structure):</b> Penembusan tren searah.<br>
+                <b>CHoCH (Change of Character):</b> Sinyal awal pembalikan arah tren.<br>
+                <b>Order Block:</b> Area candle terakhir sebelum pergerakan masif.
+            </div>
+        </details>
+        <details class="academy-item">
+            <summary>3. Psikologi Trading & Risk</summary>
+            <div class="academy-content">
+                Jangan pernah merisikokan lebih dari <b>1-2%</b> modal per posisi. Emosi FOMC (Fear of Missing Out) adalah pembunuh akun nomor satu.
+            </div>
+        </details>
+    </div>
+
+    <!-- 2. LIVE CHART PAGE -->
+    <div id="page-chart" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>📈 Advanced Technicals</h3>
+        </div>
+        <div class="card">
+            <p class="text-muted" style="margin-bottom: 10px;">Widget TradingView Multi-Timeframe. Mendukung Drawing Tools, Fibonacci, dan Indikator.</p>
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+              <div id="tvchart"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+              <script type="text/javascript">
+              new TradingView.widget({
+                "autosize": true,
+                "symbol": "OANDA:XAUUSD",
+                "interval": "15",
+                "timezone": "Asia/Jakarta",
+                "theme": "dark",
+                "style": "1",
+                "locale": "id",
+                "enable_publishing": false,
+                "backgroundColor": "#1f2630",
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "save_image": false,
+                "container_id": "tvchart"
+              });
+              </script>
+            </div>
+            <!-- TradingView Widget END -->
+        </div>
+    </div>
+
+    <!-- 3. AI ASSISTANT PAGE -->
+    <div id="page-ai" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>🤖 AI Trading Mentor</h3>
+        </div>
+        <div class="card">
+            <div class="chat-box" id="ai-chat-box">
+                <div class="msg bot">Halo! Saya AI Trading Assistant Anda. Saya bisa merangkum sentimen market, mendeteksi pola, atau menjelaskan materi trading. Ada yang ingin ditanyakan?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="ai-input" placeholder="Tanya tentang XAUUSD hari ini..." style="margin-bottom:0; flex: 1;">
+                <button class="btn-primary" style="width: 60px; padding: 12px;" onclick="sendAiMessage()">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. MAKRO & NEWS PAGE -->
+    <div id="page-macro" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>📰 Makro & Ekonomi</h3>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--danger);">
+            <h4 class="text-danger">🔥 Data High Impact Minggu Ini</h4>
+            <div style="margin-top: 10px; font-size: 13px; line-height: 1.6;">
+                <div class="flex-row" style="border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 5px;">
+                    <span><b>CPI (Inflasi AS)</b></span> <span class="text-danger">19:30 WIB</span>
+                </div>
+                <div class="flex-row" style="border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 5px;">
+                    <span><b>FOMC Statement</b></span> <span class="text-danger">Kamis, 01:00 WIB</span>
+                </div>
+                <div class="flex-row">
+                    <span><b>NFP & Unemployment</b></span> <span class="text-danger">Jumat, 19:30 WIB</span>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="background: rgba(41, 98, 255, 0.1); border-left: 4px solid var(--primary);">
+            <h4 style="color: var(--primary);">Sentimen Institusi Saat Ini</h4>
+            <p class="text-muted" style="margin-top: 5px;">Divergensi bank sentral sangat kuat. ECB telah memotong suku bunga, sementara The Fed (AS) menahan. <b>Arah Makro: Dolar AS (DXY) Bullish, XAUUSD tertekan Bearish.</b></p>
+        </div>
+    </div>
+
+    <!-- 5. PAPER TRADING (SIMULATOR) -->
+    <div id="page-simulator" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>💹 Paper Trade (Demo)</h3>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div class="text-muted">Saldo Virtual Anda</div>
+            <h2 style="color: var(--success); margin: 5px 0;">$10,000.00</h2>
+            <div class="flex-row" style="margin-top: 15px;">
+                <button class="btn-success" onclick="alertSim('Buy')">BUY MARKET</button>
+                <button class="btn-danger" onclick="alertSim('Sell')">SELL MARKET</button>
+            </div>
+        </div>
+        <h4 style="margin-bottom: 10px;">Posisi Aktif</h4>
+        <div class="card" style="padding: 10px; font-size: 13px;">
+            <div class="flex-row">
+                <span><b>XAUUSD</b> <span class="text-success">BUY 0.10</span></span>
+                <span class="text-success">+$24.50</span>
+            </div>
+            <div class="text-muted" style="margin-top: 5px;">Entry: 2340.50 | SL: 2335.00 | TP: 2350.00</div>
+        </div>
+    </div>
+
+    <!-- 6. TRADING JOURNAL -->
+    <div id="page-journal" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>📉 Jurnal Evaluasi</h3>
+        </div>
+        <div class="flex-row" style="margin-bottom: 15px;">
+            <div class="journal-stat">
+                <h3 id="stat-winrate">0%</h3>
+                <div class="text-muted">Winrate</div>
+            </div>
+            <div class="journal-stat">
+                <h3 id="stat-trades">0</h3>
+                <div class="text-muted">Total Trade</div>
+            </div>
+        </div>
+        <div class="card">
+            <h4>Tambah Catatan Entry</h4>
+            <div class="flex-row" style="margin-top: 10px;">
+                <input type="text" id="j-pair" placeholder="Pair (ex: EURUSD)" style="margin-bottom: 0;">
+                <select id="j-result" style="margin-bottom: 0;">
+                    <option value="win">Win (Profit)</option>
+                    <option value="loss">Loss (Minus)</option>
+                </select>
+            </div>
+            <button class="btn-primary" style="margin-top: 10px;" onclick="addJournal()">Simpan Jurnal</button>
+        </div>
+        <h4>Histori Analisis</h4>
+        <div id="journal-list" style="margin-top: 10px;">
+            <!-- List Jurnal Diisi JS -->
+        </div>
+    </div>
+
+    <!-- 7. SIGNAL CENTER -->
+    <div id="page-signals" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>🎯 VIP Signal Center</h3>
+        </div>
+        <div class="card signal-card">
+            <div class="flex-row">
+                <h3 style="color: var(--danger);">SELL XAUUSD</h3>
+                <span class="level-badge">Active</span>
+            </div>
+            <div style="font-size: 14px; margin-top: 10px; line-height: 1.6;">
+                <b>Entry:</b> 2355.00 - 2358.00<br>
+                <b>Stop Loss:</b> 2362.00 (70 Pips)<br>
+                <b>Take Profit:</b> 2345.00 / 2335.00
+            </div>
+            <div class="text-muted" style="margin-top: 10px;">Confidence Score (Analisis Algoritma)</div>
+            <div class="confidence-bar"><div class="confidence-fill" style="width: 92%;"></div></div>
+        </div>
+        <div class="card signal-card" style="border-left-color: var(--success);">
+            <div class="flex-row">
+                <h3 style="color: var(--success);">BUY GBPJPY</h3>
+                <span class="level-badge" style="background: #363c4e; color: #ccc; border:none;">Hit TP1</span>
+            </div>
+            <div style="font-size: 14px; margin-top: 10px; line-height: 1.6;">
+                <b>Entry:</b> 200.50<br>
+                <b>Stop Loss:</b> 200.00<br>
+                <b>Take Profit:</b> 201.50
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. CALCULATORS -->
+    <div id="page-tools" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>🧮 Risk & Lot Calculator</h3>
+        </div>
+        <div class="card">
+            <p class="text-muted" style="margin-bottom: 15px;">Kalkulator Position Sizing presisi tinggi untuk menjaga ketahanan Margin Anda.</p>
+            <label class="text-muted">Saldo Akun (USD)</label>
+            <input type="number" id="calc-balance" value="1000">
+            
+            <div class="flex-row">
+                <div style="flex: 1;">
+                    <label class="text-muted">Risiko (%)</label>
+                    <input type="number" id="calc-risk" value="1">
+                </div>
+                <div style="flex: 1;">
+                    <label class="text-muted">Stop Loss (Pips)</label>
+                    <input type="number" id="calc-sl" value="30">
+                </div>
+            </div>
+            
+            <button class="btn-primary" onclick="calculateLot()">Hitung Ukuran Lot</button>
+            
+            <div style="margin-top: 15px; padding: 15px; background: rgba(8, 153, 129, 0.1); border-radius: 8px; border: 1px solid var(--success); text-align: center;">
+                <div class="text-muted">Rekomendasi Lot Maksimal</div>
+                <h2 style="color: var(--success); margin: 5px 0;" id="calc-result">0.03 Lot</h2>
+                <div class="text-muted" id="calc-risk-usd">Maksimal kerugian: $10.00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. GAMIFICATION -->
+    <div id="page-gamify" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>🏆 Misi Harian & Badge</h3>
+        </div>
+        <div class="card flex-row">
+            <div style="font-size: 30px;">🥇</div>
+            <div style="flex: 1;">
+                <h4 style="color: var(--warning);">Discipline Trader</h4>
+                <div class="text-muted">Jaga winrate > 60% minggu ini.</div>
+            </div>
+            <button class="btn-success" style="width: auto; padding: 5px 10px;">Claim</button>
+        </div>
+        <div class="card flex-row">
+            <div style="font-size: 30px;">📚</div>
+            <div style="flex: 1;">
+                <h4>Scholar</h4>
+                <div class="text-muted">Baca 3 materi Academy.</div>
+            </div>
+            <div class="text-muted">1/3</div>
+        </div>
+    </div>
+
+    <!-- 10. COMMUNITY -->
+    <div id="page-community" class="page">
+        <div class="page-header">
+            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
+            <h3>👥 Forum Komunitas</h3>
+        </div>
+        <div class="card">
+            <div class="flex-row" style="margin-bottom: 10px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="avatar" style="width: 30px; height: 30px; font-size: 12px; background: var(--warning);">M</div>
+                    <b>Mike_Trader</b>
+                </div>
+                <span class="text-muted">10 menit lalu</span>
+            </div>
+            <p style="font-size: 13px; line-height: 1.5;">Setup Gold (XAUUSD) membentuk pola Double Bottom di area order block H1. Saya entry buy dengan konfirmasi divergence RSI. Gimana menurut kalian?</p>
+            <div class="flex-row" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                <span class="text-muted">❤️ 24 Likes</span>
+                <span class="text-muted">💬 5 Balasan</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="flex-row" style="margin-bottom: 10px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="avatar" style="width: 30px; height: 30px; font-size: 12px; background: var(--danger);">S</div>
+                    <b>SMC_Hunter</b>
+                </div>
+                <span class="text-muted">1 jam lalu</span>
+            </div>
+            <p style="font-size: 13px; line-height: 1.5;">Hati-hati malam ini ada rilis data NFP. Jangan menahan floating posisi tanpa Stop Loss. Ingat rule manajemen margin!</p>
         </div>
     </div>
 
     <script>
-        // Inisialisasi SDK Telegram
+        // INISIALISASI TELEGRAM WEB APP
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        tg.setHeaderColor('#0b0e14');
+        tg.setHeaderColor('#17212b');
 
-        // --- 1. ENGINE KUIS ---
-        const questions = [
-            { q: "Jika The Fed memutuskan menaikkan Suku Bunga (Hawkish), apa dampak instan pada pergerakan pasar?", opts: ["USD Meroket, Emas Hancur", "USD Hancur, Emas Meroket", "Saham Pesta Pora", "Tidak Ada Efek"], a: 0 },
-            { q: "Data NFP rilis JAUH lebih rendah (buruk) dari forecast. Apa respon Smart Money?", opts: ["Beli USD, Jual Emas", "Jual USD, Beli Emas Besar-besaran", "Wait and See", "Beli Saham Bank"], a: 1 },
-            { q: "Di antara data inflasi berikut, mana yang paling dipercaya dan dipantau oleh The Fed untuk memotong suku bunga?", opts: ["Headline CPI", "Core CPI (Inflasi Inti)", "Harga Minyak Mentah", "Harga Pangan Dunia"], a: 1 }
-        ];
-
-        function loadQuiz() {
-            let total = parseInt(localStorage.getItem('ab_total') || 0);
-            let correct = parseInt(localStorage.getItem('ab_correct') || 0);
-            let acc = total > 0 ? Math.round((correct/total)*100) : 0;
-            
-            document.getElementById('quiz-stats').innerText = `🏆 Akurasi: ${acc}% | Rank: ${acc >= 80 ? 'Master' : 'Pemula'}`;
-            
-            let qData = questions[Math.floor(Math.random() * questions.length)];
-            document.getElementById('quiz-q').innerText = qData.q;
-            
-            let optsHtml = '';
-            qData.opts.forEach((opt, idx) => {
-                optsHtml += `<button class="quiz-option" onclick="answerQuiz(${idx}, ${qData.a})">${opt}</button>`;
-            });
-            document.getElementById('quiz-opts').innerHTML = optsHtml;
-        }
-
-        function answerQuiz(selected, correct) {
-            let total = parseInt(localStorage.getItem('ab_total') || 0) + 1;
-            let corrects = parseInt(localStorage.getItem('ab_correct') || 0);
-            
-            if (selected === correct) {
-                corrects++;
-                tg.HapticFeedback.notificationOccurred('success');
-                document.body.style.backgroundColor = "#089981";
-            } else {
-                tg.HapticFeedback.notificationOccurred('error');
-                document.body.style.backgroundColor = "#f23645";
+        // AMBIL DATA USER TELEGRAM JIKA ADA
+        const initUser = () => {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                document.getElementById('user-name').innerText = user.first_name;
+                document.getElementById('user-avatar').innerText = user.first_name.charAt(0);
             }
-            
-            localStorage.setItem('ab_total', total);
-            localStorage.setItem('ab_correct', corrects);
-            
-            setTimeout(() => {
-                document.body.style.backgroundColor = "var(--bg-main)";
-                document.getElementById('quiz-overlay').style.display = 'none';
-            }, 600);
-        }
+        };
+        initUser();
 
-        // --- 2. NAVIGASI TAB & PENCARIAN ---
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
+        // FUNGSI NAVIGASI HALAMAN
+        function openPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
             tg.HapticFeedback.selectionChanged();
+            window.scrollTo(0,0);
         }
 
-        function filterPedia() {
-            let filter = document.getElementById('search-input').value.toLowerCase();
-            let details = document.querySelectorAll('#pedia-container details');
+        // FUNGSI KALKULATOR LOT (TOOLS TRADER)
+        // Rumus sederhana Standard Lot Forex: (Balance * Risk%) / (SL * Pip Value)
+        // Pip Value untuk major pairs (USD quote) standard lot biasanya $10
+        function calculateLot() {
+            let balance = parseFloat(document.getElementById('calc-balance').value);
+            let riskPct = parseFloat(document.getElementById('calc-risk').value);
+            let slPips = parseFloat(document.getElementById('calc-sl').value);
+
+            if(isNaN(balance) || isNaN(riskPct) || isNaN(slPips) || slPips <= 0) {
+                tg.HapticFeedback.notificationOccurred('error');
+                alert("Masukkan angka yang valid!");
+                return;
+            }
+
+            let riskAmount = balance * (riskPct / 100);
+            let pipValueStandard = 10; 
+            let lotSize = riskAmount / (slPips * pipValueStandard);
+
+            document.getElementById('calc-result').innerText = lotSize.toFixed(2) + " Lot";
+            document.getElementById('calc-risk-usd').innerText = "Maksimal kerugian: $" + riskAmount.toFixed(2);
             
-            details.forEach(detail => {
-                let btns = detail.querySelectorAll('.btn-item');
-                let hasMatch = false;
-                
-                btns.forEach(btn => {
-                    if (btn.innerText.toLowerCase().includes(filter)) {
-                        btn.style.display = '';
-                        hasMatch = true;
-                    } else {
-                        btn.style.display = 'none';
-                    }
-                });
-                
-                if (filter) {
-                    detail.style.display = hasMatch ? '' : 'none';
-                    detail.open = hasMatch;
-                } else {
-                    detail.style.display = '';
-                    detail.open = false;
-                    btns.forEach(b => b.style.display = '');
-                }
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        // FUNGSI JURNAL TRADING (Menyimpan di Local Storage)
+        let journals = JSON.parse(localStorage.getItem('trading_journals')) || [];
+
+        function renderJournal() {
+            let listHTML = '';
+            let wins = 0;
+            
+            journals.forEach((j) => {
+                if(j.res === 'win') wins++;
+                listHTML += `
+                <div class="trade-row ${j.res}">
+                    <span><b>${j.pair}</b></span>
+                    <span style="color: ${j.res === 'win' ? 'var(--success)' : 'var(--danger)'}; text-transform: uppercase; font-weight: bold;">
+                        ${j.res}
+                    </span>
+                </div>`;
             });
+
+            document.getElementById('journal-list').innerHTML = listHTML || '<div class="text-muted text-center">Belum ada histori trade.</div>';
+            document.getElementById('stat-trades').innerText = journals.length;
+            
+            let winrate = journals.length > 0 ? Math.round((wins / journals.length) * 100) : 0;
+            document.getElementById('stat-winrate').innerText = winrate + '%';
         }
 
-        // --- 3. ENGINE MADING MAKRO (BERDASARKAN TANGGAL AKTUAL) ---
-        function generateMading() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById('mading-date').innerText = `📅 Mading: ${dateStr}`;
-            
-            let date = now.getDate();
-            let narasi = "";
-            
-            if (date <= 8) {
-                narasi = `<div class="card c-green"><h4>🔥 Minggu NFP & Tenaga Kerja</h4><p class="text-muted"><b>Fokus Institusi:</b> Pasar berburu data penciptaan lapangan kerja dan pengangguran.<br><b>Skenario:</b> Jika NFP meroket, Dolar AS akan mendominasi dan melikuidasi harga emas.</p></div>`;
-            } else if (date > 8 && date <= 16) {
-                narasi = `<div class="card c-red"><h4>🔥 Minggu Inflasi (CPI & PPI)</h4><p class="text-muted"><b>Fokus Institusi:</b> Penentu utama kebijakan suku bunga The Fed. Perhatikan angka *Core CPI*.<br><b>Skenario:</b> CPI Panas = Suku Bunga Ditahan = USD Meroket, Emas Hancur.</p></div>`;
-            } else if (date > 16 && date <= 23) {
-                narasi = `<div class="card c-yellow"><h4>🔥 Minggu Konsumsi (Retail Sales & PMI)</h4><p class="text-muted"><b>Fokus Institusi:</b> Mengukur ancaman resesi ekonomi.<br><b>Skenario:</b> Jika ritel hancur, uang akan panik lari menuju Emas (Safe Haven).</p></div>`;
-            } else {
-                narasi = `<div class="card c-blue"><h4>🔥 Minggu PCE & Persiapan FOMC</h4><p class="text-muted"><b>Fokus Institusi:</b> Data inflasi favorit The Fed (PCE) rilis. Volatilitas sangat ekstrim menjelang rapat Powell.<br><b>Skenario:</b> Waspada manuver "Buy the Rumor, Sell the News".</p></div>`;
+        function addJournal() {
+            let pair = document.getElementById('j-pair').value.toUpperCase();
+            let res = document.getElementById('j-result').value;
+
+            if(!pair) {
+                tg.HapticFeedback.notificationOccurred('error');
+                return;
             }
+
+            journals.unshift({ pair, res }); // Add to beginning
+            localStorage.setItem('trading_journals', JSON.stringify(journals));
             
-            document.getElementById('mading-content').innerHTML = narasi;
+            document.getElementById('j-pair').value = '';
+            renderJournal();
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+        
+        // Render jurnal saat pertama kali muat
+        renderJournal();
+
+        // FUNGSI AI ASSISTANT SIMULATOR
+        function sendAiMessage() {
+            let inputEl = document.getElementById('ai-input');
+            let text = inputEl.value.trim();
+            if(!text) return;
+
+            let chatBox = document.getElementById('ai-chat-box');
+            
+            // Tambah pesan user
+            chatBox.innerHTML += `<div class="msg user">${text}</div>`;
+            inputEl.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            tg.HapticFeedback.impactOccurred('light');
+
+            // Simulasi Balasan AI
+            setTimeout(() => {
+                let reply = "Sebagai AI Assistant, berdasarkan analisis teknikal dan makroekonomi saat ini, pergerakan market sedang konsolidasi menunggu rilis data sentral. Tetap terapkan Stop Loss dan perhatikan batas Order Block terdekat.";
+                
+                if(text.toLowerCase().includes("gold") || text.toLowerCase().includes("xau")) {
+                    reply = "XAUUSD (Emas) saat ini sangat sensitif terhadap nilai Dolar AS (DXY) dan imbal hasil obligasi AS (Treasury Yield). Jika Anda melihat Divergence pada RSI di TF H1, itu adalah konfirmasi bagus untuk mencari entry.";
+                }
+
+                chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                tg.HapticFeedback.notificationOccurred('success');
+            }, 1000);
         }
 
-        // --- 4. DATABASE FUNDAMENTAL & MODAL ---
-        const macroData = {
-            "Non Farm Payrolls (NFP)": {
-                desc: "Data penambahan pekerja bulanan di luar sektor pertanian. <b>Mother of All News</b>.",
-                analogy: "Melihat spanduk 'Dicari 1 Juta Pekerja' di pabrik. Tanda ekonomi sedang ekspansi besar-besaran.",
-                good: "Aktual > Forecast: USD Terbang (Bullish), Emas Terjun Bebas (Bearish).",
-                bad: "Aktual < Forecast: USD Hancur, Emas Meroket (Bullish) karena ancaman resesi."
-            },
-            "CPI (Headline)": {
-                desc: "Mengukur inflasi konsumen bulanan secara keseluruhan.",
-                analogy: "Nota belanja bulanan. Jika nota makin mahal, bank sentral harus menaikkan suku bunga agar orang berhenti berutang.",
-                good: "Inflasi Naik: The Fed Hawkish. USD Meroket, Emas Hancur.",
-                bad: "Inflasi Turun: The Fed Dovish (siap potong bunga). USD Anjlok, Emas Meroket."
-            },
-            "Core CPI": {
-                desc: "Inflasi konsumen <b>tanpa</b> menghitung harga energi dan makanan segar. Ini kompas utama The Fed.",
-                analogy: "Harga sewa rumah dan asuransi. Jika ini naik, inflasi sangat susah turun (sticky).",
-                good: "Core Naik (Panas): USD Mengamuk (Bullish Ekstrem), Emas Bearish.",
-                bad: "Core Turun (Mendingin): USD Dijual Massal, Emas Terbang."
-            },
-            "Fed Interest Rate": {
-                desc: "Pengumuman suku bunga dasar bank sentral AS (The Fed).",
-                analogy: "Gravitasi pasar. Bunga tinggi menyedot semua uang spekulasi masuk ke brankas bank (Dolar).",
-                good: "Suku Bunga Naik / Hawkish: USD Bullish tak terbendung, Semua aset lain hancur.",
-                bad: "Suku Bunga Turun / Dovish: Banjir uang murah. USD Hancur, Emas & Kripto Pesta."
-            }
-        };
-
-        function openModal(title) {
-            let data = macroData[title];
-            let content = "";
-            
-            if (data) {
-                content = `
-                    <h3>1. Anatomi Data</h3>
-                    <p>${data.desc}</p>
-                    <div class="box-analogy"><b>💡 Analogi:</b> ${data.analogy}</div>
-                    <h3>2. Skenario Eksekusi Harga</h3>
-                    <div class="box-impact good"><b>📈 Skenario USD Kuat:</b><br>${data.good}</div>
-                    <div class="box-impact"><b>📉 Skenario USD Lemah:</b><br>${data.bad}</div>
-                `;
-            } else {
-                // Generik untuk data yang belum ada di objek statis
-                content = `
-                    <h3>Anatomi Data Makro</h3>
-                    <p>Indikator ekonomi penting untuk melihat arah kebijakan likuiditas Global. Smart Money bereaksi terhadap <b>Deviasi</b> (selisih antara hasil aktual dan ekspektasi konsensus).</p>
-                    <div class="box-impact good">Jika data mencerminkan pertumbuhan ekonomi sehat: <b>USD Menguat, Emas Melemah.</b></div>
-                    <div class="box-impact">Jika data mencerminkan resesi/pelemahan: <b>USD Dijual (Turun), Emas Dibeli (Naik).</b></div>
-                `;
-            }
-            
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-content').innerHTML = content;
-            document.getElementById('modal-info').style.display = 'flex';
-            tg.HapticFeedback.impactOccurred('medium');
-        }
-
-        function openCombo(title) {
-            let content = `
-                <h3>Anatomi Rilis Combo Institusional</h3>
-                <p>Dalam skenario combo, The Fed dan institusi besar tidak melihat satu angka, melainkan <b>Sinergi Data</b>.</p>
-                <div class="box-impact good" style="border-left-color: var(--primary); background: rgba(41, 98, 255, 0.1);">
-                    <b>1. Skenario Sinergi (Searah):</b><br>
-                    Jika semua paket data berwarna searah (misal: Hijau Semua). Algoritma HFT akan mendorong harga satu arah sejauh 80-150 pips <b>tanpa koreksi</b>. Jangan coba melawan arah (Counter-trend).
-                </div>
-                <div class="box-impact" style="border-left-color: var(--warning); background: rgba(255, 179, 0, 0.1);">
-                    <b>2. Skenario Divergen (Whipsaw / Manipulasi):</b><br>
-                    Jika data bertabrakan (satu bagus, satu jelek). Harga akan terbang ke atas lalu dibanting keras ke bawah dalam 1 menit. Tujuan bandar adalah memakan <i>Stop Loss</i> ritel sebelum melanjutkan tren. Tunggu 15-30 menit sebelum masuk posisi!
-                </div>
-            `;
-            document.getElementById('modal-title').innerText = "🔄 " + title;
-            document.getElementById('modal-content').innerHTML = content;
-            document.getElementById('modal-info').style.display = 'flex';
+        // SIMULATOR BUTTON ALERT
+        function alertSim(type) {
             tg.HapticFeedback.impactOccurred('heavy');
+            tg.showAlert(`Simulasi Eksekusi: Order ${type} Market terkirim! Dalam aplikasi penuh, posisi ini akan masuk ke tab Posisi Aktif.`);
         }
 
-        // --- INIT ---
-        window.onload = () => {
-            loadQuiz();
-            generateMading();
-        };
     </script>
 </body>
 </html>
