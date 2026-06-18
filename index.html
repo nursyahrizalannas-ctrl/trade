@@ -3,612 +3,732 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Trading Pro - Mini App</title>
+    <title>Enterprise Trading Pro - Telegram Mini App</title>
+    
+    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Chart.js for Trading Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Professional Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* === COLOR PALETTE & VARIABLES === */
+        /* ==========================================================================
+           1. CSS VARIABLES & DESIGN SYSTEM (ENTERPRISE GRADE)
+           ========================================================================== */
         :root {
-            --bg-main: #0b0e14;
-            --bg-card: #17212b;
-            --bg-element: #1f2630;
-            --text-main: #ffffff;
-            --text-muted: #8a93a0;
-            --border: #363c4e;
-            --primary: #2962ff;
-            --success: #089981;
-            --danger: #f23645;
-            --warning: #ffb300;
-            --purple: #6a1b9a;
+            /* Core Palette */
+            --bg-base: #0A0E17;
+            --bg-surface: #131B2A;
+            --bg-surface-elevated: #1C263A;
+            --primary: #2962FF;
+            --primary-hover: #1E4BD8;
+            --accent: #00E676;
+            --danger: #FF1744;
+            --warning: #FFAB00;
+            --purple: #D500F9;
+            
+            /* Typography & Colors */
+            --text-hightlight: #FFFFFF;
+            --text-primary: #E0E4EB;
+            --text-secondary: #8A94A6;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.4);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
-        /* === GLOBAL STYLES === */
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-        * { box-sizing: border-box; }
-
-        h1, h2, h3, h4, p { margin: 0; }
-        .text-muted { color: var(--text-muted); font-size: 12px; line-height: 1.5; }
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
+        /* ==========================================================================
+           2. GLOBAL RESETS & TYPOGRAPHY
+           ========================================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-base); color: var(--text-primary); font-size: 14px; line-height: 1.5; padding-bottom: 70px; /* Space for bottom nav */ overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { color: var(--text-hightlight); font-weight: 600; margin-bottom: 0.5rem; }
+        p { color: var(--text-secondary); margin-bottom: 1rem; }
+        hr { border: 0; height: 1px; background: var(--border-light); margin: 1rem 0; }
         
-        button { border: none; cursor: pointer; outline: none; transition: 0.2s; font-family: inherit; }
-        button:active { transform: scale(0.96); }
+        /* Typography Utilities */
+        .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; }
+        .text-success { color: var(--accent); } .text-danger { color: var(--danger); }
+        .text-warning { color: var(--warning); } .text-primary { color: var(--primary); }
+        .fw-bold { font-weight: 700; }
+
+        /* ==========================================================================
+           3. UI COMPONENTS
+           ========================================================================== */
+        /* Cards */
+        .card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow-sm); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem; }
         
-        input, select {
-            width: 100%; padding: 12px; background: var(--bg-main);
-            color: white; border: 1px solid var(--border);
-            border-radius: 8px; margin-bottom: 10px; font-size: 14px;
-        }
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: all 0.2s ease; width: 100%; font-size: 14px; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-success { background: rgba(0, 230, 118, 0.15); color: var(--accent); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .btn-danger { background: rgba(255, 23, 68, 0.15); color: var(--danger); border: 1px solid rgba(255, 23, 68, 0.3); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-strong); color: var(--text-primary); }
 
-        .btn-primary { width: 100%; padding: 14px; background: var(--primary); color: white; font-weight: bold; border-radius: 8px; }
-        .btn-success { background: var(--success); color: white; padding: 10px; border-radius: 6px; font-weight: bold; width: 100%; }
-        .btn-danger { background: var(--danger); color: white; padding: 10px; border-radius: 6px; font-weight: bold; width: 100%; }
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
+        .form-control { width: 100%; padding: 0.85rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-light); border-radius: var(--radius-sm); color: var(--text-hightlight); font-size: 14px; outline: none; transition: border 0.3s; }
+        .form-control:focus { border-color: var(--primary); }
+        select.form-control { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A94A6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
 
-        /* === HEADER & GAMIFICATION === */
-        header {
-            background: var(--bg-card);
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
-        .level-badge { background: rgba(255, 179, 0, 0.2); color: var(--warning); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; border: 1px solid var(--warning); }
-        .xp-bar { width: 100px; height: 6px; background: var(--border); border-radius: 3px; margin-top: 5px; overflow: hidden; }
-        .xp-fill { height: 100%; background: var(--warning); width: 45%; }
+        /* Badges & Avatars */
+        .badge { padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-warning { background: rgba(255, 171, 0, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+        .badge-primary { background: rgba(41, 98, 255, 0.2); color: #fff; border: 1px solid var(--primary); }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #fff; box-shadow: var(--shadow-sm); }
 
-        /* === PAGE SYSTEM === */
-        .page { display: none; padding: 15px; animation: slideIn 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        /* Progress Bars */
+        .progress-wrapper { width: 100%; background: var(--bg-surface-elevated); border-radius: 4px; height: 8px; overflow: hidden; margin-top: 5px; }
+        .progress-bar { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
 
-        .page-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .btn-back { background: var(--bg-element); color: white; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
-        /* === DASHBOARD GRID (10 FITUR) === */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 15px;
-        }
-        .menu-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-        .menu-icon { font-size: 28px; margin-bottom: 8px; }
-        .menu-title { font-size: 13px; font-weight: 600; color: #e0e0e0; }
-
-        /* === CARDS & CONTAINERS === */
-        .card { background: var(--bg-card); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 12px; }
-        .flex-row { display: flex; gap: 10px; justify-content: space-between; align-items: center; }
+        /* ==========================================================================
+           4. LAYOUT & NAVIGATION
+           ========================================================================== */
+        /* Top App Bar */
+        .app-header { position: sticky; top: 0; z-index: 1000; background: rgba(10, 14, 23, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
         
-        /* === MODULE: ACADEMY === */
-        details.academy-item { background: var(--bg-element); padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
-        details.academy-item summary { font-weight: bold; font-size: 14px; outline: none; list-style: none; display: flex; justify-content: space-between; }
-        details.academy-item summary::after { content: '▼'; font-size: 12px; color: var(--text-muted); }
-        .academy-content { margin-top: 10px; font-size: 13px; color: #ccc; line-height: 1.6; border-top: 1px dashed var(--border); padding-top: 10px; }
+        /* Bottom Navigation Bar (App Native Style) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; background: rgba(19, 27, 42, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border-light); display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none; font-size: 11px; width: 20%; cursor: pointer; transition: color 0.2s; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-2px); transition: transform 0.2s; }
 
-        /* === MODULE: AI CHAT === */
-        .chat-box { height: 300px; overflow-y: auto; background: var(--bg-main); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 80%; padding: 10px; border-radius: 8px; font-size: 13px; line-height: 1.4; }
-        .msg.bot { background: var(--bg-element); align-self: flex-start; border-left: 3px solid var(--primary); }
-        .msg.user { background: var(--primary); align-self: flex-end; }
-        .chat-input-area { display: flex; gap: 5px; }
+        /* Page Routing System */
+        .view-page { display: none; padding: 1rem; animation: fadeUp 0.4s ease forwards; opacity: 0; transform: translateY(10px); }
+        .view-page.active { display: block; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* === MODULE: JOURNAL === */
-        .journal-stat { text-align: center; background: var(--bg-element); padding: 10px; border-radius: 8px; flex: 1; }
-        .journal-stat h3 { color: var(--warning); margin-bottom: 5px; }
-        .trade-row { display: flex; justify-content: space-between; background: var(--bg-main); padding: 10px; border-radius: 6px; margin-bottom: 5px; font-size: 13px; border-left: 3px solid var(--success); }
-        .trade-row.loss { border-left-color: var(--danger); }
+        /* Grid Systems */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
 
-        /* === MODULE: SIGNALS === */
-        .signal-card { border-left: 4px solid var(--primary); }
-        .confidence-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; margin-top: 8px; }
-        .confidence-fill { height: 100%; background: var(--success); width: 85%; }
+        /* ==========================================================================
+           5. SPECIFIC MODULE STYLES
+           ========================================================================== */
+        /* Dashboard Ticker */
+        .ticker-container { height: 40px; margin-bottom: 1rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-light); }
+        
+        /* Academy Module */
+        .academy-chapter { background: var(--bg-surface-elevated); border-radius: var(--radius-sm); margin-bottom: 0.5rem; overflow: hidden; border: 1px solid transparent; transition: border 0.3s; }
+        .academy-chapter:focus-within { border-color: var(--primary); }
+        .academy-chapter summary { padding: 1rem; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-hightlight); }
+        .academy-chapter summary::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 12px; color: var(--text-secondary); transition: transform 0.3s; }
+        .academy-chapter[open] summary::after { transform: rotate(180deg); }
+        .academy-content { padding: 0 1rem 1rem 1rem; color: var(--text-secondary); font-size: 0.9rem; border-top: 1px solid var(--border-light); margin-top: 0.5rem; padding-top: 1rem; }
 
-        /* TV Chart Container */
-        #tvchart { width: 100%; height: 400px; background: var(--bg-element); border-radius: 8px; overflow: hidden; }
+        /* AI Chat Module */
+        .chat-container { height: 60vh; display: flex; flex-direction: column; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border-light); overflow: hidden; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        .message { max-width: 85%; padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 14px; line-height: 1.5; position: relative; }
+        .msg-ai { align-self: flex-start; background: var(--bg-surface-elevated); color: var(--text-hightlight); border-bottom-left-radius: 4px; border: 1px solid var(--border-light); }
+        .msg-user { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
+        .chat-input { display: flex; padding: 1rem; background: var(--bg-surface-elevated); border-top: 1px solid var(--border-light); gap: 0.5rem; }
+
+        /* Journal Module & Charts */
+        .stat-box { background: var(--bg-surface-elevated); padding: 1rem; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-light); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text-hightlight); margin-bottom: 0.25rem; }
+        .stat-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-light); }
+        .history-item:last-child { border-bottom: none; }
+        .pnl-positive { color: var(--accent); font-weight: 600; }
+        .pnl-negative { color: var(--danger); font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <!-- GLOBAL HEADER -->
-    <header>
-        <div class="user-info">
-            <div class="avatar" id="user-avatar">👤</div>
+    <!-- ==========================================================================
+         APP HEADER (GLOBAL PROFILE)
+         ========================================================================== -->
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="avatar" id="profile-avatar">P</div>
             <div>
-                <div style="font-size: 14px; font-weight: bold;" id="user-name">Trader Pro</div>
-                <div class="level-badge">Level 5: SMC Master</div>
+                <h3 id="profile-name" style="margin-bottom: 2px; font-size: 16px;">Trader Pro</h3>
+                <span class="badge badge-warning" id="profile-rank"><i class="fa-solid fa-crown"></i> SMC Master (Lv.8)</span>
             </div>
         </div>
-        <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted);">Daily XP</div>
-            <div class="xp-bar"><div class="xp-fill"></div></div>
+        <div style="text-align: right; min-width: 100px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;">
+                <span class="text-secondary">XP Progress</span>
+                <span class="text-warning fw-bold">84%</span>
+            </div>
+            <div class="progress-wrapper"><div class="progress-bar bg-warning" style="width: 84%; background: var(--warning);"></div></div>
         </div>
     </header>
 
-    <!-- DASHBOARD HOME (Main Menu) -->
-    <div id="page-home" class="page active">
-        <div style="margin-bottom: 15px; padding: 0 15px;">
-            <h3 style="color: var(--primary);">Ultimate Trading Hub</h3>
-            <p class="text-muted">Pusat komando analisis makro, teknikal, dan edukasi terpadu.</p>
-        </div>
-
-        <div class="dashboard-grid">
-            <button class="menu-card" onclick="openPage('page-academy')">
-                <div class="menu-icon">📚</div>
-                <div class="menu-title">1. Academy</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-chart')">
-                <div class="menu-icon">📈</div>
-                <div class="menu-title">2. Live Chart</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-ai')">
-                <div class="menu-icon">🤖</div>
-                <div class="menu-title">3. AI Assistant</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-macro')">
-                <div class="menu-icon">📰</div>
-                <div class="menu-title">4. Makro & News</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-simulator')">
-                <div class="menu-icon">💹</div>
-                <div class="menu-title">5. Paper Trade</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-journal')">
-                <div class="menu-icon">📉</div>
-                <div class="menu-title">6. Trade Journal</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-signals')">
-                <div class="menu-icon">🎯</div>
-                <div class="menu-title">7. Signal Center</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-tools')">
-                <div class="menu-icon">🧮</div>
-                <div class="menu-title">8. Calculators</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-gamify')">
-                <div class="menu-icon">🏆</div>
-                <div class="menu-title">9. Missions</div>
-            </button>
-            <button class="menu-card" onclick="openPage('page-community')">
-                <div class="menu-icon">👥</div>
-                <div class="menu-title">10. Community</div>
-            </button>
-        </div>
-    </div>
-
-    <!-- 1. ACADEMY PAGE -->
-    <div id="page-academy" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>📚 Belajar Trading</h3>
-        </div>
-        
-        <details class="academy-item">
-            <summary>1. Dasar Trading (Lot, Pip, Leverage)</summary>
-            <div class="academy-content">
-                <b>Lot:</b> Satuan volume transaksi (1 Lot Standard = 100,000 unit).<br>
-                <b>Pip:</b> Point in Percentage, pergerakan desimal ke-4 (0.0001).<br>
-                <b>Leverage:</b> Daya ungkit daya beli dari broker (contoh 1:500).
-            </div>
-        </details>
-        <details class="academy-item">
-            <summary>2. Smart Money Concept (SMC)</summary>
-            <div class="academy-content">
-                Analisis jejak uang besar (Bank/Institusi).<br>
-                <b>BOS (Break of Structure):</b> Penembusan tren searah.<br>
-                <b>CHoCH (Change of Character):</b> Sinyal awal pembalikan arah tren.<br>
-                <b>Order Block:</b> Area candle terakhir sebelum pergerakan masif.
-            </div>
-        </details>
-        <details class="academy-item">
-            <summary>3. Psikologi Trading & Risk</summary>
-            <div class="academy-content">
-                Jangan pernah merisikokan lebih dari <b>1-2%</b> modal per posisi. Emosi FOMC (Fear of Missing Out) adalah pembunuh akun nomor satu.
-            </div>
-        </details>
-    </div>
-
-    <!-- 2. LIVE CHART PAGE -->
-    <div id="page-chart" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>📈 Advanced Technicals</h3>
-        </div>
-        <div class="card">
-            <p class="text-muted" style="margin-bottom: 10px;">Widget TradingView Multi-Timeframe. Mendukung Drawing Tools, Fibonacci, dan Indikator.</p>
-            <!-- TradingView Widget BEGIN -->
+    <!-- ==========================================================================
+         VIEW: DASHBOARD (HOME)
+         ========================================================================== -->
+    <main id="view-dashboard" class="view-page active">
+        <!-- TradingView Ticker Widget -->
+        <div class="ticker-container">
             <div class="tradingview-widget-container">
-              <div id="tvchart"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-              <script type="text/javascript">
-              new TradingView.widget({
-                "autosize": true,
-                "symbol": "OANDA:XAUUSD",
-                "interval": "15",
-                "timezone": "Asia/Jakarta",
-                "theme": "dark",
-                "style": "1",
-                "locale": "id",
-                "enable_publishing": false,
-                "backgroundColor": "#1f2630",
-                "hide_top_toolbar": false,
-                "hide_legend": false,
-                "save_image": false,
-                "container_id": "tvchart"
-              });
-              </script>
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                "symbols": [{"proName": "FOREXCOM:SPXUSD","title": "S&P 500"}, {"proName": "OANDA:EURUSD","title": "EUR/USD"}, {"proName": "OANDA:XAUUSD","title": "Gold"}, {"proName": "BINANCE:BTCUSDT","title": "Bitcoin"}],
+                "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "id"
+                }
+                </script>
             </div>
-            <!-- TradingView Widget END -->
         </div>
-    </div>
 
-    <!-- 3. AI ASSISTANT PAGE -->
-    <div id="page-ai" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>🤖 AI Trading Mentor</h3>
-        </div>
         <div class="card">
-            <div class="chat-box" id="ai-chat-box">
-                <div class="msg bot">Halo! Saya AI Trading Assistant Anda. Saya bisa merangkum sentimen market, mendeteksi pola, atau menjelaskan materi trading. Ada yang ingin ditanyakan?</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="ai-input" placeholder="Tanya tentang XAUUSD hari ini..." style="margin-bottom:0; flex: 1;">
-                <button class="btn-primary" style="width: 60px; padding: 12px;" onclick="sendAiMessage()">Kirim</button>
+            <h3 class="text-primary"><i class="fa-solid fa-bolt"></i> Market Summary</h3>
+            <p class="text-sm">Analisis Algoritma AI berdasarkan data institusional (Smart Money Flow) hari ini.</p>
+            <div class="grid-2" style="margin-top: 1rem;">
+                <div class="stat-box" style="border-left: 3px solid var(--accent);">
+                    <div class="stat-label">DXY (Dollar) Trend</div>
+                    <div class="text-success fw-bold" style="font-size: 1.2rem; margin-top: 5px;"><i class="fa-solid fa-arrow-trend-up"></i> Bullish</div>
+                </div>
+                <div class="stat-box" style="border-left: 3px solid var(--danger);">
+                    <div class="stat-label">XAUUSD Bias</div>
+                    <div class="text-danger fw-bold" style="font-size: 1.2rem; margin-top: 5px;"><i class="fa-solid fa-arrow-trend-down"></i> Bearish</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- 4. MAKRO & NEWS PAGE -->
-    <div id="page-macro" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>📰 Makro & Ekonomi</h3>
+        <h4 style="margin: 1.5rem 0 1rem 0;"><i class="fa-solid fa-layer-group text-primary"></i> Pusat Fitur Utama</h4>
+        <div class="grid-2">
+            <!-- Navigation Cards -->
+            <div class="card" style="text-align: center; cursor: pointer; padding: 1.5rem 1rem;" onclick="app.navigate('view-chart')">
+                <i class="fa-solid fa-chart-candlestick text-primary" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5>Live Charting</h5>
+                <span class="text-xs text-secondary">Pro Multi-Timeframe</span>
+            </div>
+            <div class="card" style="text-align: center; cursor: pointer; padding: 1.5rem 1rem;" onclick="app.navigate('view-academy')">
+                <i class="fa-solid fa-graduation-cap text-warning" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5>Pro Academy</h5>
+                <span class="text-xs text-secondary">SMC & Price Action</span>
+            </div>
+            <div class="card" style="text-align: center; cursor: pointer; padding: 1.5rem 1rem;" onclick="app.navigate('view-tools')">
+                <i class="fa-solid fa-calculator text-success" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5>Risk Calculators</h5>
+                <span class="text-xs text-secondary">Lot, Margin & Fibonacci</span>
+            </div>
+            <div class="card" style="text-align: center; cursor: pointer; padding: 1.5rem 1rem;" onclick="app.navigate('view-macro')">
+                <i class="fa-solid fa-globe text-danger" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5>Macro & News</h5>
+                <span class="text-xs text-secondary">High Impact Calendar</span>
+            </div>
         </div>
+    </main>
+
+    <!-- ==========================================================================
+         VIEW: LIVE CHART (TRADINGVIEW PRO)
+         ========================================================================== -->
+    <main id="view-chart" class="view-page">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-chart-line text-primary"></i> Terminal Analisis</h3>
+        <div class="card" style="padding: 0; overflow: hidden; height: 60vh;">
+            <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                <div id="tv_advanced_chart" style="height: 100%; width: 100%;"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                new TradingView.widget({
+                    "autosize": true, "symbol": "OANDA:XAUUSD", "interval": "15", "timezone": "Asia/Jakarta",
+                    "theme": "dark", "style": "1", "locale": "id", "enable_publishing": false,
+                    "backgroundColor": "#131B2A", "gridColor": "#1C263A", "hide_top_toolbar": false,
+                    "hide_legend": false, "save_image": false, "container_id": "tv_advanced_chart",
+                    "studies": ["Volume@tv-basicstudies", "MACD@tv-basicstudies", "RSI@tv-basicstudies"]
+                });
+                </script>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==========================================================================
+         VIEW: ACADEMY (EDUCATIONAL MODULES)
+         ========================================================================== -->
+    <main id="view-academy" class="view-page">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-book-open text-warning"></i> Enterprise Academy</h3>
+        <p class="text-sm">Materi komprehensif dari dasar mekanika pasar hingga eksekusi institusional (SMC).</p>
+        
+        <h4 style="margin: 1.5rem 0 0.5rem 0; color: var(--primary);">Modul 1: Anatomi Pasar</h4>
+        <details class="academy-chapter">
+            <summary>1.1 Struktur Candlestick & Price Action</summary>
+            <div class="academy-content">
+                <p>Harga bergerak bukan karena indikator, melainkan karena likuiditas. Candlestick adalah visualisasi pertempuran antara <i>Buyers</i> dan <i>Sellers</i>.</p>
+                <ul>
+                    <li><b>Body:</b> Menggambarkan momentum volume. Body penuh mengindikasikan kontrol absolut dari satu pihak.</li>
+                    <li><b>Wick (Ekor):</b> Area penolakan (Rejection) atau sapuan likuiditas (Liquidity Sweep). Institusi menggunakan ekor panjang untuk memakan Stop Loss ritel.</li>
+                </ul>
+            </div>
+        </details>
+        
+        <h4 style="margin: 1.5rem 0 0.5rem 0; color: var(--danger);">Modul 2: Smart Money Concept (SMC)</h4>
+        <details class="academy-chapter">
+            <summary>2.1 Market Structure (BOS & CHoCH)</summary>
+            <div class="academy-content">
+                <p>Membaca arah peta jalan Bank Sentral.</p>
+                <div class="card" style="background: var(--bg-base); padding: 1rem;">
+                    <b>BOS (Break of Structure):</b> Penembusan level <i>Higher High</i> atau <i>Lower Low</i> yang memvalidasi kelanjutan tren.<br><br>
+                    <b>CHoCH (Change of Character):</b> Sinyal peringatan dini bahwa tren mulai melemah dan institusi membalikkan arah pesanan (Reversal). Terjadi ketika struktur koreksi terakhir berhasil ditembus.
+                </div>
+            </div>
+        </details>
+        <details class="academy-chapter">
+            <summary>2.2 Order Block (OB) & Imbalance (FVG)</summary>
+            <div class="academy-content">
+                <p>Order Block adalah jejak kaki paus (Pusat Limit Order). Ini adalah candle terakhir dengan warna berlawanan sebelum terjadinya pergerakan impulsif besar yang menciptakan <b>Fair Value Gap (FVG)</b>.</p>
+                <p class="text-warning fw-bold">Aturan Eksekusi: Harga selalu memiliki gaya magnetis untuk kembali mengisi kekosongan Imbalance (FVG) dan menyentuh kembali Order Block sebelum melanjutkan tren utamanya.</p>
+            </div>
+        </details>
+        <details class="academy-chapter">
+            <summary>2.3 Inducement & Liquidity Pools</summary>
+            <div class="academy-content">
+                <p>Retail trader diajarkan menggunakan Support/Resistance tradisional. Institusi menyebut area ini sebagai <b>Liquidity Pools</b> (Kolam Uang).</p>
+                <p>Institusi akan sengaja menggerakkan harga menembus batas Support (Breakout palsu) untuk mengaktifkan Stop Loss ritel, mencuri pesanan mereka untuk memenuhi kuota order raksasa institusi, lalu harga berbalik arah dengan tajam.</p>
+            </div>
+        </details>
+    </main>
+
+    <!-- ==========================================================================
+         VIEW: MACRO & NEWS
+         ========================================================================== -->
+    <main id="view-macro" class="view-page">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-newspaper text-danger"></i> Fundamental Radar</h3>
+        
         <div class="card" style="border-left: 4px solid var(--danger);">
-            <h4 class="text-danger">🔥 Data High Impact Minggu Ini</h4>
-            <div style="margin-top: 10px; font-size: 13px; line-height: 1.6;">
-                <div class="flex-row" style="border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 5px;">
-                    <span><b>CPI (Inflasi AS)</b></span> <span class="text-danger">19:30 WIB</span>
-                </div>
-                <div class="flex-row" style="border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 5px;">
-                    <span><b>FOMC Statement</b></span> <span class="text-danger">Kamis, 01:00 WIB</span>
-                </div>
-                <div class="flex-row">
-                    <span><b>NFP & Unemployment</b></span> <span class="text-danger">Jumat, 19:30 WIB</span>
-                </div>
+            <h4 class="text-danger"><i class="fa-solid fa-fire"></i> Skema Rilis Inflasi (CPI)</h4>
+            <p class="text-sm" style="margin-bottom: 10px;">Consumer Price Index adalah diktator arah Dolar saat ini. The Fed menargetkan inflasi di angka 2%.</p>
+            <div style="background: rgba(255,23,68,0.1); padding: 10px; border-radius: 6px; margin-bottom: 5px;">
+                <b class="text-danger">Skenario Hawkish:</b> CPI Aktual > Forecast.<br> Suku bunga ditahan tinggi = DXY Meroket 🚀, Gold Hancur 🩸
+            </div>
+            <div style="background: rgba(0,230,118,0.1); padding: 10px; border-radius: 6px;">
+                <b class="text-success">Skenario Dovish:</b> CPI Aktual < Forecast.<br> Prospek pemotongan bunga = DXY Anjlok 🩸, Gold Meroket 🚀
             </div>
         </div>
-        <div class="card" style="background: rgba(41, 98, 255, 0.1); border-left: 4px solid var(--primary);">
-            <h4 style="color: var(--primary);">Sentimen Institusi Saat Ini</h4>
-            <p class="text-muted" style="margin-top: 5px;">Divergensi bank sentral sangat kuat. ECB telah memotong suku bunga, sementara The Fed (AS) menahan. <b>Arah Makro: Dolar AS (DXY) Bullish, XAUUSD tertekan Bearish.</b></p>
-        </div>
-    </div>
 
-    <!-- 5. PAPER TRADING (SIMULATOR) -->
-    <div id="page-simulator" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>💹 Paper Trade (Demo)</h3>
-        </div>
-        <div class="card" style="text-align: center;">
-            <div class="text-muted">Saldo Virtual Anda</div>
-            <h2 style="color: var(--success); margin: 5px 0;">$10,000.00</h2>
-            <div class="flex-row" style="margin-top: 15px;">
-                <button class="btn-success" onclick="alertSim('Buy')">BUY MARKET</button>
-                <button class="btn-danger" onclick="alertSim('Sell')">SELL MARKET</button>
+        <div class="card" style="padding: 0; overflow: hidden; height: 350px;">
+            <!-- TradingView Economic Calendar Widget -->
+            <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                {
+                "colorTheme": "dark", "isTransparent": true, "width": "100%", "height": "100%", "locale": "id",
+                "importanceFilter": "0,1", "currencyFilter": "USD,EUR,GBP,JPY,CAD,AUD"
+                }
+                </script>
             </div>
         </div>
-        <h4 style="margin-bottom: 10px;">Posisi Aktif</h4>
-        <div class="card" style="padding: 10px; font-size: 13px;">
-            <div class="flex-row">
-                <span><b>XAUUSD</b> <span class="text-success">BUY 0.10</span></span>
-                <span class="text-success">+$24.50</span>
-            </div>
-            <div class="text-muted" style="margin-top: 5px;">Entry: 2340.50 | SL: 2335.00 | TP: 2350.00</div>
-        </div>
-    </div>
+    </main>
 
-    <!-- 6. TRADING JOURNAL -->
-    <div id="page-journal" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>📉 Jurnal Evaluasi</h3>
-        </div>
-        <div class="flex-row" style="margin-bottom: 15px;">
-            <div class="journal-stat">
-                <h3 id="stat-winrate">0%</h3>
-                <div class="text-muted">Winrate</div>
-            </div>
-            <div class="journal-stat">
-                <h3 id="stat-trades">0</h3>
-                <div class="text-muted">Total Trade</div>
-            </div>
-        </div>
+    <!-- ==========================================================================
+         VIEW: TOOLS & CALCULATORS
+         ========================================================================== -->
+    <main id="view-tools" class="view-page">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-gears text-success"></i> Toolkit Eksekusi</h3>
+        
         <div class="card">
-            <h4>Tambah Catatan Entry</h4>
-            <div class="flex-row" style="margin-top: 10px;">
-                <input type="text" id="j-pair" placeholder="Pair (ex: EURUSD)" style="margin-bottom: 0;">
-                <select id="j-result" style="margin-bottom: 0;">
-                    <option value="win">Win (Profit)</option>
-                    <option value="loss">Loss (Minus)</option>
+            <h4>Position Sizing (Lot Calculator)</h4>
+            <p class="text-sm">Kalkulasi lot presisi menghindari Margin Call.</p>
+            
+            <div class="form-group">
+                <label class="form-label">Account Balance (USD)</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-dollar-sign" style="position: absolute; left: 15px; top: 15px; color: var(--text-secondary);"></i>
+                    <input type="number" id="calc-balance" class="form-control" style="padding-left: 35px;" value="1000">
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Risk Tolerance (%)</label>
+                    <input type="number" id="calc-risk" class="form-control" value="1" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stop Loss (Pips)</label>
+                    <input type="number" id="calc-sl" class="form-control" value="30">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Currency Pair Type</label>
+                <select id="calc-pair" class="form-control">
+                    <option value="10">Standard USD Quote (EURUSD, GBPUSD, XAUUSD)</option>
+                    <option value="8">JPY Quote Estimasi (USDJPY, GBPJPY)</option>
                 </select>
             </div>
-            <button class="btn-primary" style="margin-top: 10px;" onclick="addJournal()">Simpan Jurnal</button>
-        </div>
-        <h4>Histori Analisis</h4>
-        <div id="journal-list" style="margin-top: 10px;">
-            <!-- List Jurnal Diisi JS -->
-        </div>
-    </div>
-
-    <!-- 7. SIGNAL CENTER -->
-    <div id="page-signals" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>🎯 VIP Signal Center</h3>
-        </div>
-        <div class="card signal-card">
-            <div class="flex-row">
-                <h3 style="color: var(--danger);">SELL XAUUSD</h3>
-                <span class="level-badge">Active</span>
-            </div>
-            <div style="font-size: 14px; margin-top: 10px; line-height: 1.6;">
-                <b>Entry:</b> 2355.00 - 2358.00<br>
-                <b>Stop Loss:</b> 2362.00 (70 Pips)<br>
-                <b>Take Profit:</b> 2345.00 / 2335.00
-            </div>
-            <div class="text-muted" style="margin-top: 10px;">Confidence Score (Analisis Algoritma)</div>
-            <div class="confidence-bar"><div class="confidence-fill" style="width: 92%;"></div></div>
-        </div>
-        <div class="card signal-card" style="border-left-color: var(--success);">
-            <div class="flex-row">
-                <h3 style="color: var(--success);">BUY GBPJPY</h3>
-                <span class="level-badge" style="background: #363c4e; color: #ccc; border:none;">Hit TP1</span>
-            </div>
-            <div style="font-size: 14px; margin-top: 10px; line-height: 1.6;">
-                <b>Entry:</b> 200.50<br>
-                <b>Stop Loss:</b> 200.00<br>
-                <b>Take Profit:</b> 201.50
-            </div>
-        </div>
-    </div>
-
-    <!-- 8. CALCULATORS -->
-    <div id="page-tools" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>🧮 Risk & Lot Calculator</h3>
-        </div>
-        <div class="card">
-            <p class="text-muted" style="margin-bottom: 15px;">Kalkulator Position Sizing presisi tinggi untuk menjaga ketahanan Margin Anda.</p>
-            <label class="text-muted">Saldo Akun (USD)</label>
-            <input type="number" id="calc-balance" value="1000">
             
-            <div class="flex-row">
-                <div style="flex: 1;">
-                    <label class="text-muted">Risiko (%)</label>
-                    <input type="number" id="calc-risk" value="1">
-                </div>
-                <div style="flex: 1;">
-                    <label class="text-muted">Stop Loss (Pips)</label>
-                    <input type="number" id="calc-sl" value="30">
-                </div>
-            </div>
+            <button class="btn btn-primary" onclick="tools.calculateLot()"><i class="fa-solid fa-calculator"></i> Kalkulasi Optimal Lot</button>
             
-            <button class="btn-primary" onclick="calculateLot()">Hitung Ukuran Lot</button>
-            
-            <div style="margin-top: 15px; padding: 15px; background: rgba(8, 153, 129, 0.1); border-radius: 8px; border: 1px solid var(--success); text-align: center;">
-                <div class="text-muted">Rekomendasi Lot Maksimal</div>
-                <h2 style="color: var(--success); margin: 5px 0;" id="calc-result">0.03 Lot</h2>
-                <div class="text-muted" id="calc-risk-usd">Maksimal kerugian: $10.00</div>
+            <div id="calc-result-box" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0, 230, 118, 0.1); border: 1px solid var(--accent); border-radius: var(--radius-sm); text-align: center;">
+                <span class="text-secondary text-sm text-uppercase">Rekomendasi Lot Maksimal</span>
+                <h2 id="calc-out-lot" class="text-success" style="font-size: 2rem; margin: 5px 0;">0.00 Lot</h2>
+                <div class="text-sm">Risiko Finansial: <b id="calc-out-risk" class="text-danger">$0.00</b></div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- 9. GAMIFICATION -->
-    <div id="page-gamify" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>🏆 Misi Harian & Badge</h3>
+    <!-- ==========================================================================
+         VIEW: TRADING JOURNAL & ANALYTICS
+         ========================================================================== -->
+    <main id="view-journal" class="view-page">
+        <div class="card-header" style="padding:0; border:none; margin-bottom: 1rem;">
+            <h3><i class="fa-solid fa-book-journal-whills text-purple"></i> Jurnal Performansi</h3>
+            <button class="btn btn-primary" style="width: auto; padding: 5px 12px; font-size: 12px;" onclick="journal.openAddModal()"><i class="fa-solid fa-plus"></i> Entry</button>
         </div>
-        <div class="card flex-row">
-            <div style="font-size: 30px;">🥇</div>
-            <div style="flex: 1;">
-                <h4 style="color: var(--warning);">Discipline Trader</h4>
-                <div class="text-muted">Jaga winrate > 60% minggu ini.</div>
-            </div>
-            <button class="btn-success" style="width: auto; padding: 5px 10px;">Claim</button>
-        </div>
-        <div class="card flex-row">
-            <div style="font-size: 30px;">📚</div>
-            <div style="flex: 1;">
-                <h4>Scholar</h4>
-                <div class="text-muted">Baca 3 materi Academy.</div>
-            </div>
-            <div class="text-muted">1/3</div>
-        </div>
-    </div>
 
-    <!-- 10. COMMUNITY -->
-    <div id="page-community" class="page">
-        <div class="page-header">
-            <button class="btn-back" onclick="openPage('page-home')">🔙</button>
-            <h3>👥 Forum Komunitas</h3>
+        <!-- Analytics Dashboard -->
+        <div class="grid-3" style="margin-bottom: 1rem;">
+            <div class="stat-box">
+                <div class="stat-value" id="j-stat-trades">0</div>
+                <div class="stat-label">Total Trade</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value text-primary" id="j-stat-winrate">0%</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="j-stat-pnl">$0</div>
+                <div class="stat-label">Net PnL</div>
+            </div>
         </div>
-        <div class="card">
-            <div class="flex-row" style="margin-bottom: 10px;">
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <div class="avatar" style="width: 30px; height: 30px; font-size: 12px; background: var(--warning);">M</div>
-                    <b>Mike_Trader</b>
+
+        <!-- Chart.js Graph -->
+        <div class="card" style="padding: 10px;">
+            <canvas id="pnlChart" height="150"></canvas>
+        </div>
+
+        <!-- Add Journal Form (Inline for simplicity) -->
+        <div id="form-add-journal" class="card" style="display: none; border: 1px solid var(--primary);">
+            <h4>Input Eksekusi Baru</h4>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">Pair</label>
+                    <input type="text" id="add-j-pair" class="form-control" placeholder="XAUUSD" style="text-transform: uppercase;">
                 </div>
-                <span class="text-muted">10 menit lalu</span>
-            </div>
-            <p style="font-size: 13px; line-height: 1.5;">Setup Gold (XAUUSD) membentuk pola Double Bottom di area order block H1. Saya entry buy dengan konfirmasi divergence RSI. Gimana menurut kalian?</p>
-            <div class="flex-row" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
-                <span class="text-muted">❤️ 24 Likes</span>
-                <span class="text-muted">💬 5 Balasan</span>
-            </div>
-        </div>
-        <div class="card">
-            <div class="flex-row" style="margin-bottom: 10px;">
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <div class="avatar" style="width: 30px; height: 30px; font-size: 12px; background: var(--danger);">S</div>
-                    <b>SMC_Hunter</b>
+                <div class="form-group">
+                    <label class="form-label">Hasil (PnL $)</label>
+                    <input type="number" id="add-j-pnl" class="form-control" placeholder="Gunakan min (-) jika loss">
                 </div>
-                <span class="text-muted">1 jam lalu</span>
             </div>
-            <p style="font-size: 13px; line-height: 1.5;">Hati-hati malam ini ada rilis data NFP. Jangan menahan floating posisi tanpa Stop Loss. Ingat rule manajemen margin!</p>
+            <div class="grid-2">
+                <button class="btn btn-outline" onclick="document.getElementById('form-add-journal').style.display='none'">Batal</button>
+                <button class="btn btn-primary" onclick="journal.saveEntry()">Simpan ke Database</button>
+            </div>
         </div>
-    </div>
 
+        <h4>History Eksekusi</h4>
+        <div class="card" style="padding: 0; overflow: hidden;" id="journal-list">
+            <!-- Dynamic List Injected via JS -->
+        </div>
+    </main>
+
+    <!-- ==========================================================================
+         VIEW: AI MENTOR
+         ========================================================================== -->
+    <main id="view-ai" class="view-page">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-robot text-primary"></i> Alpha AI Assistant</h3>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message msg-ai">
+                    Sistem Alpha AI siap. Saya adalah mesin pemroses logika teknikal dan fundamental tingkat lanjut. Anda ingin menganalisis pair apa hari ini?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="ai-input" class="form-control" placeholder="Ketik prompt analisis di sini..." style="margin-bottom: 0;">
+                <button class="btn btn-primary" style="width: 50px; border-radius: 8px;" onclick="ai.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==========================================================================
+         BOTTOM NAVIGATION BAR
+         ========================================================================== -->
+    <nav class="bottom-nav">
+        <a class="nav-item active" data-target="view-dashboard" onclick="app.navigate('view-dashboard')">
+            <i class="fa-solid fa-house"></i><span>Home</span>
+        </a>
+        <a class="nav-item" data-target="view-chart" onclick="app.navigate('view-chart')">
+            <i class="fa-solid fa-chart-line"></i><span>Chart</span>
+        </a>
+        <a class="nav-item" data-target="view-journal" onclick="app.navigate('view-journal')">
+            <i class="fa-solid fa-book-journal-whills"></i><span>Journal</span>
+        </a>
+        <a class="nav-item" data-target="view-ai" onclick="app.navigate('view-ai')">
+            <i class="fa-solid fa-robot"></i><span>AI Chat</span>
+        </a>
+    </nav>
+
+    <!-- ==========================================================================
+         JAVASCRIPT / APPLICATION LOGIC (STATE MANAGEMENT)
+         ========================================================================== -->
     <script>
-        // INISIALISASI TELEGRAM WEB APP
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor('#17212b');
-
-        // AMBIL DATA USER TELEGRAM JIKA ADA
-        const initUser = () => {
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const user = tg.initDataUnsafe.user;
-                document.getElementById('user-name').innerText = user.first_name;
-                document.getElementById('user-avatar').innerText = user.first_name.charAt(0);
-            }
-        };
-        initUser();
-
-        // FUNGSI NAVIGASI HALAMAN
-        function openPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            tg.HapticFeedback.selectionChanged();
-            window.scrollTo(0,0);
-        }
-
-        // FUNGSI KALKULATOR LOT (TOOLS TRADER)
-        // Rumus sederhana Standard Lot Forex: (Balance * Risk%) / (SL * Pip Value)
-        // Pip Value untuk major pairs (USD quote) standard lot biasanya $10
-        function calculateLot() {
-            let balance = parseFloat(document.getElementById('calc-balance').value);
-            let riskPct = parseFloat(document.getElementById('calc-risk').value);
-            let slPips = parseFloat(document.getElementById('calc-sl').value);
-
-            if(isNaN(balance) || isNaN(riskPct) || isNaN(slPips) || slPips <= 0) {
-                tg.HapticFeedback.notificationOccurred('error');
-                alert("Masukkan angka yang valid!");
-                return;
-            }
-
-            let riskAmount = balance * (riskPct / 100);
-            let pipValueStandard = 10; 
-            let lotSize = riskAmount / (slPips * pipValueStandard);
-
-            document.getElementById('calc-result').innerText = lotSize.toFixed(2) + " Lot";
-            document.getElementById('calc-risk-usd').innerText = "Maksimal kerugian: $" + riskAmount.toFixed(2);
-            
-            tg.HapticFeedback.notificationOccurred('success');
-        }
-
-        // FUNGSI JURNAL TRADING (Menyimpan di Local Storage)
-        let journals = JSON.parse(localStorage.getItem('trading_journals')) || [];
-
-        function renderJournal() {
-            let listHTML = '';
-            let wins = 0;
-            
-            journals.forEach((j) => {
-                if(j.res === 'win') wins++;
-                listHTML += `
-                <div class="trade-row ${j.res}">
-                    <span><b>${j.pair}</b></span>
-                    <span style="color: ${j.res === 'win' ? 'var(--success)' : 'var(--danger)'}; text-transform: uppercase; font-weight: bold;">
-                        ${j.res}
-                    </span>
-                </div>`;
-            });
-
-            document.getElementById('journal-list').innerHTML = listHTML || '<div class="text-muted text-center">Belum ada histori trade.</div>';
-            document.getElementById('stat-trades').innerText = journals.length;
-            
-            let winrate = journals.length > 0 ? Math.round((wins / journals.length) * 100) : 0;
-            document.getElementById('stat-winrate').innerText = winrate + '%';
-        }
-
-        function addJournal() {
-            let pair = document.getElementById('j-pair').value.toUpperCase();
-            let res = document.getElementById('j-result').value;
-
-            if(!pair) {
-                tg.HapticFeedback.notificationOccurred('error');
-                return;
-            }
-
-            journals.unshift({ pair, res }); // Add to beginning
-            localStorage.setItem('trading_journals', JSON.stringify(journals));
-            
-            document.getElementById('j-pair').value = '';
-            renderJournal();
-            tg.HapticFeedback.notificationOccurred('success');
-        }
-        
-        // Render jurnal saat pertama kali muat
-        renderJournal();
-
-        // FUNGSI AI ASSISTANT SIMULATOR
-        function sendAiMessage() {
-            let inputEl = document.getElementById('ai-input');
-            let text = inputEl.value.trim();
-            if(!text) return;
-
-            let chatBox = document.getElementById('ai-chat-box');
-            
-            // Tambah pesan user
-            chatBox.innerHTML += `<div class="msg user">${text}</div>`;
-            inputEl.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-            
-            tg.HapticFeedback.impactOccurred('light');
-
-            // Simulasi Balasan AI
-            setTimeout(() => {
-                let reply = "Sebagai AI Assistant, berdasarkan analisis teknikal dan makroekonomi saat ini, pergerakan market sedang konsolidasi menunggu rilis data sentral. Tetap terapkan Stop Loss dan perhatikan batas Order Block terdekat.";
+        /**
+         * Core Application Module
+         * Handles routing, Telegram initialization, and global state.
+         */
+        const app = {
+            tg: window.Telegram.WebApp,
+            init() {
+                this.tg.ready();
+                this.tg.expand();
+                this.tg.setHeaderColor('#0A0E17');
+                this.tg.setBackgroundColor('#0A0E17');
                 
-                if(text.toLowerCase().includes("gold") || text.toLowerCase().includes("xau")) {
-                    reply = "XAUUSD (Emas) saat ini sangat sensitif terhadap nilai Dolar AS (DXY) dan imbal hasil obligasi AS (Treasury Yield). Jika Anda melihat Divergence pada RSI di TF H1, itu adalah konfirmasi bagus untuk mencari entry.";
+                // Initialize Profile from Telegram Data
+                if (this.tg.initDataUnsafe && this.tg.initDataUnsafe.user) {
+                    const user = this.tg.initDataUnsafe.user;
+                    document.getElementById('profile-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+                    document.getElementById('profile-avatar').innerText = user.first_name.charAt(0);
                 }
 
-                chatBox.innerHTML += `<div class="msg bot">${reply}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-                tg.HapticFeedback.notificationOccurred('success');
-            }, 1000);
-        }
+                // Initialize Modules
+                journal.init();
+            },
+            navigate(viewId) {
+                // Haptic Feedback
+                this.tg.HapticFeedback.selectionChanged();
+                
+                // Hide all views
+                document.querySelectorAll('.view-page').forEach(el => el.classList.remove('active'));
+                // Deactivate all nav items
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                
+                // Show target view
+                document.getElementById(viewId).classList.add('active');
+                
+                // Activate corresponding nav item if exists
+                const navItem = document.querySelector(`.nav-item[data-target="${viewId}"]`);
+                if(navItem) navItem.classList.add('active');
+                
+                window.scrollTo(0, 0);
+            }
+        };
 
-        // SIMULATOR BUTTON ALERT
-        function alertSim(type) {
-            tg.HapticFeedback.impactOccurred('heavy');
-            tg.showAlert(`Simulasi Eksekusi: Order ${type} Market terkirim! Dalam aplikasi penuh, posisi ini akan masuk ke tab Posisi Aktif.`);
-        }
+        /**
+         * Tools & Calculators Module
+         */
+        const tools = {
+            calculateLot() {
+                app.tg.HapticFeedback.impactOccurred('light');
+                
+                const balance = parseFloat(document.getElementById('calc-balance').value);
+                const riskPct = parseFloat(document.getElementById('calc-risk').value);
+                const slPips = parseFloat(document.getElementById('calc-sl').value);
+                const pipValue = parseFloat(document.getElementById('calc-pair').value); // $10 or $8
+
+                if(isNaN(balance) || isNaN(riskPct) || isNaN(slPips) || slPips <= 0) {
+                    app.tg.HapticFeedback.notificationOccurred('error');
+                    alert("Parameter input tidak valid!");
+                    return;
+                }
+
+                const riskAmount = balance * (riskPct / 100);
+                const lotSize = riskAmount / (slPips * pipValue);
+
+                document.getElementById('calc-out-lot').innerText = lotSize.toFixed(2) + " Lot";
+                document.getElementById('calc-out-risk').innerText = "$" + riskAmount.toFixed(2);
+                document.getElementById('calc-result-box').style.display = 'block';
+                
+                app.tg.HapticFeedback.notificationOccurred('success');
+            }
+        };
+
+        /**
+         * Trading Journal & Analytics Module (Powered by LocalStorage & Chart.js)
+         */
+        const journal = {
+            data: [],
+            chartInstance: null,
+            init() {
+                const stored = localStorage.getItem('enterprise_journal');
+                if(stored) this.data = JSON.parse(stored);
+                this.render();
+            },
+            openAddModal() {
+                app.tg.HapticFeedback.impactOccurred('light');
+                document.getElementById('form-add-journal').style.display = 'block';
+            },
+            saveEntry() {
+                const pair = document.getElementById('add-j-pair').value.toUpperCase();
+                const pnl = parseFloat(document.getElementById('add-j-pnl').value);
+
+                if(!pair || isNaN(pnl)) {
+                    app.tg.HapticFeedback.notificationOccurred('error');
+                    return;
+                }
+
+                // Add to start of array
+                this.data.unshift({
+                    id: Date.now(),
+                    pair: pair,
+                    pnl: pnl,
+                    date: new Date().toLocaleDateString('id-ID', { month:'short', day:'numeric'})
+                });
+
+                // Persist
+                localStorage.setItem('enterprise_journal', JSON.stringify(this.data));
+                
+                // Cleanup
+                document.getElementById('add-j-pair').value = '';
+                document.getElementById('add-j-pnl').value = '';
+                document.getElementById('form-add-journal').style.display = 'none';
+                
+                app.tg.HapticFeedback.notificationOccurred('success');
+                this.render();
+            },
+            deleteEntry(id) {
+                app.tg.HapticFeedback.impactOccurred('medium');
+                this.data = this.data.filter(item => item.id !== id);
+                localStorage.setItem('enterprise_journal', JSON.stringify(this.data));
+                this.render();
+            },
+            render() {
+                // 1. Calculate Stats
+                const totalTrades = this.data.length;
+                let wins = 0;
+                let netPnl = 0;
+                
+                let listHtml = '';
+                let chartLabels = [];
+                let chartData = [];
+                let cumulativePnl = 0;
+
+                // Process data (Reverse for chronological chart drawing)
+                const chartSource = [...this.data].reverse();
+
+                chartSource.forEach((item, index) => {
+                    cumulativePnl += item.pnl;
+                    chartLabels.push(`T${index + 1}`);
+                    chartData.push(cumulativePnl);
+                });
+
+                this.data.forEach(item => {
+                    if(item.pnl > 0) wins++;
+                    netPnl += item.pnl;
+                    
+                    const isWin = item.pnl >= 0;
+                    const pnlClass = isWin ? 'pnl-positive' : 'pnl-negative';
+                    const sign = isWin ? '+' : '';
+
+                    listHtml += `
+                    <div class="history-item">
+                        <div>
+                            <div class="fw-bold text-hightlight">${item.pair}</div>
+                            <div class="text-xs text-secondary">${item.date}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="${pnlClass}">${sign}$${item.pnl.toFixed(2)}</div>
+                            <button class="btn" style="background:transparent; color: var(--danger); padding: 5px; width: auto;" onclick="journal.deleteEntry(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                });
+
+                const winRate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : 0;
+
+                // Update DOM Stats
+                document.getElementById('j-stat-trades').innerText = totalTrades;
+                document.getElementById('j-stat-winrate').innerText = winRate + '%';
+                
+                const pnlEl = document.getElementById('j-stat-pnl');
+                pnlEl.innerText = (netPnl >= 0 ? '+$' : '-$') + Math.abs(netPnl).toFixed(2);
+                pnlEl.className = 'stat-value ' + (netPnl >= 0 ? 'text-success' : 'text-danger');
+
+                document.getElementById('journal-list').innerHTML = listHtml || '<div style="padding: 1rem; text-align: center; color: var(--text-secondary);">Belum ada riwayat transaksi.</div>';
+
+                // 2. Render Chart.js
+                this.renderChart(chartLabels, chartData);
+            },
+            renderChart(labels, dataObj) {
+                const ctx = document.getElementById('pnlChart').getContext('2d');
+                
+                if(this.chartInstance) {
+                    this.chartInstance.destroy();
+                }
+
+                // Gradient Fill
+                let gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                gradient.addColorStop(0, 'rgba(41, 98, 255, 0.5)');
+                gradient.addColorStop(1, 'rgba(41, 98, 255, 0.0)');
+
+                this.chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels.length ? labels : ['0'],
+                        datasets: [{
+                            label: 'Growth Curve ($)',
+                            data: dataObj.length ? dataObj : [0],
+                            borderColor: '#2962FF',
+                            backgroundColor: gradient,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#00E676',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false, color: '#1C263A' }, ticks: { color: '#8A94A6', font: {size: 10} } },
+                            y: { grid: { color: '#1C263A' }, ticks: { color: '#8A94A6', font: {size: 10} } }
+                        }
+                    }
+                });
+            }
+        };
+
+        /**
+         * AI Chat Bot Module Simulation
+         */
+        const ai = {
+            sendMessage() {
+                const inputEl = document.getElementById('ai-input');
+                const text = inputEl.value.trim();
+                if(!text) return;
+
+                const chatBox = document.getElementById('chat-messages');
+                
+                // Append User Message
+                chatBox.innerHTML += `<div class="message msg-user">${text}</div>`;
+                inputEl.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                app.tg.HapticFeedback.impactOccurred('light');
+
+                // Simulate Typing Indicator
+                const typingId = 'typing-' + Date.now();
+                chatBox.innerHTML += `<div id="${typingId}" class="message msg-ai"><i class="fa-solid fa-ellipsis fa-fade"></i> Menganalisis data pasar...</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Fake Backend Delay Logic
+                setTimeout(() => {
+                    document.getElementById(typingId).remove();
+                    
+                    let reply = "Sebagai asisten AI, berdasarkan analisis struktur pasar saat ini, kami mendeteksi area konsolidasi. Disarankan untuk menunggu penembusan (Breakout) di area Supply/Demand utama sebelum mengeksekusi order.";
+                    
+                    const lowerText = text.toLowerCase();
+                    if(lowerText.includes("xau") || lowerText.includes("gold")) {
+                        reply = "<b>Analisis XAUUSD (Emas):</b><br>Secara makro, divergensi kebijakan The Fed sangat mempengaruhi emas. Secara teknikal (H4), harga saat ini tertahan di zona Liquidity Pool. Jika terjadi <i>Liquidity Sweep</i> ke atas diikuti penolakan kuat (Wick), ini adalah konfirmasi setup sell probabilitas tinggi.";
+                    } else if (lowerText.includes("nfp") || lowerText.includes("news")) {
+                        reply = "<b>Peringatan High Impact:</b> Menjelang NFP atau CPI, institusi sering melebarkan spread dan menciptakan <i>Whipsaw</i> (ekor panjang dua arah). Hindari menahan posisi mengambang (floating) tanpa Stop Loss ketat di waktu rilis.";
+                    }
+
+                    chatBox.innerHTML += `<div class="message msg-ai">${reply}</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    app.tg.HapticFeedback.notificationOccurred('success');
+                }, 1500);
+            }
+        };
+
+        // Bootstrap App
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
 
     </script>
 </body>
