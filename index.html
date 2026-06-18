@@ -76,6 +76,7 @@
         .data-body { flex: 1; line-height: 1.7; font-size: 14px; margin-bottom: 20px; color: #e0e0e0; }
         .data-body b { color: #64b5f6; }
         .data-body h3 { color: #ffb300; font-size: 16px; margin-bottom: 5px; margin-top: 15px; border-bottom: 1px dashed #363c4e; padding-bottom: 5px; }
+        .data-body ul { margin-top: 5px; padding-left: 20px; }
         .data-body .analogy-box { background: #1f2630; padding: 10px; border-left: 4px solid #2962ff; border-radius: 5px; margin: 10px 0; font-style: italic; }
         .data-body .impact-box { background: #2e1518; padding: 10px; border-left: 4px solid #f23645; border-radius: 5px; margin: 10px 0; }
         .data-body .impact-box.good { background: #0c2b20; border-left: 4px solid #089981; }
@@ -93,7 +94,6 @@
     </style>
 </head>
 <body>
-    <!-- OVERLAY KUIS -->
     <div id="quiz-overlay">
         <h2 style="color: #2962ff; margin-bottom: 5px;">🚀 Welcome Trader!</h2>
         <div id="quiz-achievement" style="background: #1f2630; padding: 10px; border-radius: 8px; border: 1px solid #ffb300; color: #ffb300; font-size: 13px; margin-bottom: 15px; width: 100%; max-width: 400px;">
@@ -106,7 +106,6 @@
         </div>
     </div>
 
-    <!-- MODAL PENJELASAN STATIS PAKEM -->
     <div id="data-modal">
         <div class="data-header" id="data-modal-title">📖 Ensiklopedia Makro</div>
         <div class="data-body" id="data-content">
@@ -127,7 +126,6 @@
     </div>
 
     <div id="main" class="content active">
-        <!-- Ticker Tape TradingView -->
         <div style="background: #131722; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid #363c4e;">
             <div class="tradingview-widget-container">
               <div class="tradingview-widget-container__widget"></div>
@@ -158,102 +156,88 @@
         </div>
     </div>
 
-    <!-- TAB MADING KALENDER (Analisis Manual tanpa Widget Eksternal) -->
     <div id="mading" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #089981;">
-            <h4 style="color: #089981; margin: 0 0 10px 0; border: none;">📰 Mading Analisis Fundamental (Update: 18 Juni 2026)</h4>
+            <h4 style="color: #089981; margin: 0 0 10px 0; border: none;">📰 Mading Analisis Fundamental Terpadu</h4>
             <p style="margin: 0; font-size: 12px; color: #ccc; line-height: 1.5;">
-                Analisis pakem sentimen makroekonomi terbaru penggerak utama institusi (Smart Money).
+                Analisis mendalam sentimen makroekonomi penggerak utama algoritma institusi (Smart Money) yang memadukan kebijakan moneter, inflasi, dan pasar tenaga kerja.
             </p>
         </div>
 
-        <h4 style="color: #2962ff; margin-bottom: 10px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🔥 Highlight Sentimen Terkini</h4>
+        <h4 style="color: #2962ff; margin-bottom: 10px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🔥 Highlight Makro & Siklus Pasar Terkini</h4>
         
         <div style="background: #242f3d; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
-            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">🏦 Rapat FOMC & Suku Bunga The Fed (Juni 2026)</h5>
+            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">🏦 Narasi Bank Sentral: Rapat FOMC & Suku Bunga The Fed</h5>
             <p style="font-size: 12px; color: #e0e0e0; margin-top: 0; line-height: 1.6;">
-                <b>Kejadian:</b> The Fed memutuskan untuk <b>menahan</b> suku bunga acuan di level puncak 5.25% - 5.50%. Proyeksi terbaru (Dot Plot) mengindikasikan para pejabat bank sentral tidak terburu-buru memangkas suku bunga dan menyisakan sedikit peluang pemotongan tahun ini (Sikap <i>Hawkish</i>).<br><br>
-                <b>Analisis Institusi:</b> Suku bunga yang ditahan pada level tinggi untuk waktu yang lebih lama (<i>higher for longer</i>) membuat instrumen investasi Dolar AS tetap memberikan imbal hasil (yield) tinggi yang sangat menggiurkan bagi para investor global.<br><br>
-                <b>Indikasi Market:</b><br>
-                <span style="color: #00e676; font-weight: bold;">📈 USD (Dolar AS): BULLISH KUAT</span><br>
-                <span style="color: #ff1744; font-weight: bold;">📉 XAUUSD (Emas): BEARISH (Tertekan)</span>
+                <b>Kondisi Makro:</b> The Fed berada pada fase kritis antara menekan inflasi yang membandel atau mencegah resesi. Keputusan menahan suku bunga (<i>Pause</i>) di level restriktif memberikan sinyal bahwa stabilitas harga masih menjadi prioritas utama. <i>Dot Plot</i> (proyeksi masa depan pejabat Fed) menjadi indikator krusial dibandingkan angka suku bunga saat ini.<br><br>
+                <b>Data Terpadu (Korelasi Yield):</b> Bertahannya sikap <i>Hawkish</i> menjaga imbal hasil (Yield) US Treasury 10-Tahun tetap tinggi di atas batas wajar. Modal global (Capital Flow) secara mekanis terus menyedot likuiditas ke aset berbasis Dolar AS, mengeringkan aset berisiko dan aset tanpa bunga seperti emas.<br><br>
+                <b>Indikasi Market Mayor:</b><br>
+                <span style="color: #00e676; font-weight: bold;">📈 USD Index (DXY): BULLISH FUNDAMENTAL</span><br>
+                <span style="color: #ff1744; font-weight: bold;">📉 XAUUSD (Emas): BEARISH TEKANAN TINGGI</span>
             </p>
         </div>
 
         <div style="background: #242f3d; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
-            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">🛒 Data Inflasi AS (CPI & Core CPI) Bulan Ini</h5>
+            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">🛒 Matriks Harga: Data Inflasi AS (Core CPI & Supercore)</h5>
             <p style="font-size: 12px; color: #e0e0e0; margin-top: 0; line-height: 1.6;">
-                <b>Kejadian:</b> Meskipun angka Inflasi Headline (CPI umum) mulai stabil dan perlahan mendingin, TETAPI Core CPI (Inflasi Inti tanpa komponen makanan & energi) masih sangat <i>sticky</i> (lengket) di atas target 2%.<br><br>
-                <b>Analisis Institusi:</b> Inflasi inti yang membandel (terutama biaya layanan jasa perumahan dan asuransi) mengonfirmasi bahwa The Fed tidak boleh terburu-buru menurunkan suku bunga. Hal ini menjaga daya tarik dan pijakan USD tetap kokoh.<br><br>
-                <b>Indikasi Market:</b><br>
-                <span style="color: #00e676; font-weight: bold;">📈 USD (Dolar AS): BULLISH (Konsolidasi Naik)</span><br>
-                <span style="color: #ff1744; font-weight: bold;">📉 EUR/USD & GBP/USD: BEARISH</span>
+                <b>Kondisi Makro:</b> Pasar tidak lagi bereaksi berlebihan pada Inflasi Headline (yang dipengaruhi harga minyak yang fluktuatif), melainkan berfokus penuh pada <i>Core CPI</i> (tanpa energi & makanan) dan <i>Supercore CPI</i> (inflasi jasa inti tanpa perumahan).<br><br>
+                <b>Data Terpadu (Korelasi Tenaga Kerja):</b> Inflasi jasa yang lengket sangat berkorelasi dengan kenaikan upah pekerja (Average Hourly Earnings dari rilis NFP). Selama upah masyarakat AS masih tinggi, permintaan jasa tidak akan turun. Ini memaksa institusi untuk merevisi mundur jadwal pemotongan suku bunga The Fed.<br><br>
+                <b>Indikasi Market Mayor:</b><br>
+                <span style="color: #00e676; font-weight: bold;">📈 USD (Dolar AS): BULLISH LANJUTAN</span><br>
+                <span style="color: #ff1744; font-weight: bold;">📉 EUR/USD & GBP/USD: TERDISTRIBUSI (Bearish)</span>
             </p>
         </div>
 
         <div style="background: #242f3d; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #363c4e;">
-            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">👷 Data Klaim Pengangguran Mingguan (Jobless Claims)</h5>
+            <h5 style="margin: 0 0 8px 0; color: #ffb300; font-size: 14px;">👷 Retakan Ekonomi: Klaim Pengangguran (Jobless Claims) & JOLTs</h5>
             <p style="font-size: 12px; color: #e0e0e0; margin-top: 0; line-height: 1.6;">
-                <b>Kejadian:</b> Klaim awal pengangguran mingguan AS rilis sedikit merangkak naik, menyentuh titik lebih tinggi dari konsensus prediksi.<br><br>
-                <b>Analisis Institusi:</b> Meski secara gambaran besar pasar tenaga kerja kuat, kenaikan jumlah pengangguran ini memberi sinyal adanya retakan kecil. Hal ini memicu aksi jual instan (profit taking) USD oleh institusi besar, memberi celah Emas untuk bangkit sesaat.<br><br>
-                <b>Indikasi Market:</b><br>
-                <span style="color: #ff1744; font-weight: bold;">📉 USD (Dolar AS): KOREKSI MINOR (Bearish Jangka Pendek)</span><br>
-                <span style="color: #00e676; font-weight: bold;">📈 XAUUSD (Emas): PANTULAN BULLISH (Bounce)</span>
+                <b>Kondisi Makro:</b> Initial Jobless Claims bertindak sebagai alarm pertama sebelum badai NFP tiba. Kenaikan klaim pengangguran mingguan, dipadukan dengan menurunnya jumlah lowongan pekerjaan (JOLTs), mengindikasikan pendinginan di sektor riil.<br><br>
+                <b>Data Terpadu (Peluang Risk-Off):</b> Meskipun inflasi masih tinggi, pelemahan signifikan di sektor tenaga kerja akan memicu ketakutan resesi (Hard Landing). Jika ini terjadi, narasi pasar bergeser dari "Inflasi Tinggi" menjadi "Kepanikan Ekonomi". Institusi akan bergegas memindahkan dana dari Dolar ke Emas sebagai <i>Safe Haven</i> sejati.<br><br>
+                <b>Indikasi Market Mayor:</b><br>
+                <span style="color: #ff1744; font-weight: bold;">📉 USD (Dolar AS): KOREKSI / PELEMAHAN STRUKTURAL</span><br>
+                <span style="color: #00e676; font-weight: bold;">📈 XAUUSD (Emas): FASE AKUMULASI (Bullish Reversal)</span>
             </p>
         </div>
 
-        <h4 style="color: #f57c00; margin-bottom: 10px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">📅 Radar Institusi: Jadwal Rilis High Impact (1 Bulan ke Depan)</h4>
-        <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Persiapkan manajemen margin dan risiko Anda pada tanggal-tanggal krusial berikut ini (Perkiraan waktu rilis dalam WIB malam hari):</p>
+        <h4 style="color: #f57c00; margin-bottom: 10px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">📅 Radar Institusi: Jadwal Rilis Krusial Terpadu</h4>
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Fokuslah pada rangkaian rilis data yang saling mengonfirmasi narasi ekonomi bulanan (Urutan Siklus Makro AS):</p>
         
         <div style="background: #1f2630; padding: 12px; border-radius: 8px; border-left: 3px solid #f23645; margin-bottom: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                <b style="color: #e0e0e0;">US Core PCE Price Index</b>
-                <span style="color: #ffb300;">26 Juni 2026</span>
+                <b style="color: #e0e0e0;">Siklus 1: ISM Manufacturing & Services PMI</b>
             </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Indikator inflasi yang paling diawasi The Fed. Penentu kuat volatilitas arah Emas.</div>
+            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Indikator awalan (Leading Indicator). Rilis di awal bulan. Memberikan kisi-kisi tentang ekspansi bisnis dan harga yang dibayarkan produsen. Jika PMI Jasa hancur, Dolar akan melemah sebelum rilis data tenaga kerja.</div>
         </div>
 
         <div style="background: #1f2630; padding: 12px; border-radius: 8px; border-left: 3px solid #f23645; margin-bottom: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                <b style="color: #e0e0e0;">US Non-Farm Payrolls (NFP)</b>
-                <span style="color: #ffb300;">2 Juli 2026</span>
+                <b style="color: #e0e0e0;">Siklus 2: Paket Tenaga Kerja (JOLTs, ADP, NFP)</b>
             </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Rilis data tenaga kerja AS bulan Juli (Dimajukan awal Juli karena libur Kemerdekaan AS 4 Juli). The Mother of All News.</div>
+            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Dirilis pada minggu pertama. JOLTs mengukur lowongan, ADP memprediksi sektor swasta, dan puncaknya pada NFP di hari Jumat. Penentu utama kesehatan daya beli masyarakat AS.</div>
         </div>
 
         <div style="background: #1f2630; padding: 12px; border-radius: 8px; border-left: 3px solid #f23645; margin-bottom: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                <b style="color: #e0e0e0;">US CPI (Inflasi Konsumen Umum & Inti)</b>
-                <span style="color: #ffb300;">14 Juli 2026</span>
+                <b style="color: #e0e0e0;">Siklus 3: Laporan Inflasi (CPI, PPI, PCE)</b>
             </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Laporan rilis inflasi bulanan. Pemicu utama ledakan ratusan pips untuk Gold (XAUUSD) dan Indeks USD.</div>
+            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Pertengahan hingga akhir bulan. PPI (inflasi tingkat pabrik) mengawali CPI (inflasi konsumen). Diakhiri oleh PCE (ukuran favorit The Fed). Rangkaian ini memvalidasi apakah kebijakan suku bunga saat ini sudah efektif.</div>
         </div>
 
         <div style="background: #1f2630; padding: 12px; border-radius: 8px; border-left: 3px solid #f23645; margin-bottom: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                <b style="color: #e0e0e0;">Keputusan Suku Bunga ECB (Eropa)</b>
-                <span style="color: #ffb300;">16 Juli 2026</span>
+                <b style="color: #e0e0e0;">Siklus Akhir: FOMC Statement & Press Conference</b>
             </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Bank Sentral Eropa memutuskan arah kebijakan uang. Sangat krusial untuk ayunan *pair* EUR/USD.</div>
-        </div>
-
-        <div style="background: #1f2630; padding: 12px; border-radius: 8px; border-left: 3px solid #f23645; margin-bottom: 8px;">
-            <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                <b style="color: #e0e0e0;">FOMC Statement & Fed Funds Rate</b>
-                <span style="color: #ffb300;">29 Juli 2026</span>
-            </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Rapat besar The Fed yang menentukan kebijakan suku bunga terbaru disusul sesi tanya-jawab Ketua The Fed, Jerome Powell.</div>
+            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Muara dari semua data (Siklus 1, 2, 3) yang diakumulasi. Jerome Powell akan memberikan keputusan akhir yang memicu volatilitas harga terbesar dan mereset arah tren untuk bulan berikutnya.</div>
         </div>
     </div>
 
-    <!-- TAB EDUKASI ENSIKLOPEDIA -->
     <div id="edu" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
             <h4 style="color:#ffb300; margin-top: 15px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🌍 4 Pilar Global Macro</h4>
-            <div class="macro-card"><h5>📊 1. Data Ekonomi Rill (Economic Health)</h5><p>Melihat kesehatan ekonomi (GDP, Inflasi, Pekerja). Negara kuat menarik aliran dana investasi.</p></div>
-            <div class="macro-card"><h5>🏦 2. Kebijakan Bank Sentral (Central Banks)</h5><p>Respons Bank Sentral terhadap data. Perbedaan arah suku bunga adalah penggerak utama Forex.</p></div>
-            <div class="macro-card"><h5>📉 3. Pasar Obligasi (Bond Yields)</h5><p>Pergerakan imbal hasil obligasi negara. Jika yield meroket, Emas tertekan, USD menguat.</p></div>
-            <div class="macro-card" style="margin-bottom: 15px;"><h5>💸 4. Capital Flow (Aliran Modal)</h5><p>Apakah uang mengalir ke aset berisiko (Risk-On) atau bersembunyi di aset aman (Risk-Off).</p></div>
+            <div class="macro-card"><h5>📊 1. Data Ekonomi Rill (Economic Health)</h5><p>Melihat kesehatan ekonomi (GDP, Inflasi, Pekerja). Negara kuat menarik aliran dana investasi secara mekanis.</p></div>
+            <div class="macro-card"><h5>🏦 2. Kebijakan Bank Sentral (Central Banks)</h5><p>Respons pembuat kebijakan terhadap data riil. Divergensi (perbedaan arah) suku bunga antar negara adalah bahan bakar murni pergerakan Forex.</p></div>
+            <div class="macro-card"><h5>📉 3. Pasar Obligasi (Bond Yields)</h5><p>Denyut nadi Smart Money. Harga aset lain (saham, emas, mata uang) terpaksa tunduk pada pergerakan imbal hasil obligasi negara.</p></div>
+            <div class="macro-card" style="margin-bottom: 15px;"><h5>💸 4. Capital Flow & Sentimen (Risk On/Off)</h5><p>Lacak ke mana likuiditas besar mengalir. Saat panik (Risk-Off), uang masuk ke Safe Haven (USD, JPY, Emas). Saat rakus (Risk-On), uang masuk ke Saham & Kripto.</p></div>
 
             <div class="edu-grid" style="margin-bottom: 15px;">
                 <button class="edu-btn bg-yellow" onclick="askStatic('MACRO', 'US Treasury Yield 10Y')">US Treasury Yield 10Y</button>
@@ -310,369 +294,54 @@
                     <summary style="color: #ffb74d;">👷 Labour & Employment</summary>
                     <div class="edu-grid">
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'ADP Employment Change')">ADP Employment</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'ADP Employment Change - Large Firms')">ADP Large Firms</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'ADP Employment Change - Mid-Sized Firms')">ADP Mid-Sized Firms</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'ADP Employment Change - Small Firms')">ADP Small Firms</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'ADP Employment Change Weekly')">ADP Weekly</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Average Annual Wages')">Avg Annual Wages</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Average Hourly Earnings MoM')">Avg Hourly Earnings MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Average Hourly Earnings YoY')">Avg Hourly Earnings YoY</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Average Weekly Hours')">Avg Weekly Hours</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Challenger Hiring Plans')">Challenger Hiring Plans</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Challenger Job Cuts')">Challenger Job Cuts</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Chicago Fed Hiring Rate')">Chicago Fed Hiring Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Chicago Fed Layoffs Rate')">Chicago Fed Layoffs</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Continuing Jobless Claims')">Continuing Jobless Claims</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Continuing Jobless Claims - Federal Workers')">Cont. Claims Federal</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Earnings Growth Expectations')">Earnings Growth Exp</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Employed Persons')">Employed Persons</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Employment Cost Index')">Employment Cost Index</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Employment Rate')">Employment Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Full Time Employment')">Full Time Employment</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Government Payrolls')">Government Payrolls</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Gross Average Monthly Wages')">Gross Avg Monthly Wages</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Initial Jobless Claims')">Initial Jobless Claims</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Initial Jobless Claims - Federal Workers')">Initial Claims Federal</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Job Layoffs and Discharges')">Job Layoffs</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Job Openings')">Job Openings</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Job Quits Rate')">Job Quits Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Jobless Claims 4-week Average')">Claims 4-wk Average</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'JOLTs Job Quits')">JOLTs Job Quits</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Labour Costs')">Labour Costs</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Long Term Unemployment Rate')">Long Term Unemploy.</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Manufacturing Payrolls')">Manufacturing Payrolls</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Mean Unemployment Rate Expectations')">Mean Unemploy. Exp</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Minimum Wages')">Minimum Wages</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Non Farm Payrolls')">Non Farm Payrolls</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Nonfarm Payrolls Private')">Nonfarm Payrolls Pvt</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Nonfarm Productivity')">Nonfarm Productivity</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Part Time Employment')">Part Time Employment</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Participation Rate')">Participation Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Population')">Population</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Productivity')">Productivity</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Real Average Hourly Earnings MoM')">Real Avg Hourly MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Real Average Hourly Earnings YoY')">Real Avg Hourly YoY</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retirement Age Men')">Retirement Age Men</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retirement Age Women')">Retirement Age Women</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'U-6 Unemployment Rate')">U-6 Unemployment</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Unemployed Persons')">Unemployed Persons</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Unemployment Rate')">Unemployment Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Unit Labour Costs')">Unit Labour Costs</button>
                         <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Wage Growth')">Wage Growth</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Wages')">Wages</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Wages in Manufacturing')">Wages Manufacturing</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Youth Unemployment Rate')">Youth Unemployment</button>
                     </div>
                 </details>
 
                 <details>
                     <summary style="color: #e57373;">🏷️ Prices & Inflation</summary>
                     <div class="edu-grid">
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', '3-Year Consumer Inflation Expectations')">3-Yr Inflation Exp</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', '5-Year Consumer Inflation Expectations')">5-Yr Inflation Exp</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Consumer Inflation Expectations')">Consumer Inflation Exp</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core Consumer Prices')">Core Consumer Prices</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core Inflation Rate MoM')">Core Inflation MoM</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core Inflation Rate YoY')">Core Inflation YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PCE Price Index')">Core PCE Price Index</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PCE Price Index MoM')">Core PCE MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PCE Price Index YoY')">Core PCE YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PCE Prices QoQ')">Core PCE QoQ</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PPI MOM')">Core PPI MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core PPI YOY')">Core PPI YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Core Producer Prices')">Core Producer Prices</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI')">CPI</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Apparel')">CPI Apparel</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Core Core YoY')">CPI Core Core YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Education')">CPI Education</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Food')">CPI Food</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Housing Utilities')">CPI Housing Utilities</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Median')">CPI Median</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Recreation')">CPI Recreation</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI s.a')">CPI s.a</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Transportation')">CPI Transportation</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'CPI Trimmed-Mean')">CPI Trimmed-Mean</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Energy Inflation')">Energy Inflation</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Export Prices')">Export Prices</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Export Prices MoM')">Export Prices MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Export Prices YoY')">Export Prices YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Food Inflation')">Food Inflation</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'GDP Price Index')">GDP Price Index</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Import Prices')">Import Prices</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Import Prices MoM')">Import Prices MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Import Prices YoY')">Import Prices YoY</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Inflation Rate MoM')">Inflation Rate MoM</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Inflation Rate YoY')">Inflation Rate YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Michigan 5 Year Inflation Expectations')">Mich 5-Yr Inflation Exp</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Michigan Inflation Expectations')">Mich Inflation Exp</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PCE Price Index')">PCE Price Index</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PCE Price Index MoM')">PCE Price MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PCE Price Index YoY')">PCE Price YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PCE Prices QoQ')">PCE Prices QoQ</button>
                         <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI')">PPI</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI Ex Food Energy and Trade Services')">PPI Ex Food/Energy</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI Ex Food, Energy and Trade MoM')">PPI Ex Food MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI Ex Food, Energy and Trade YoY')">PPI Ex Food YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI MOM')">PPI MoM</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'PPI YOY')">PPI YoY</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Services Inflation')">Services Inflation</button>
-                        <button class="edu-btn bg-red" onclick="askStatic('EDUKASI', 'Shelter Inflation')">Shelter Inflation</button>
                     </div>
                 </details>
 
                 <details>
                     <summary style="color: #ce93d8;">💱 Money & Banking</summary>
                     <div class="edu-grid">
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Banks Balance Sheet')">Banks Balance Sheet</button>
                         <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Effective Federal Funds Rate')">Effective Fed Funds</button>
                         <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Fed Balance Sheet')">Fed Balance Sheet</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Fed Capital Account Surplus')">Fed Cap Acct Surplus</button>
                         <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Fed Interest Rate')">Fed Interest Rate</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Foreign Bond Investment')">Foreign Bond Inv.</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Foreign Exchange Reserves')">FX Reserves</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Loans to Private Sector')">Loans to Pvt Sector</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Money Supply M0')">Money Supply M0</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Money Supply M1')">Money Supply M1</button>
                         <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Money Supply M2')">Money Supply M2</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Private Debt to GDP')">Pvt Debt to GDP</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Proxy Funds Rate')">Proxy Funds Rate</button>
-                        <button class="edu-btn bg-purple" onclick="askStatic('EDUKASI', 'Secured Overnight Financing Rate')">SOFR</button>
                     </div>
                 </details>
 
                 <details>
-                    <summary style="color: #4db6ac;">🚢 Trade</summary>
+                    <summary style="color: #a1887f;">🏭 Business & Consumer</summary>
                     <div class="edu-grid">
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Auto Exports')">Auto Exports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Balance of Trade')">Balance of Trade</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Crude Oil Production')">Crude Oil Production</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Current Account')">Current Account</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Current Account Services')">Current Acct Services</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Current Account to GDP')">Current Acct to GDP</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Exports')">Exports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Exports by Category')">Exports by Category</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Exports by Country')">Exports by Country</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'External Debt')">External Debt</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Direct Investment')">FDI</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings')">Foreign Treas Holdings</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings - Belgium')">Treas. Hold Belgium</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings - Canada')">Treas. Hold Canada</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings - China')">Treas. Hold China</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings - Japan')">Treas. Hold Japan</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Foreign Treasury Holdings - UK')">Treas. Hold UK</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Gold Reserves')">Gold Reserves</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Goods Exports')">Goods Exports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Goods Imports')">Goods Imports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Goods Trade Balance')">Goods Trade Balance</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Imports')">Imports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Imports by Category')">Imports by Category</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Imports by Country')">Imports by Country</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Net Long-term TIC Flows')">TIC Flows</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Oil Exports')">Oil Exports</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Overall Net Capital Flows')">Net Capital Flows</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Terms of Trade')">Terms of Trade</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Terrorism Index')">Terrorism Index</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Tourism Revenues')">Tourism Revenues</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Tourist Arrivals')">Tourist Arrivals</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Weapons Sales')">Weapons Sales</button>
-                        <button class="edu-btn bg-teal" onclick="askStatic('EDUKASI', 'Weekly Crude Oil Production')">Weekly Oil Prod</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #ffd54f;">🏛️ Government</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Asylum Applications')">Asylum Applications</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Corruption Index')">Corruption Index</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Corruption Rank')">Corruption Rank</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Credit Rating')">Credit Rating</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Fiscal Expenditure')">Fiscal Expenditure</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Budget')">Government Budget</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Debt')">Government Debt</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Debt to GDP')">Gov Debt to GDP</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Revenues')">Government Revenues</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Spending')">Government Spending</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Government Spending to GDP')">Gov Spending to GDP</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Holidays')">Holidays</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Military Expenditure')">Military Exp</button>
-                        <button class="edu-btn bg-yellow" onclick="askStatic('EDUKASI', 'Monthly Budget Statement')">Monthly Budget Stmt</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #a1887f;">🏭 Business</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Average Equipment Rate')">Avg Equipment Rate</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Bankruptcies')">Bankruptcies</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Business Inventories MoM')">Business Inv MoM</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Capacity Utilization')">Capacity Utilization</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Car Loan Delinquency')">Car Loan Delinquency</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Car Production')">Car Production</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Car Registrations')">Car Registrations</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Changes in Inventories')">Changes Inventories</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Chicago Fed National Activity Index')">Chicago Fed Activity</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Chicago PMI')">Chicago PMI</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Coincident Index')">Coincident Index</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Composite Leading Indicator')">Composite Leading</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Corporate Profits')">Corporate Profits</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Dallas Fed Manufacturing Index')">Dallas Fed Mfg</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Dallas Fed Services Index')">Dallas Fed Services</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Dry-Van Rate')">Dry-Van Rate</button>
+                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Building Permits')">Building Permits</button>
+                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Consumer Confidence')">Consumer Confidence</button>
                         <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Durable Goods Orders MoM')">Durable Goods MoM</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Factory Orders ex Transportation')">Factory Orders ex Tr.</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Factory Orders MoM')">Factory Orders MoM</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Industrial Production MoM')">Ind. Production MoM</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Industrial Production YoY')">Ind. Production YoY</button>
+                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Existing Home Sales')">Existing Home Sales</button>
                         <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'ISM Manufacturing PMI')">ISM Mfg PMI</button>
                         <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'ISM Services PMI')">ISM Services PMI</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Kansas Fed Manufacturing Index')">Kansas Fed Mfg</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Leading Economic Index')">Leading Economic Index</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'LMI Logistics Managers Index')">LMI Logistics Index</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Manufacturing Production MoM')">Mfg Production MoM</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Manufacturing Production YoY')">Mfg Production YoY</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Mining Production')">Mining Production</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'New Orders')">New Orders</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'NFIB Business Optimism Index')">NFIB Optimism</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Non Defense Goods Orders Ex Air')">Non Def Goods Ex Air</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'NY Empire State Manufacturing Index')">NY Empire State Mfg</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'NY Fed Services Activity Index')">NY Fed Services</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Philadelphia Fed Manufacturing Index')">Philly Fed Mfg</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Retail Inventories Ex Autos MoM')">Retail Inv Ex Autos</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Richmond Fed Manufacturing Index')">Richmond Fed Mfg</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Richmond Fed Services Index')">Richmond Fed Services</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Steel Production')">Steel Production</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Total Vehicle Sales')">Total Vehicle Sales</button>
-                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Wholesale Inventories MoM')">Wholesale Inv MoM</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #ff8a65;">🛒 Consumer</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Bank Lending Rate')">Bank Lending Rate</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Chain Store Sales')">Chain Store Sales</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Consumer Credit Change')">Consumer Credit Chg</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Consumer Spending')">Consumer Spending</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Credit Card Accounts')">Credit Card Accounts</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Debt Balance Auto Loans')">Debt Auto Loans</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Debt Balance Credit Cards')">Debt Credit Cards</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Debt Balance Mortgages')">Debt Mortgages</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Debt Balance Student Loans')">Debt Student Loans</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Disposable Personal Income')">Disposable Income</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Gasoline Prices')">Gasoline Prices</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Households Debt to GDP')">Households Debt/GDP</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Michigan Consumer Expectations')">Mich Consumer Exp</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Michigan Consumer Sentiment')">Mich Sentiment</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Michigan Current Conditions')">Mich Current Cond</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Personal Income MoM')">Personal Income MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Personal Savings')">Personal Savings</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Personal Spending MoM')">Personal Spending MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Private Sector Credit')">Private Sector Credit</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'RCM/TIPP Economic Optimism Index')">RCM/TIPP Optimism</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Real Personal Spending MoM')">Real Pers Spending MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Redbook YoY')">Redbook YoY</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Monitor YoY')">Retail Monitor YoY</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Building and Garden Supply Stores MoM')">Retail Sales Garden</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Car Dealers MoM')">Retail Sales Car Deals</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Clothing Stores MoM')">Retail Sales Clothing</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Control Group MoM')">Retail Sales Control</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Electronics Stores MoM')">Retail Sales Electronics</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Ex Autos MoM')">Retail Sales Ex Autos</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Ex Gas MoM')">Retail Sales Ex Gas</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Ex Gas/Autos MoM')">Retail Sales Ex Gas/Auto</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Food and Beverage Stores MoM')">Retail Sales Food/Bev</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Furniture Stores MoM')">Retail Sales Furniture</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Gasoline Stations MoM')">Retail Sales Gasoline</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales General Merchandise Stores MoM')">Retail Sales Gen Mdse</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Health and Personal Care Stores MoM')">Retail Sales Health</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Miscellaneous Store Retailers MoM')">Retail Sales Misc</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales MoM')">Retail Sales MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Online Trade MoM')">Retail Sales Online</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Restaurants and Bars MoM')">Retail Sales Rest/Bars</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales Sporting Goods and Hobby Stores MoM')">Retail Sales Sporting</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Retail Sales YoY')">Retail Sales YoY</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Total Household Debt')">Total Household Debt</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Used Car Prices MoM')">Used Car Prices MoM</button>
-                        <button class="edu-btn bg-orange" onclick="askStatic('EDUKASI', 'Used Car Prices YoY')">Used Car Prices YoY</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #aed581;">🏠 Housing</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', '15-Year Mortgage Rate')">15-Yr Mortgage Rate</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', '30-Year Mortgage Rate')">30-Yr Mortgage Rate</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Average House Prices')">Avg House Prices</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Average Mortgage Size')">Avg Mortgage Size</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Building Permits')">Building Permits</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Building Permits MoM')">Building Permits MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Case-Shiller Home Price Index')">Case-Shiller Index</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Case-Shiller Home Price Index MoM')">Case-Shiller MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Case-Shiller Home Price Index YoY')">Case-Shiller YoY</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Case-Shiller Single Family Home Price Index')">Case-Shiller Single Fam</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Construction Spending MoM')">Construction Spending</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Existing Home Sales')">Existing Home Sales</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Existing Home Sales MoM')">Existing Home MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Existing Home Sales Prices')">Existing Home Prices</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Home Ownership Rate')">Home Ownership Rate</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'House Price Index')">House Price Index</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'House Price Index MoM')">House Price MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'House Price Index YoY')">House Price YoY</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Housing Starts')">Housing Starts</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Housing Starts MoM')">Housing Starts MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Housing Starts Multi Family')">Housing Starts Multi</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Housing Starts Single Family')">Housing Starts Single</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'MBA 30-Year Mortgage Rate')">MBA 30-Yr Mortgage</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'MBA Mortgage Applications')">MBA Mortg Applications</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'MBA Mortgage Market Index')">MBA Mortgage Market</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'MBA Mortgage Refinance Index')">MBA Mortg Refinance</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'MBA Purchase Index')">MBA Purchase Index</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Mortgage Originations')">Mortgage Originations</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'NAHB Housing Market Index')">NAHB Housing Market</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'New Home Sales')">New Home Sales</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'New Home Sales MoM')">New Home Sales MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Pending Home Sales MoM')">Pending Home Sales MoM</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Pending Home Sales YoY')">Pending Home Sales YoY</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Price to Rent Ratio')">Price to Rent Ratio</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Residential Property Prices')">Residential Prop Prices</button>
-                        <button class="edu-btn bg-green" onclick="askStatic('EDUKASI', 'Total Housing Inventory')">Total Housing Inventory</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #f06292;">🧾 Taxes</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Corporate Tax Rate')">Corporate Tax Rate</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Personal Income Tax Rate')">Personal Income Tax</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Sales Tax Rate')">Sales Tax Rate</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Social Security Rate')">Social Security Rate</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Social Security Rate For Companies')">SS Rate Companies</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Social Security Rate For Employees')">SS Rate Employees</button>
-                        <button class="edu-btn bg-pink" onclick="askStatic('EDUKASI', 'Withholding Tax Rate')">Withholding Tax Rate</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary style="color: #90a4ae;">⚡ Energy</summary>
-                    <div class="edu-grid">
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'API Crude Oil Stock Change')">API Crude Oil Stock</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'API Cushing Number')">API Cushing Number</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'API Distillate Stocks')">API Distillate Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'API Gasoline Stocks')">API Gasoline Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'Baker Hughes Oil Rig Count')">Baker Hughes Oil Rig</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'Baker Hughes Total Rigs Count')">Baker Hughes Total Rigs</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Crude Oil Imports Change')">EIA Crude Oil Imports</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Crude Oil Stocks Change')">EIA Crude Oil Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Cushing Crude Oil Stocks Change')">EIA Cushing Crude</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Distillate Fuel Production Change')">EIA Distillate Fuel Prod</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Distillate Stocks Change')">EIA Distillate Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Gasoline Production Change')">EIA Gasoline Prod</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Gasoline Stocks Change')">EIA Gasoline Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Heating Oil Stocks Change')">EIA Heating Oil Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Natural Gas Stocks Change')">EIA Natural Gas Stocks</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'EIA Refinery Crude Runs Change')">EIA Refinery Crude Runs</button>
-                        <button class="edu-btn bg-grey" onclick="askStatic('EDUKASI', 'Strategic Petroleum Reserve Crude Oil Stocks')">Strategic Petroleum</button>
+                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Michigan Consumer Sentiment')">Mich Sentiment</button>
+                        <button class="edu-btn bg-brown" onclick="askStatic('EDUKASI', 'Retail Sales MoM')">Retail Sales MoM</button>
                     </div>
                 </details>
             </div>
@@ -681,7 +350,7 @@
 
     <div id="combo" class="content">
         <div style="background: #17212b; padding: 15px; border-radius: 8px;">
-            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda beserta prioritas datanya (Institusional Logic) & Waktu yang sering bentrok bersamaan.</p>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda (Combo) sangat krusial. Institusi memprogram algoritma (HFT - High Frequency Trading) untuk membaca deviasi gabungan, menciptakan volatilitas manipulatif untuk membersihkan <i>Stop Loss</i> sebelum melanjutkan tren utama.</p>
             
             <h4 style="color: #ef5350;">🔥 Super Combo & Dampak Sangat Tinggi</h4>
             <div class="edu-grid">
@@ -699,7 +368,7 @@
                 <button class="edu-btn bg-orange" onclick="askStatic('COMBO_NEWS', 'Paket ISM PMI (Manufacturing & Jasa)')">Paket ISM PMI</button>
                 <button class="edu-btn bg-purple" onclick="askStatic('COMBO_NEWS', 'Paket PPI (Core PPI & PPI)')">Paket PPI Lengkap</button>
                 <button class="edu-btn bg-purple" onclick="askStatic('COMBO_NEWS', 'Paket JOLTS (Job Openings & Quits)')">Paket JOLTS</button>
-                <button class="edu-btn bg-purple" onclick="askStatic('COMBO_NEWS', 'Advance GDP q/q + Initial Jobless Claims (Sering rilis bersamaan di hari Kamis)')">GDP + Jobless Claims</button>
+                <button class="edu-btn bg-purple" onclick="askStatic('COMBO_NEWS', 'Advance GDP q/q + Initial Jobless Claims')">GDP + Jobless Claims</button>
                 <button class="edu-btn bg-purple" onclick="askStatic('COMBO_NEWS', 'Michigan Consumer Sentiment + Inflation Expectations')">Michigan Sentiment + Inflasi</button>
             </div>
 
@@ -834,89 +503,125 @@
             }
         }
 
-        // DATABASE MAYOR STATIS
+        // DATABASE MAYOR STATIS YANG DIPERKUAT (TERPADU)
         const majorDatabase = {
-            "GDP": `<h3>1. Penjelasan Mendalam (Definisi)</h3>Gross Domestic Product (PDB) adalah indikator kesehatan absolut pertumbuhan ekonomi makro negara.
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Rapor nilai akhir semester. Nilai naik berarti ekonomi subur, investor memburu Dolar (USD Bullish / Gold Bearish).</div>
+            "GDP": `<h3>1. Penjelasan Mendalam (Definisi & Komponen)</h3>Gross Domestic Product (PDB) adalah indikator absolut pertumbuhan ekonomi makro. GDP menghitung total nilai barang dan jasa yang diproduksi. GDP AS didorong sangat kuat oleh <b>Belanja Konsumen (Consumer Spending)</b> yang mencakup hampir 70% komposisinya.<br><br><b>Perhatian:</b> Ada 3 rilis (Advance, Second, Final). <i>Advance GDP</i> adalah yang paling memicu volatilitas karena rilis paling pertama.
+<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Rapor akhir semester sebuah negara. Rapor bagus berarti bisnis sehat, menarik investor memburu aset berdenominasi Dolar AS.</div>
+<h3>2. Logika Institusi & Korelasi</h3>Jika GDP mencetak angka panas (jauh di atas target), ketakutan resesi sirna. Institusi akan mengabaikan Emas (Safe Haven) dan kembali memutar uang di Dolar atau Wall Street.
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> USD Menguat (Bullish), Emas Tertekan (Bearish).</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b> USD Melemah (Bearish), Emas Meroket (Bullish).</div>`,
+<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> USD Menguat Signifikan (Bullish), Emas Tertekan Runtuh (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Pertumbuhan macet. USD Melemah (Bearish), Emas Meroket (Bullish) karena narasi resesi.</div>`,
 
-            "Non Farm Payrolls (NFP)": `<h3>1. Penjelasan Mendalam</h3>Total tenaga kerja baru AS di luar sektor pertanian. "The Mother of All News".
-<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Pabrik besar merekrut ratusan ribu pegawai baru menandakan bisnis sedang ekspansi gila-gilaan.</div>
+            "Non Farm Payrolls (NFP)": `<h3>1. Penjelasan Mendalam (Definisi & Relevansi)</h3>Total tenaga kerja baru AS di luar sektor pertanian, rilis bersamaan dengan data Pengangguran dan Pertumbuhan Upah. Sektor tenaga kerja memvalidasi kekuatan daya beli. The Fed memiliki "Mandat Ganda": menjaga inflasi dan memaksimalkan tenaga kerja. NFP menjawab mandat kedua.
+<div class="analogy-box"><b>💡 Analogi Sederhana:</b> Pabrik merekrut karyawan baru secara massal, membuktikan bahwa roda mesin industri sedang bekerja optimal.</div>
+<h3>2. Logika Institusi & Algoritma</h3>Hati-hati dengan <i>Bait and Switch</i>! Institusi akan sering melakukan aksi <i>Stop Hunt</i> (Whipsaw) jika angka NFP hijau tetapi Angka Pengangguran ikut naik, atau sebaliknya. 
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> USD Terbang Tinggi (Bullish), Emas Ambruk (Bearish).</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b> USD Hancur (Bearish), Emas Terbang (Bullish).</div>`,
+<div class="impact-box good"><b>Aktual > Forecast (Hijau) & Pengangguran Turun:</b> Sinergi sempurna. USD Terbang Tinggi (Bullish), Emas Ambruk Hancur (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah) & Pengangguran Naik:</b> Ledakan resesi. USD Hancur (Bearish), Emas Terbang Bebas (Bullish).</div>`,
 
-            "CPI": `<h3>1. Penjelasan Mendalam</h3>Consumer Price Index (Inflasi Konsumen). Data paling krusial penentu kebijakan suku bunga.
-<div class="analogy-box"><b>💡 Analogi:</b> Kenaikan harga sembako bulanan pasar. Inflasi naik memaksa bank sentral menaikkan bunga.</div>
-<h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> Inflasi Panas. USD Meroket Keras (Bullish), Emas Terjun Bebas (Bearish).</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Inflasi Turun. USD Anjlok (Bearish), Emas Meroket Tajam (Bullish).</div>`,
+            "CPI": `<h3>1. Penjelasan Mendalam (Inflasi Inti vs Headline)</h3>Consumer Price Index (Inflasi Konsumen). Data nomor satu yang menyetir The Fed. 
+<ul>
+<li><b>Headline CPI:</b> Total semua barang. Sangat fluktuatif terpengaruh harga minyak/gas.</li>
+<li><b>Core CPI:</b> Tanpa Energi & Makanan. Jauh lebih lambat (sticky) namun paling diawasi oleh institusi karena menggambarkan inflasi fundamental (biaya sewa rumah dan asuransi).</li>
+</ul>
+<div class="analogy-box"><b>💡 Analogi:</b> Kenaikan rata-rata harga nota belanjaan bulanan. Jika terlalu mahal, bank sentral terpaksa menghancurkan ekonomi dengan bunga tinggi untuk memaksa konsumen berhenti belanja.</div>
+<h3>2. Dampak Harga Pakem</h3>
+<div class="impact-box good"><b>Aktual > Forecast (Hijau / Panas):</b> Memicu skenario <i>Higher for Longer</i>. USD Meroket Keras (Bullish), Emas Terjun Bebas (Bearish).</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah / Dingin):</b> Inflasi terkendali. Peluang potong bunga naik. USD Anjlok (Bearish), Emas Pesta Bullish.</div>`,
 
-            "Fed Interest Rate": `<h3>1. Penjelasan Mendalam</h3>Keputusan Suku Bunga Acuan AS. Menentukan biaya dasar peminjaman uang di dunia.
-<h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Rate Hike (Naik):</b> USD Menguat Agresif (Bullish), Emas Hancur Lebur (Bearish).</div>
-<div class="impact-box"><b>Rate Cut (Turun):</b> USD Terpuruk (Bearish), Emas Berpesta Meroket (Bullish).</div>`,
+            "Fed Interest Rate": `<h3>1. Penjelasan Mendalam (Suku Bunga & Forward Guidance)</h3>Keputusan penentuan suku bunga acuan. Hal ini mematok biaya meminjam uang (Cost of Capital) untuk bank, perusahaan, hingga KPR konsumen.
+<br><br><b>Logika Smart Money:</b> Pasar bereaksi pada <b>Ekspektasi Masa Depan</b>, bukan angka hari ini. Jika The Fed menaikkan suku bunga, namun Jerome Powell berpidato "ini kenaikan terakhir tahun ini" (Dovish), maka Dolar justru akan jatuh (Sell the Fact).
+<h3>2. Dampak Harga Pakem (Fundamental Murni)</h3>
+<div class="impact-box good"><b>Rate Hike (Naik) / Sikap Hawkish:</b> Uang mahal. USD Menguat Agresif (Bullish), Emas Ditinggalkan (Bearish).</div>
+<div class="impact-box"><b>Rate Cut (Turun) / Sikap Dovish:</b> Uang murah, likuiditas banjir. USD Terpuruk (Bearish), Emas Meroket Bebas (Bullish).</div>`,
 
-            "US Treasury Yield 10Y": `<h3>1. Penjelasan Mendalam</h3>Imbal hasil obligasi 10 tahun AS. Musuh alami nomor satu bagi pergerakan harga Emas.
+            "US Treasury Yield 10Y": `<h3>1. Penjelasan Mendalam (Musuh Utama Emas)</h3>Imbal hasil (bunga) obligasi pemerintah AS jangka 10 tahun. Bertindak sebagai proksi utama pandangan institusi terhadap pertumbuhan dan inflasi.
+<div class="analogy-box"><b>💡 Analogi:</b> Deposito super aman tanpa risiko gagal bayar yang dijamin langsung oleh negara adidaya AS.</div>
+<h3>2. Korelasi Lintas Aset (Opportunity Cost)</h3>Emas adalah aset tanpa imbal hasil (zero-yielding asset). Ketika Yield 10Y memberi bunga 5%, institusi besar (Hedge Fund/Bank) akan melikuidasi emas miliaran dolar dan memindahkannya ke obligasi demi keamanan dan kepastian <i>cash flow</i>.
 <h3>3. Dampak Harga Pakem</h3>
-<div class="impact-box good"><b>Yield Meroket Naik:</b> USD Menguat, Emas (XAUUSD) Sangat Tertekan/Turun (Bearish).</div>
-<div class="impact-box"><b>Yield Jatuh Runtuh:</b> USD Melemah, Emas Bebas Terbang Tinggi (Bullish).</div>`
+<div class="impact-box good"><b>Yield Meroket Naik:</b> Modal tersedot ke AS. USD Bullish, Emas Sangat Tertekan/Turun (Bearish Kuat).</div>
+<div class="impact-box"><b>Yield Runtuh:</b> Obligasi tidak menarik. USD Melemah, Uang kembali memburu aset lindung nilai (Emas Bullish).</div>`
         };
 
         const comboDatabase = {
-            "Paket NFP (NFP, Average Hourly Earnings, Unemployment Rate)": `<h3>Analisis Skenario Rilis Paket NFP</h3>
-<b>1. Sinergi Sempurna:</b> NFP Naik + Pengangguran Turun + Gaji Naik. <br><b>Dampak: USD Bullish Mutlak, Emas Bearish Mutlak.</b><br><br>
-<b>2. Skenario Divergen (Whipsaw):</b> NFP Bagus tapi Pengangguran Naik.<br><b>Dampak:</b> Volatilitas bolak balik (Kocokan bandar). Turun tajam lalu berbalik naik meroket menjebol batas atas.`,
+            "Paket NFP (NFP, Average Hourly Earnings, Unemployment Rate)": `<h3>Analisis Institusi Rilis Paket NFP</h3>
+<b>1. Sinergi Sempurna (Searah):</b> 
+- NFP (Pekerja Baru) = <b>Hijau</b>
+- Unemployment (Pengangguran) = <b>Hijau (Turun)</b>
+- Average Hourly Earnings (Gaji) = <b>Hijau (Naik)</b><br>
+<b>Dampak: Momentum searah masif. USD Bullish Mutlak, Emas Bearish Mutlak tanpa perlawanan.</b><br><br>
+<b>2. Skenario Divergen / Whipsaw (Bentrokan Data):</b> 
+- NFP Bagus (Hijau) TETAPI Pengangguran Memburuk (Merah).<br>
+<b>Logika Algoritma (HFT):</b> Bot akan bereaksi ke data utama (NFP) dulu memicu lonjakan harga palsu, menelan <i>Stop Loss</i> ritel, kemudian 15 menit berselang harga dibanting balik (Reversal) karena pelaku pasar yang lebih besar menilai fundamental aslinya (Pengangguran) lebih krusial.`,
             
-            "Paket CPI (Core CPI & CPI)": `<h3>Analisis Skenario Rilis Paket CPI</h3>
-<b>1. Aturan Pakem:</b> Core CPI MoM adalah Pemimpin Arah Tren Utama hari tersebut.<br><br>
-<b>2. Sinergi Sempurna:</b> Semua data rilis di atas forecast (Panas).<br><b>Dampak: USD Bullish Kuat, Emas Bearish Ekstrem.</b>`,
+            "Paket CPI (Core CPI & CPI)": `<h3>Analisis Rilis Paket CPI (Headline vs Core)</h3>
+<b>1. Aturan Hierarki Institusi:</b> Core CPI (Inflasi Inti) MoM adalah <b>Pemimpin Arah Tren</b>. Walaupun Headline YoY turun secara drastis (karena minyak murah), jika Core MoM naik, institusi akan tetap menjual emas.<br><br>
+<b>2. Sinergi Panas (Hot Inflation):</b> Core dan Headline rilis serempak di atas forecast. <br>
+<b>Dampak Instan: USD Bullish Ganas, Emas Bearish Ekstrem (Terjun ke Support kuat berikutnya dalam hitungan menit).</b><br><br>
+<b>3. Skenario Divergen:</b> Headline Turun (Merah) tapi Core Naik (Hijau). Arah market akan berombak liar (Whipsaw) sebelum akhirnya ditarik mengikuti arah Core CPI.`,
 
-            "Paket FOMC (Rate Decision, Dot Plot, Press Conference)": `<h3>Analisis Rilis Paket FOMC</h3>
-<b>Fase 1 (Suku Bunga):</b> Bot merespons instan angka tabel.<br>
-<b>Fase 2 (Dot Plot):</b> Mengukur arah proyeksi masa depan dewan.<br>
-<b>Fase 3 (Pidato Powell):</b> Penentu arah akhir sesungguhnya. Sering membalikkan total arah Fase 1.`
+            "Paket FOMC (Rate Decision, Dot Plot, Press Conference)": `<h3>Skenario Eksekusi Paket FOMC (Hari Kiamat Forex)</h3>
+Rapat bank sentral ini tidak rilis dalam satu detik, melainkan fase beruntun:
+<br><br>
+<b>Fase 1 (01:00 WIB - Rilis Suku Bunga & Dot Plot):</b> Bot merespons instan angka tabel tanpa emosi. Jika Dot Plot berubah Hawkish, Dolar meroket spontan 50-100 pips.<br>
+<b>Fase 2 (01:30 WIB - Pidato Jerome Powell Q&A):</b> Fase interpretasi manusia. Wartawan akan bertanya untuk memprovokasi Powell. Seringkali pasar yang tadinya Bullish Dolar di Fase 1 akan dibanting berbalik total 180 derajat jika Powell tersenyum dan melontarkan kalimat bernada Dovish (pesimis).<br><br>
+<b>Saran:</b> Trader pemula diwajibkan <i>flat/clear position</i> (menutup semua order) sebelum Fase 1 dimulai akibat minimnya likuiditas dan <i>slippage</i> (pelebaran spread) tak wajar.`,
+
+            "Advance GDP q/q + Initial Jobless Claims": `<h3>Analisis Bentrokan Data Kamis Malam (GDP + Jobless)</h3>
+Kedua data rilis serempak di jam yang sama.<br><br>
+<b>Prioritas Bobot:</b> Advance GDP q/q <b>> (Lebih kuat) ></b> Initial Jobless Claims mingguan.<br>
+<b>Skenario Logika:</b> Jika Advance GDP jauh di atas forecast (Sangat Hijau), namun Jobless claims juga sedikit memburuk (Merah), pasar akan mengabaikan Jobless Claims. Uang besar akan mengikuti narasi GDP untuk memperkuat status Dolar (USD Bullish). Jobless Claims hanya akan mendominasi jika rilis angkanya ekstrim anomali.`,
+
+            "US NFP + Canada Employment Change (Bentrokan data AS dan Kanada di hari Jumat)": `<h3>Analisis Cross-Border: NFP vs CAD Jobs</h3>
+Berdampak destruktif khusus untuk pair <b>USD/CAD</b>.<br><br>
+<b>Skenario Tarik Tambang:</b> 
+Jika NFP AS (Hijau/Bagus) dan Data Pekerja Kanada (Merah/Buruk). Terjadi <i>Double Momentum</i>. Dolar AS menguat, Dolar Kanada melemah. Pair USD/CAD akan meledak meroket tak terkendali ke atas tanpa koreksi yang berarti.`
         };
 
         // DYNAMIC ENGINE GENERATOR UNTUK INDIKATOR MINOR
         function generateDynamicResponse(title) {
             let desc = `<b>${title}</b> adalah metrik pendukung makroekonomi yang dipantau institusi finansial global.`;
-            let analogy = `Ibarat panel dasbor instrumen kecil. Memberitahu kondisi spesifik satu suku cadang ekonomi.`;
+            let analogy = `Ibarat sensor pelengkap di panel dasbor ekonomi. Memberikan kepingan <i>puzzle</i> spesifik.`;
             let isGoodForUSD = true;
+            let institusionalFlow = `Daya dorongnya menengah, institusi menggunakannya sebagai penambah konfirmasi, bukan pembalik tren utama.`;
 
             let txt = title.toLowerCase();
 
             if (txt.includes("pmi") || txt.includes("index") || txt.includes("activity")) {
-                desc = `<b>${title}</b> mengukur tingkat ekspansi bisnis (>50) atau kontraksi (<50).`;
-                analogy = `Mewawancarai manajer pabrik apakah mereka menambah stok produksi atau tidak.`;
+                desc = `<b>${title}</b> adalah survei langsung (Leading Indicator) yang mengukur tingkat ekspansi manajer bisnis (>50) atau kontraksi (<50).`;
+                analogy = `Mewawancarai direktur pengadaan pabrik apakah mereka optimis menambah stok produksi atau bersiap memotong biaya.`;
+                institusionalFlow = `Institusi memantau indeks komponen "Prices Paid" (Harga Dibayar) di dalam laporan PMI untuk menebak angka inflasi resmi minggu depan.`;
             } else if (txt.includes("sales") || txt.includes("spending") || txt.includes("retail")) {
-                desc = `<b>${title}</b> mengukur volume transaksi ritel daya beli konsumsi masyarakat.`;
-                analogy = `Melihat ramai tidaknya keranjang belanja antrean kasir pusat perbelanjaan.`;
+                desc = `<b>${title}</b> mengukur total nota transaksi penjualan ritel. Mewakili 70% aktivitas ekonomi AS.`;
+                analogy = `Memantau laju perputaran kasir di pusat perbelanjaan dan dealer mobil selama sebulan penuh.`;
+                institusionalFlow = `Jika angka ritel hancur, narasi "Konsumen AS Kehabisan Uang" bergema, memicu pelemahan instan Dolar AS di keranjang valas (Forex).`;
             } else if (txt.includes("claims") || txt.includes("unemploy")) {
-                desc = `<b>${title}</b> menghitung laju pertambahan pengangguran pengaju santunan sosial.`;
-                analogy = `Melihat panjangnya antrean pencari kerja di dinas ketenagakerjaan negara.`;
+                desc = `<b>${title}</b> menghitung frekuensi warga yang kehilangan pekerjaan dan mengajukan tunjangan bantuan ke negara.`;
+                analogy = `Mengukur seberapa panjang antrean pengangguran di kantor dinas sosial minggu ini.`;
+                institusionalFlow = `Algoritma memantau tren mingguan (4-Week Average). Lonjakan tajam berturut-turut menandakan PHK massal korporasi, memicu panik beli obligasi dan Emas.`;
                 isGoodForUSD = false;
             } else if (txt.includes("housing") || txt.includes("home") || txt.includes("permits")) {
-                desc = `<b>${title}</b> memantau kesehatan siklus penjualan sektor properti komersial.`;
-                analogy = `Seberapa banyak orang berani mengajukan kredit jangka panjang (KPR) ke perbankan.`;
+                desc = `<b>${title}</b> memantau persetujuan pendirian bangunan baru atau penjualan unit rumah komersial. Sektor perumahan sangat sensitif terhadap suku bunga pinjaman (KPR).`;
+                analogy = `Melihat berapa banyak investor berani mengajukan kredit raksasa jangka panjang dalam kondisi bunga tinggi.`;
+                institusionalFlow = `Sektor properti adalah efek domino awal. Keruntuhan di sektor ini menular cepat ke sektor perbankan dan material bangunan.`;
             } else if (txt.includes("inventory") || txt.includes("stock") || txt.includes("oil")) {
-                desc = `<b>${title}</b> mengukur kapasitas pasokan/stok sisa cadangan komoditas di gudang industri.`;
-                analogy = `Gudang terlalu penuh menandakan barang tidak laku terjual, memicu penurunan harga aset tersebut.`;
+                desc = `<b>${title}</b> mengukur pasokan tersisa komoditas (seperti minyak) atau barang jadi di gudang industri.`;
+                analogy = `Gudang yang kelebihan muatan membuktikan barang tak laku terjual, memaksa pedagang banting harga.`;
+                institusionalFlow = `Hukum murni *Supply & Demand*. Over-supply berakibat negatif pada harga spot aset tersebut di komoditas berjangka.`;
                 isGoodForUSD = false;
             }
 
-            let html = `<h3>1. Penjelasan Singkat (Definisi)</h3>${desc}
+            let html = `<h3>1. Definisi & Posisi Sektor</h3>${desc}
 <div class="analogy-box"><b>💡 Analogi Sederhana:</b> ${analogy}</div>
+<h3>2. Logika Aliran Dana Institusi (Smart Money)</h3>${institusionalFlow}
 <h3>3. Dampak Harga Pakem (Rule of Thumb)</h3>`;
 
             if (isGoodForUSD) {
-                html += `<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> Sektor Kuat. <b>USD Menguat (Bullish)</b>, Emas (XAUUSD) <b>Tertekan (Bearish)</b>.</div>
-<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Sektor Lemah. <b>USD Melemah (Bearish)</b>, Emas (XAUUSD) <b>Meroket (Bullish)</b>.</div>`;
+                html += `<div class="impact-box good"><b>Aktual > Forecast (Hijau):</b> Sektor Menguat & Ekspansif. <b>USD Bullish (Naik)</b>, Emas (XAUUSD) <b>Bearish (Tertekan)</b>.</div>
+<div class="impact-box"><b>Aktual < Forecast (Merah):</b> Sektor Lesu & Kontraksi. <b>USD Bearish (Turun)</b>, Emas (XAUUSD) <b>Bullish (Naik)</b>.</div>`;
             } else {
-                html += `<div class="impact-box"><b>Aktual > Forecast (Merah untuk Pasar):</b> Sektor Memburuk. <b>USD Bearish</b>, Emas <b>Bullish (Naik)</b>.</div>
-<div class="impact-box good"><b>Aktual < Forecast (Hijau untuk Pasar):</b> Sektor Sehat. <b>USD Bullish</b>, Emas <b>Bearish (Turun)</b>.</div>`;
+                html += `<div class="impact-box"><b>Aktual > Forecast (Merah untuk Pasar):</b> Sektor Memburuk (Cth: Pengangguran/Stok Membengkak). <b>USD Bearish</b>, Emas <b>Bullish (Naik / Diincar)</b>.</div>
+<div class="impact-box good"><b>Aktual < Forecast (Hijau untuk Pasar):</b> Sektor Sehat/Terkendali. <b>USD Bullish</b>, Emas <b>Bearish (Turun)</b>.</div>`;
             }
             return html;
         }
@@ -932,10 +637,10 @@
             if (category === 'COMBO_NEWS' || category === 'COMBO') {
                 answer = comboDatabase[title];
                 if (!answer) {
-                    answer = `<h3>Analisis Skenario Rilis Combo: ${title}</h3>
-<p>Institusi fokus pada komponen rilis data yang menghasilkan <b>Deviasi Terbesar</b> (kejutan angka terjauh dari forecast).</p>
-<b>• Skenario Sinergi:</b> Semua data serempak searah hijau/merah. Tren kuat satu sisi searah pakem tanpa manipulasi.<br>
-<b>• Skenario Divergen:</b> Data rilis bertabrakan (ada yang bagus, ada yang jelek). Melahirkan pola manipulasi <b>Whipsaw Bearish/Bullish beruntun</b> untuk membersihkan SL trader retail.`;
+                    answer = `<h3>Analisis Institusi Rilis Combo: ${title}</h3>
+<p>Institusi tidak membaca satu per satu angka, melainkan memprogram algoritma (HFT) untuk merespons <b>Deviasi Terbesar Secara Keseluruhan</b>.</p>
+<b>• Skenario Sinergi (Searah):</b> Seluruh angka pendukung rilis hijau (atau merah). Tren akan bergerak masif ke satu sisi tanpa banyak koreksi (Tren Kuat).<br><br>
+<b>• Skenario Divergen (Bentrokan Data):</b> Data saling bertolak belakang (Satu indikator bagus, satu buruk). Algoritma akan menciptakan manuver "Sapu Bersih" berupa <b>Whipsaw Ganda (Kocokan Atas-Bawah)</b> dengan kecepatan sangat tinggi untuk menghabisi Stop Loss trader retail yang terjebak di tengah jalan.`;
                 }
             } else {
                 answer = majorDatabase[title];
