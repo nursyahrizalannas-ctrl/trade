@@ -1,192 +1,71 @@
-/* =========================================================
-   css/style.css - TAMPILAN PROFESIONAL ANTIPRAKTIS LOGIC
-   ========================================================= */
-
-:root {
-    /* Palet Warna Premium (Deep Dark Theme) */
-    --bg-main: #0b1120;       /* Warna latar lebih gelap dan elegan */
-    --bg-card: #162032;       /* Warna kartu dengan kontras tipis */
-    --bg-glass: rgba(15, 23, 42, 0.75); /* Transparansi untuk efek kaca */
-    
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    
-    --border-color: rgba(255, 255, 255, 0.08); /* Border sangat halus */
-    --border-glow: rgba(59, 130, 246, 0.3);
-    
-    --accent-blue: #3b82f6;
-    --accent-green: #10b981;
-    --accent-red: #ef4444;
-    --accent-yellow: #f59e0b;
+/* Styling untuk Risk Meter */
+.risk-bar-container {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 5px;
 }
 
-/* RESET & TYPOGRAPHY DASAR */
-* { 
-    box-sizing: border-box; 
-    -webkit-tap-highlight-color: transparent; /* Hilangkan kotak biru saat ditap di HP */
-    margin: 0; 
-    padding: 0;
+.risk-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
 }
 
-body { 
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-    background-color: var(--bg-main); 
-    color: var(--text-main); 
-    padding: 70px 15px 90px 15px; /* Spasi yang lebih bernapas untuk header dan nav */
-    transition: background-color 0.5s ease;
-    line-height: 1.6;
+/* Styling untuk Watchlist Rekomendasi */
+.recom-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
 }
 
-/* Sembunyikan Scrollbar Bawaan agar terlihat seperti App Native */
-::-webkit-scrollbar { width: 0px; background: transparent; }
-
-/* =========================================
-   1. HEADER (GLASSMORPHISM)
-   ========================================= */
-.app-header {
-    position: fixed; top: 0; left: 0; width: 100%; height: 60px;
-    background: var(--bg-glass); 
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    display: flex; align-items: center; justify-content: center;
-    border-bottom: 1px solid var(--border-color); 
-    z-index: 1000;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); /* Bayangan halus ke bawah */
+.recom-item:last-child {
+    margin-bottom: 0;
 }
 
-.app-header h2 { 
-    font-size: 18px; 
-    font-weight: 800; 
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #60a5fa, #34d399); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
+.recom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
-/* =========================================
-   2. BOTTOM NAVIGATION BAR
-   ========================================= */
-.bottom-nav {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
-    background: var(--bg-glass); 
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    display: flex; justify-content: space-around; align-items: center;
-    border-top: 1px solid var(--border-color); 
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom); /* Dukungan poni iPhone */
+.recom-asset {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: white;
 }
 
-.nav-item {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    color: var(--text-muted); font-size: 11px; font-weight: 600; 
-    cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    flex: 1; height: 100%; text-decoration: none;
+.recom-reason {
+    font-size: 12px;
+    color: var(--text-muted); /* Pastikan variabel warna ini ada di CSS Anda, misal: #a0a0a0 */
+    line-height: 1.4;
+    margin: 0;
 }
 
-.nav-item .icon { 
-    font-size: 22px; margin-bottom: 4px; 
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    opacity: 0.7;
+/* Badges untuk Bias Arah */
+.badge {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
 }
 
-/* Animasi saat menu aktif */
-.nav-item.active { color: var(--text-main); }
-.nav-item.active .icon { 
-    transform: translateY(-4px) scale(1.15); 
-    opacity: 1;
-    filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.4)); /* Efek glow pada icon */
+.badge-buy {
+    background: rgba(46, 213, 115, 0.15);
+    color: #2ed573;
+    border: 1px solid rgba(46, 213, 115, 0.3);
 }
 
-/* =========================================
-   3. KONTEN & KARTU (CARDS)
-   ========================================= */
-.content { 
-    display: none; 
-    animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
-    opacity: 0; transform: translateY(20px);
-} 
-.content.active { display: block; }
-
-@keyframes fadeSlideUp { 
-    to { opacity: 1; transform: translateY(0); } 
+.badge-sell {
+    background: rgba(255, 71, 87, 0.15);
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.3);
 }
-
-.card {
-    background: var(--bg-card); 
-    border-radius: 20px; 
-    padding: 20px; 
-    margin-bottom: 16px;
-    border: 1px solid var(--border-color); 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    position: relative; overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.card h4 { 
-    font-size: 16px; font-weight: 700; 
-    display: flex; align-items: center; gap: 8px; 
-    letter-spacing: -0.3px;
-}
-
-.card p { 
-    margin-top: 6px; font-size: 13px; color: var(--text-muted); 
-}
-
-/* =========================================
-   4. FORM INPUT & TOMBOL
-   ========================================= */
-input { 
-    width: 100%; padding: 15px 18px; margin: 12px 0; 
-    background: rgba(0, 0, 0, 0.2); color: white; 
-    border: 1px solid var(--border-color); border-radius: 14px; 
-    font-family: inherit; font-size: 14px; font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-input:focus { 
-    outline: none; 
-    border-color: var(--accent-blue); 
-    background: rgba(59, 130, 246, 0.05);
-    box-shadow: 0 0 0 4px var(--border-glow); 
-}
-
-input::placeholder { color: #64748b; }
-
-button.action-btn { 
-    width: 100%; padding: 16px; margin-top: 8px;
-    border: none; border-radius: 14px; 
-    font-weight: 700; font-size: 14px; letter-spacing: 0.5px;
-    cursor: pointer; color: white; 
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-button.action-btn:active { transform: scale(0.96); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-/* Varian Warna Tombol dengan Gradien Premium */
-.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.buy { background: linear-gradient(135deg, #10b981, #059669); } 
-.sell { background: linear-gradient(135deg, #ef4444, #dc2626); } 
-
-.trade-row { display: flex; gap: 12px; margin-top: 8px; }
-
-/* =========================================
-   5. GRID EDUKASI TINTED
-   ========================================= */
-.edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;}
-.edu-btn { 
-    padding: 14px 10px; font-size: 12px; border-radius: 12px; cursor: pointer; 
-    font-weight: 600; text-align: center; border: 1px solid transparent; 
-    transition: all 0.2s ease;
-    display: flex; align-items: center; justify-content: center;
-}
-.edu-btn:active { transform: scale(0.95); }
-
-/* Pewarnaan Transparan/Tinted */
-.bg-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); } 
-.bg-orange { background: rgba(249, 115, 22, 0.1); color: #f97316; border-color: rgba(249, 115, 22, 0.2); } 
-.bg-yellow { background: rgba(234, 179, 8, 0.1); color: #eab308; border-color: rgba(234, 179, 8, 0.2); } 
-.bg-green { background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2); } 
-.bg-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); } 
-
-/* Sembunyikan Overlay & Modal (Kita atur nanti via JS) */
-#quiz-overlay, #ai-modal { display: none; }
