@@ -2,7 +2,7 @@
    UI.JS - KONTROL ANTARMUKA & TELEGRAM
    ========================================================================== */
 const tg = window.Telegram.WebApp;
-tg.expand(); // Layar penuh
+tg.expand(); // Agar aplikasi Telegram full screen
 
 function showTab(tabId, element) {
     document.querySelectorAll('.content').forEach(tab => tab.classList.remove('active'));
