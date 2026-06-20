@@ -40,6 +40,21 @@
                 <h4 style="color: var(--accent-purple); margin: 0;">⚡ AI Macro Watchlist</h4>
             </div>
             
+                    <!-- FITUR BARU: Live News Investing & AI Analysis -->
+        <div class="card" style="border-left: 4px solid var(--accent-yellow);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="color: var(--accent-yellow); margin: 0;">🌐 Live Market News</h4>
+                <button class="action-btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 4px 8px; font-size: 11px; width: auto; border-radius: 6px;" onclick="fetchLiveNews()">🔄 Refresh</button>
+            </div>
+            
+            <!-- Area Berita (Bisa di-scroll) -->
+            <div id="live-news-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">
+                    ⏳ Menghubungkan ke server berita...
+                </div>
+            </div>
+        </div>
+
             <!-- Kontainer Rekomendasi (Akan diisi otomatis oleh JavaScript nanti) -->
             <div id="recom-container">
                 <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0;">
