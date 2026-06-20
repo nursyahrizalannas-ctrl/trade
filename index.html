@@ -1,46 +1,178 @@
-<!-- FITUR: Market Risk O'Meter -->
-<div class="card" style="border-left: 4px solid #ff4757; margin-bottom: 15px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h4 style="color:#ff4757; margin: 0;">🚨 Market Risk O'Meter</h4>
-        <span style="font-size: 12px; font-weight: bold; background: rgba(255, 71, 87, 0.2); color: #ff4757; padding: 4px 8px; border-radius: 6px;">HIGH RISK</span>
-    </div>
-    <div class="risk-bar-container">
-        <div class="risk-bar-fill" style="width: 85%; background: linear-gradient(90deg, #ffa502, #ff4757);"></div>
-    </div>
-    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
-        <strong>Status:</strong> Volatilitas tinggi. Rilis data <span style="color: white;">NFP & Unemployment Rate</span> malam ini. Hindari entry sebelum data rilis.
-    </p>
-</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANTIPRAKTIS - Pro</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-<!-- FITUR: AI Macro Watchlist -->
-<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 15px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h4 style="color:var(--accent-green); margin: 0;">🎯 Top Setup Antipraktis</h4>
-        <button class="action-btn" style="background: transparent; border: 1px solid var(--accent-green); color: var(--accent-green); padding: 4px 10px; font-size: 11px;" onclick="askAI('WATCHLIST', 'Berikan update detail untuk watchlist hari ini')">🔄 UPDATE</button>
-    </div>
+    <header class="app-header">
+        <h2>Antipraktis Logic</h2>
+    </header>
 
-    <!-- Rekomendasi 1 -->
-    <div class="recom-item">
-        <div class="recom-header">
-            <div class="recom-asset">
-                <span class="icon">🥇</span>
-                <span class="symbol">XAU/USD</span>
-            </div>
-            <span class="badge badge-buy">BUY ON DIP</span>
+    <div id="quiz-overlay">
+        <h2 style="color: var(--text-main); font-size: 24px; margin-bottom: 10px;">🚀 Welcome, Trader!</h2>
+        <div class="card" style="border-left: 4px solid var(--accent-yellow); max-width: 400px; text-align: left; margin-bottom: 20px;">
+            <div id="quiz-achievement" style="color: var(--accent-yellow); font-size: 13px; font-weight: 600;">Memuat Data...</div>
         </div>
-        <p class="recom-reason">Dolar melemah pasca dovish the Fed. Tunggu koreksi ke area liquidity 2320-2315.</p>
-        <button class="action-btn buy" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 8px;" onclick="askAI('ANALYSIS', 'Analisis mendalam XAUUSD hari ini dengan gaya antipraktis')">🤖 Analisis AI XAUUSD</button>
+        <div class="quiz-card">
+            <p style="color: var(--text-muted); margin-top: 0; font-size: 13px;">Selesaikan kuis keamanan makro ini untuk masuk ke Dashboard</p>
+            <h3 id="quiz-question" style="margin-top: 10px; color: white; font-size: 16px; line-height: 1.4;">Memuat kuis...</h3>
+            <div id="quiz-options" style="margin-top: 20px;"></div>
+        </div>
     </div>
 
-    <!-- Rekomendasi 2 -->
-    <div class="recom-item">
-        <div class="recom-header">
-            <div class="recom-asset">
-                <span class="icon">💶</span>
-                <span class="symbol">EUR/USD</span>
+    <div id="ai-modal">
+        <div class="ai-sheet">
+            <div class="sheet-handle"></div>
+            <div class="ai-header" id="ai-modal-title">🤖 Analisis Market</div>
+            <div class="ai-body" id="ai-content">
+                <i>Menganalisis data institusi... mohon tunggu beberapa detik ⏳</i>
             </div>
-            <span class="badge badge-sell">SELL ON RALLY</span>
+            
+            <div style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;" id="followup-container">
+                <div class="trade-row">
+                    <input type="text" id="ai-followup" placeholder="💬 Tanya lebih lanjut..." style="border-radius: 20px; padding: 12px 20px;">
+                    <button class="action-btn buy" style="flex: 0.4; border-radius: 20px; margin-top: 8px;" onclick="sendFollowUp()">KIRIM</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <button class="action-btn" id="btn-belum-paham" style="background: var(--accent-yellow); color: #000; display: none;" onclick="explainLikeTK()">👶 JELASKAN GAYA TK (ROASTING)</button>
+                <div class="trade-row">
+                    <button class="action-btn blue" id="btn-save-ai" style="display: none;" onclick="saveToLibrary()">💾 SIMPAN</button>
+                    <button class="action-btn sell" onclick="document.getElementById('ai-modal').style.display='none'">TUTUP</button>
+                </div>
+            </div>
         </div>
-        <p class="recom-reason">ECB potong suku bunga lebih agresif dari proyeksi. Tekanan bearish kuat.</p>
+    </div>
+
+    <div id="main" class="content active">
+        <div class="card" style="border-left: 4px solid var(--accent-blue);">
+            <h4 style="color:var(--accent-blue);">🎯 Setup Target Harga</h4>
+            <input type="text" id="dataInput" placeholder="Masukkan Target Harga (Contoh: 2350)">
+            <button class="action-btn blue" onclick="kirimDataBot()">Kirim Target ke Bot</button>
+        </div>
+
+        <div class="card" style="padding: 0; border: none; background: #131722;">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+              { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "GOLD" }, { "proName": "FX:EURUSD", "title": "EUR/USD" }, { "proName": "FX:USDJPY", "title": "USD/JPY" }, { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR" }, { "proName": "BINANCE:BTCUSDT", "title": "BITCOIN" } ], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "id" }
+              </script>
+            </div>
+            
+        </div><!-- START: AI RECOMMENDATION WIDGET -->
+<div class="card" style="border-left: 4px solid var(--accent-purple, #9b59b6);">
+    <div class="recom-header">
+        <h4 style="color: var(--accent-purple, #9b59b6);">⚡ AI Macro Watchlist</h4>
+        <button class="refresh-btn" onclick="generateRecommendations()">🔄 Perbarui</button>
+    </div>
+    
+    <div class="recom-list" id="recom-container">
+        <!-- Data akan di-inject lewat JavaScript -->
+        <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0;">
+            ⏳ Menarik data bias market...
+        </div>
+    </div>
+    
+    <div class="recom-disclaimer">
+        *Data berdasarkan analisis AI makro & institusi. Bukan saran keuangan pasti (NFA).
     </div>
 </div>
+<!-- END: AI RECOMMENDATION WIDGET -->
+
+
+        <div class="card" id="session-container">
+            <h4 style="color:var(--accent-blue);">🌍 Global Market Session</h4>
+            <div id="map-area" style="position:relative; width:100%; height:180px; background:url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') no-repeat center center; background-size:contain; opacity:0.8; margin-top:10px;">
+                <div id="syd-tok" class="session-dot" style="left: 80%; top: 40%;" title="Sydney/Tokyo"></div>
+                <div id="lon" class="session-dot" style="left: 48%; top: 30%;" title="London/Eropa"></div>
+                <div id="ny" class="session-dot" style="left: 25%; top: 35%;" title="New York"></div>
+            </div>
+            <div id="sleep-earth" style="display:none; width:100%; height:180px; flex-direction:column; align-items:center; justify-content:center;">
+                <img src="https://cdn3d.iconscout.com/3d/premium/thumb/sleeping-earth-5120613-4277717.png?f=webp" style="height:120px;" alt="Bumi Tidur">
+            </div>
+            <div id="session-status" style="font-size:13px; color:white; margin-top:15px; font-weight:600; text-align: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">Memuat status market...</div>
+        </div>
+    </div>
+
+    <div id="news" class="content">
+        <div class="card" style="border-left: 4px solid var(--accent-yellow);">
+            <h4 style="color:var(--accent-yellow);">📰 Mading Makro Harian</h4>
+            <button class="action-btn" style="background: var(--accent-yellow); color: #000;" onclick="askAI('MADING', 'Buatkan rangkuman berita dan kondisi market terbaru hari ini')">🔄 BACA MADING HARI INI</button>
+        </div>
+
+        <div class="card">
+            <h4 style="color:var(--accent-blue);">🤖 Filter Berita AI</h4>
+            <input type="text" id="newsName" placeholder="Kopas Teks/Nama Berita di sini">
+            <div class="trade-row">
+                <input type="text" id="newsAct" placeholder="Act">
+                <input type="text" id="newsPrev" placeholder="Prev">
+                <input type="text" id="newsFore" placeholder="Fore">
+            </div>
+            <div class="trade-row">
+                <button class="action-btn blue" onclick="processNews('TRANSLATE')">🔤 TERJEMAHKAN</button>
+                <button class="action-btn buy" onclick="processNews('ANALYZE')">🤖 ANALISIS</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edu" class="content">
+        <details class="card" style="margin-bottom: 15px; border-left: 4px solid var(--accent-green);" open>
+            <summary style="color: var(--accent-green); margin-bottom: 0;">📚 Perpustakaan Tersimpan</summary>
+            <div id="library-list" style="margin-top: 15px; max-height: 200px; overflow-y: auto;"></div>
+            <button class="action-btn sell" style="padding: 10px; font-size: 11px;" onclick="clearLibrary()">🗑️ HAPUS PERPUSTAKAAN</button>
+        </details>
+
+        <div class="card">
+            <h4 style="color:var(--accent-green);">💡 Tanya Bebas AI</h4>
+            <input type="text" id="freeChat" placeholder="Cth: Kenapa market gold naik?">
+            <button class="action-btn buy" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">TANYA ANTIPRAKTIS</button>
+        </div>
+    </div>
+
+    <div id="combo" class="content">
+        <div class="card">
+            <h4 style="color: var(--text-main);">Analisis Rilis Ganda</h4>
+            <p>Prioritas data Institusional Logic & Waktu rilis bentrok.</p>
+            <div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket NFP (NFP, Average Hourly Earnings, Unemployment Rate)')">Paket NFP Lengkap</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket CPI (Core CPI & CPI)')">Paket CPI Lengkap</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a class="nav-item active" onclick="showTab('main', this)">
+            <span class="icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a class="nav-item" onclick="showTab('news', this)">
+            <span class="icon">📅</span>
+            <span>Kalender</span>
+        </a>
+        <a class="nav-item" onclick="showTab('edu', this)">
+            <span class="icon">📚</span>
+            <span>Edukasi</span>
+        </a>
+        <a class="nav-item" onclick="showTab('combo', this)">
+            <span class="icon">🔄</span>
+            <span>Combo</span>
+        </a>
+    </nav>
+
+    <script src="js/telegram.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/market.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/library.js"></script>
+    <script src="js/ai.js"></script>
+
+</body>
+</html>
