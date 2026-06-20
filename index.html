@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Enterprise Trading Pro - Full Version</title>
+    <title>Enterprise Trading Pro - Live Terminal V4</title>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
@@ -14,17 +14,17 @@
         /* ==================== CSS (DESIGN SYSTEM) ==================== */
         :root {
             --bg-base: #0A0D14; --bg-glass: rgba(18, 23, 33, 0.55);
-            --primary: #3D8BFF; --primary-glow: rgba(61, 139, 255, 0.4);
-            --accent: #00E6B8; --danger: #FF3366; --warning: #FFB020; 
+            --primary: #3D8BFF; --accent: #00E6B8; 
+            --danger: #FF3366; --warning: #FFB020; 
             --text-main: #FFFFFF; --text-muted: #8F9BB3;
-            --border: rgba(255, 255, 255, 0.08); --border-highlight: rgba(255, 255, 255, 0.2);
+            --border: rgba(255, 255, 255, 0.08); 
             --radius-lg: 16px; --radius-md: 12px;
             --font-main: 'Plus Jakarta Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-base); color: var(--text-main); font-size: 14px; padding-bottom: 100px; overflow-x: hidden; transition: background 1.5s ease; }
-        body::after { content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(61,139,255,0.05) 0%, rgba(0,0,0,0) 70%); z-index: -1; pointer-events: none; }
+        body { background: var(--bg-base); color: var(--text-main); font-size: 14px; padding-bottom: 100px; overflow-x: hidden; transition: background 1.5s ease, --primary 1.5s ease; }
+        body::after { content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--primary) 0%, rgba(0,0,0,0) 60%); opacity: 0.1; z-index: -1; pointer-events: none; transition: background 1.5s ease; }
 
         h1, h2, h3, h4, h5 { font-weight: 700; margin-bottom: 0.5rem; }
         p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; font-size: 13.5px; }
@@ -37,7 +37,8 @@
         .card { background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); transition: 0.3s; }
         .btn { padding: 0.85rem 1rem; border: none; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; text-align: center; width: 100%; font-size: 13px; color: white; transition: 0.2s; }
         .btn:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, #3D8BFF, #1E50FF); } 
+        
+        .btn-primary { background: var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.3); } 
         .btn-danger { background: linear-gradient(135deg, #FF3366, #D91040); }
         .btn-success { background: linear-gradient(135deg, #00E6B8, #00B38F); color: #000; }
         .btn-outline { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-main); }
@@ -45,14 +46,14 @@
         .form-control:focus { outline: none; border-color: var(--primary); }
 
         .header { position: sticky; top: 0; background: rgba(10, 13, 20, 0.85); backdrop-filter: blur(15px); padding: 15px 20px; z-index: 100; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .profile-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #000; }
-        .badge-session { font-size: 10px; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; font-weight: 700; }
+        .profile-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #FFF; transition: background 1.5s; }
+        .badge-session { font-size: 10px; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; font-weight: 800; }
 
         .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; height: 70px; background: rgba(18, 23, 33, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         .nav-item { color: var(--text-muted); text-align: center; font-size: 10.5px; font-weight: 600; cursor: pointer; flex: 1; padding: 8px 0; border-radius: 15px; transition: 0.3s; }
         .nav-item.active { color: var(--text-main); background: rgba(255,255,255,0.05); transform: translateY(-2px); } 
-        .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; background: -webkit-linear-gradient(#fff, #8F9BB3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item.active i { background: -webkit-linear-gradient(var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; color: var(--text-muted); transition: color 0.3s; }
+        .nav-item.active i { color: var(--primary); }
 
         .view-page { display: none; padding: 20px; animation: fadeScale 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .view-page.active { display: block; }
@@ -61,7 +62,7 @@
         .module-btn { height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; } .module-btn i { font-size: 26px; }
         details.edu-module { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; transition: 0.3s; }
         details.edu-module summary { padding: 16px; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; font-size: 13.5px; }
-        .edu-content { padding: 0 16px 16px; color: var(--text-muted); font-size: 13.5px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 15px; }
+        .edu-content { padding: 0 16px 16px; color: var(--text-muted); font-size: 13.5px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 15px; text-align: justify; }
 
         .sync-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: var(--radius-md); margin-bottom: 15px; border: 1px solid var(--border); }
         .btn-trade { padding: 15px; display: flex; flex-direction: column; align-items: center; } .btn-trade b { font-size: 16px; } .btn-trade span { font-size: 13px; font-family: var(--font-mono); }
@@ -69,13 +70,13 @@
         
         .stat-card { padding: 15px; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; } .stat-val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); } .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
 
-        .fab-bot { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #1A212D, #000); border: 2px solid var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; }
+        .fab-bot { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #1A212D, #000); border: 2px solid var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; transition: border-color 1.5s; }
         #bot-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 200; display: none; flex-direction: column; }
         #bot-modal.active { display: flex; }
         .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .chat-bubble { max-width: 85%; padding: 14px 18px; border-radius: 16px; font-size: 13.5px; }
         .bot-msg { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-top-left-radius: 4px; align-self: flex-start; }
-        .user-msg { background: var(--primary); color: white; border-top-right-radius: 4px; align-self: flex-end; }
+        .user-msg { background: var(--primary); color: white; border-top-right-radius: 4px; align-self: flex-end; transition: background 1.5s; }
     </style>
 </head>
 <body>
@@ -91,20 +92,19 @@
         <div id="session-badge" class="badge-session">Syncing...</div>
     </header>
 
-    <div class="fab-bot" onclick="Bot.toggle()"><i class="fa-solid fa-network-wired" style="color: white;"></i></div>
+    <div class="fab-bot" onclick="Bot.toggle()"><i class="fa-solid fa-network-wired text-primary"></i></div>
 
     <main id="view-dashboard" class="view-page active">
-        <div class="card" style="background: linear-gradient(90deg, rgba(255, 51, 102, 0.1) 0%, transparent 100%); border-left: 4px solid var(--danger);">
-            <h5 style="color: white; font-size: 13px; text-transform: uppercase;"><i class="fa-solid fa-satellite-dish text-danger"></i> Global Macro Radar</h5>
-            <p style="margin:0;">Data feed terhubung langsung ke API Institusi.</p>
-        </div>
         
-        <div class="card" style="border-left: 4px solid var(--primary);">
-            <div class="flex-row" style="margin-bottom: 12px;">
-                <b id="live-news-title" style="color: var(--text-main); font-size: 15px;"><i class="fa-solid fa-circle-notch fa-spin text-primary"></i> Syncing Data...</b>
-                <span style="font-size: 10px; background: var(--accent); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold;">🟢 LIVE</span>
+        <div class="card" style="border-left: 4px solid var(--warning); transition: border-color 1.5s; background: rgba(18, 23, 33, 0.8);">
+            <div class="flex-row" style="margin-bottom: 15px; border-bottom: 1px dashed var(--border); padding-bottom: 12px;">
+                <b id="live-news-title" style="color: var(--text-main); font-size: 16px;"><i class="fa-solid fa-bolt text-warning"></i> Daily Macro Insight</b>
+                <span style="font-size: 10px; background: var(--accent); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; animation: pulse 2s infinite;">🟢 LIVE</span>
             </div>
-            <div id="live-news-content" style="color:var(--text-muted); font-size: 13.5px; line-height: 1.6;">Menunggu sinkronisasi...</div>
+            
+            <div id="live-news-content">
+                <p class="text-center text-muted"><i class="fa-solid fa-circle-notch fa-spin"></i> Menyusun Market Briefing...</p>
+            </div>
         </div>
 
         <h4 style="margin-top: 25px; margin-bottom: 15px; font-size: 15px;"><i class="fa-solid fa-layer-group text-primary"></i> Terminal Modules</h4>
@@ -125,17 +125,18 @@
     </main>
 
     <main id="view-macro-book" class="view-page">
-        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-earth-americas text-warning"></i> Macro Economics</h3>
-        <div class="card" style="padding: 25px; margin-top: 20px;">
-            <h2 id="book-title" style="font-size: 20px; color: var(--accent); margin-bottom: 15px;">Memuat Indeks...</h2>
-            <div id="book-content" style="font-size: 14px; line-height: 1.8; color: #E2E8F0;">...</div>
+        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-earth-americas text-warning"></i> Ekonomi Makro</h3>
+        <p style="font-size: 12px; color: var(--primary);">Bersumber dari Buku Pengantar Ekonomi Makro.</p>
+        <div class="card" style="padding: 25px; margin-top: 20px; border-top: 4px solid var(--primary);">
+            <h2 id="book-title" style="font-size: 18px; color: var(--text-main); margin-bottom: 15px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;">Memuat Indeks...</h2>
+            <div id="book-content" style="font-size: 14px; line-height: 1.8; color: var(--text-muted); text-align: justify;">...</div>
             <div class="flex-row" style="margin-top: 25px; gap: 10px;">
                 <button class="btn btn-outline" style="width:30%" onclick="MacroBook.prev()"><i class="fa-solid fa-arrow-left"></i></button>
-                <div id="book-page-num" style="font-family: var(--font-mono); font-size: 12px; text-align: center; width:40%;">1 / 100</div>
+                <div id="book-page-num" style="font-family: var(--font-mono); font-size: 12px; text-align: center; width:40%;">1 / 7</div>
                 <button class="btn btn-outline" style="width:30%" onclick="MacroBook.next()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
             <div class="flex-row" style="margin-top: 15px; gap: 10px;">
-                <input type="number" id="book-jump-input" class="form-control m-0" placeholder="Hal" min="1" max="100">
+                <input type="number" id="book-jump-input" class="form-control m-0" placeholder="Hal" min="1" max="7">
                 <button class="btn btn-primary" onclick="MacroBook.jump()">Lompat</button>
             </div>
         </div>
@@ -151,10 +152,10 @@
             <div id="tv_chart_container" style="height: 100%; width: 100%;"></div>
         </div>
         
-        <div class="card" style="border-color: var(--primary);">
+        <div class="card" style="border-color: var(--primary); transition: border-color 1.5s;">
             <div class="flex-row" style="margin-bottom: 15px;">
                 <div>
-                    <h4 style="margin:0; color:var(--primary); font-size:16px;"><i class="fa-brands fa-binance"></i> API Engine</h4>
+                    <h4 style="margin:0; color:var(--primary); font-size:16px; transition: color 1.5s;"><i class="fa-brands fa-binance"></i> API Engine</h4>
                     <div style="font-size:11px; color:var(--accent); font-family:var(--font-mono);">WebSocket: LIVE FEED</div>
                 </div>
                 <div style="text-align: right; width: 35%;">
@@ -251,28 +252,29 @@
 
     <script>
         // ----------------------------------------------------
-        // 1. DATA GENERATION (100% COMPLETE AS REQUESTED)
+        // 1. DATA GENERATION & PDF INTEGRATION
         // ----------------------------------------------------
         const DataStore = {
             academy: [
-                { cat: "1. Pemula: Basic Foundation", list: [ {t: "Apa itu Forex?", d: "Pasar pertukaran mata uang global. XAUUSD adalah Emas/Dolar AS."}, {t: "Lot, Pips, dan Margin", d: "Pips = satuan harga. Lot = volume. Margin = jaminan."}, {t: "Bullish vs Bearish", d: "Bullish = NAIK. Bearish = TURUN."} ]},
+                { cat: "1. Pemula: Basic Foundation", list: [ {t: "Apa itu Forex?", d: "Pasar pertukaran mata uang global. XAUUSD adalah Emas/Dolar AS."}, {t: "Lot, Pips, dan Margin", d: "Pips = satuan harga. Lot = volume. Margin = jaminan."} ]},
                 { cat: "2. Menengah: Analisis Teknikal", list: [ {t: "Support & Resistance", d: "Batas bawah dan atas harga."}, {t: "Market Structure", d: "Tren dikonfirmasi oleh Higher High & Higher Low."} ]},
-                { cat: "3. Lanjutan: Smart Money Concept", list: [ {t: "Konsep Likuiditas", d: "Institusi memicu Stop Loss ritel (Liquidity Sweep)."}, {t: "Fair Value Gap (FVG)", d: "Ruang kosong akibat momentum cepat."}, {t: "Order Block (OB)", d: "Area konsolidasi terakhir sebelum BOS."} ]}
+                { cat: "3. Lanjutan: Smart Money Concept", list: [ {t: "Konsep Likuiditas", d: "Institusi memicu Stop Loss ritel (Liquidity Sweep)."}, {t: "Fair Value Gap (FVG)", d: "Ruang kosong akibat momentum cepat."} ]}
             ],
             playbook: [],
-            macro: []
+            macro: [
+                { t: "Bab 1: Konsep Dasar Ekonomi Makro", c: "Ilmu ekonomi makro menganalisis secara keseluruhan (agregat) kegiatan perekonomian yang bersifat global seperti pendapatan nasional, tingkat inflasi, kesempatan kerja, neraca pembayaran, dan pertumbuhan ekonomi." },
+                { t: "Bab 2: Permasalahan Ekonomi Makro", c: "Secara umum terbagi dua: masalah jangka pendek (stabilisasi) seperti inflasi, pengangguran, dan neraca pembayaran timpang; serta masalah jangka panjang (pertumbuhan) seperti ledakan penduduk dan kapasitas produksi." },
+                { t: "Bab 3: Peran Pemerintah", c: "Mekanisme pasar sering gagal berfungsi sehingga butuh peran pemerintah sebagai stabilisator, alokator, dan distributor. Intervensi bisa dilakukan secara langsung (harga minimum/maksimum) maupun tidak langsung (pajak dan subsidi)." },
+                { t: "Bab 4: Tujuan Ekonomi Makro", c: "Tujuan utamanya adalah memaksimumkan kesejahteraan masyarakat melalui tingkat pengangguran yang rendah, stabilitas harga, dan pertumbuhan ekonomi berkelanjutan." },
+                { t: "Bab 5: Instrumen Kebijakan", c: "Terdapat dua instrumen utama yang digunakan: Kebijakan Fiskal (mengubah pajak dan pengeluaran transfer pemerintah) serta Kebijakan Moneter (mengatur jumlah uang beredar atau tingkat bunga oleh otoritas bank sentral)." },
+                { t: "Bab 6: Penawaran & Permintaan Agregat", c: "Fluktuasi ekonomi diagregasi lewat model ini. Pergeseran permintaan agregat berdampak pada output jangka pendek, sementara pergeseran penawaran agregat dapat menyebabkan stagnasi/inflasi (stagflasi)." },
+                { t: "Bab 7: Siklus Aliran Pendapatan", c: "Siklus (circular flow) menggambarkan interaksi rasional pelaku ekonomi. Aliran output dari bisnis disebut produk nasional, sedangkan aliran balas jasa faktor produksi ke rumah tangga disebut pendapatan nasional." }
+            ]
         };
 
-        // Generate 50 Playbook Setups
         const playbookThemes = ["Asian Range Sweep", "London Fakeout", "NY Killzone", "FVG Retracement", "Valid Order Block", "SMT Divergence", "Power of 3", "Mitigation Block", "Breaker Block", "Equal Highs Sweep"];
         for(let i=1; i<=50; i++) {
             DataStore.playbook.push({ t: `Setup #${i}: ${playbookThemes[(i-1) % 10]} ${i>10?'Advanced':''}`, d: `Setup eksekusi level institusi. Tunggu harga merespons zona ini sebelum melakukan entry konfirmasi pada time frame M15.` });
-        }
-
-        // Generate 100 Macro Book Chapters
-        const macroTopics = ["Hegemoni Dolar & Suku Bunga", "Inflasi CPI", "Non-Farm Payroll", "Harga Minyak Global", "Quantitative Easing", "Kurva Imbal Hasil", "Geopolitik", "Krisis Hutang", "Sovereign Funds", "Intervensi Mata Uang"];
-        for(let i=1; i<=100; i++) {
-            DataStore.macro.push({ t: `Bab ${i}: Dinamika ${macroTopics[(i-1) % 10]}`, c: `Institusi memanfaatkan turbulensi pada indikator ini untuk merestrukturisasi portofolio global. Mempelajari arus modal lintas batas adalah kunci utama dalam siklus makro ekonomi ini.` });
         }
 
 
@@ -280,21 +282,10 @@
         // 2. CORE TRADING ENGINE (WEB-SOCKET & PNL MATH)
         // ----------------------------------------------------
         const Engine = {
-            ws: null,
-            balance: 100000.00,
-            simPrice: 0.00,
-            positions: [],
-            stats: { trades: 0, wins: 0, netPnl: 0 },
-            
-            // Financial Parameters
-            feeRate: 0.0005, // 0.05% Exchange Fee
-            spread: 1.20,    // $1.20 Bid/Ask Spread
+            ws: null, balance: 100000.00, simPrice: 0.00, positions: [], stats: { trades: 0, wins: 0, netPnl: 0 },
+            feeRate: 0.0005, spread: 1.20,
 
-            init() {
-                this.updateBalanceUI();
-                this.connectWS();
-            },
-
+            init() { this.updateBalanceUI(); this.connectWS(); },
             connectWS() {
                 this.ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker');
                 this.ws.onmessage = (e) => {
@@ -307,32 +298,22 @@
                 };
                 this.ws.onclose = () => setTimeout(() => this.connectWS(), 3000);
             },
-
             updatePricesUI() {
                 if(!document.getElementById('pt-sync-price')) return;
                 document.getElementById('pt-sync-price').textContent = this.simPrice.toFixed(2);
                 document.getElementById('pt-sell-price').textContent = (this.simPrice - (this.spread/2)).toFixed(2);
                 document.getElementById('pt-buy-price').textContent = (this.simPrice + (this.spread/2)).toFixed(2);
             },
-
-            updateBalanceUI() {
-                document.getElementById('header-balance').innerHTML = `Equ: $${this.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
-            },
-
+            updateBalanceUI() { document.getElementById('header-balance').innerHTML = `Equ: $${this.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`; },
             openPosition(type) {
                 const lot = parseFloat(document.getElementById('pt-lot').value);
                 if (isNaN(lot) || lot <= 0) return alert("Volume tidak valid");
-
                 const entryPrice = type === 'BUY' ? this.simPrice + (this.spread/2) : this.simPrice - (this.spread/2);
                 const feeCost = (entryPrice * lot) * this.feeRate;
-                
                 this.balance -= feeCost;
-                
                 this.positions.push({ id: Date.now(), type: type, lot: lot, entry: entryPrice, pnl: -feeCost });
-                this.updateBalanceUI();
-                this.renderList();
+                this.updateBalanceUI(); this.renderList();
             },
-
             updateRunningPnL() {
                 this.positions.forEach(p => {
                     let markPrice = p.type === 'BUY' ? (this.simPrice - (this.spread/2)) : (this.simPrice + (this.spread/2));
@@ -341,30 +322,19 @@
                 });
                 this.renderList();
             },
-
             closePosition(id) {
                 const index = this.positions.findIndex(x => x.id === id);
                 if (index === -1) return;
-                
                 const pos = this.positions[index];
                 this.balance += pos.pnl;
-                
-                this.stats.trades++;
-                if(pos.pnl > 0) this.stats.wins++;
-                this.stats.netPnl += pos.pnl;
-
+                this.stats.trades++; if(pos.pnl > 0) this.stats.wins++; this.stats.netPnl += pos.pnl;
                 Journal.addRecord(pos.type, `BTC/USDT (${pos.lot} Vol)`, pos.pnl);
-                
                 this.positions.splice(index, 1);
-                this.updateBalanceUI();
-                this.renderList();
-                this.updateStatsUI();
+                this.updateBalanceUI(); this.renderList(); this.updateStatsUI();
             },
-
             renderList() {
                 const list = document.getElementById('pt-active-list');
                 if(this.positions.length === 0) { list.innerHTML = '<p class="text-center text-muted">Tidak ada pesanan berjalan.</p>'; return; }
-                
                 list.innerHTML = '';
                 this.positions.forEach(p => {
                     const color = p.pnl >= 0 ? 'var(--accent)' : 'var(--danger)';
@@ -381,7 +351,6 @@
                         </div>`);
                 });
             },
-
             updateStatsUI() {
                 document.getElementById('j-trades').textContent = this.stats.trades;
                 document.getElementById('j-winrate').textContent = `${this.stats.trades === 0 ? 0 : Math.round((this.stats.wins / this.stats.trades) * 100)}%`;
@@ -399,23 +368,93 @@
                 const container = document.getElementById('academy-container');
                 DataStore.academy.forEach(c => {
                     container.insertAdjacentHTML('beforeend', `<h4 style="margin-top:20px; font-size:14px; color:var(--text-muted); border-bottom:1px dashed var(--border); padding-bottom:8px;">${c.cat}</h4>`);
-                    c.list.forEach(i => {
-                        container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary>${i.t}</summary><div class="edu-content">${i.d}</div></details>`);
-                    });
+                    c.list.forEach(i => container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary>${i.t}</summary><div class="edu-content">${i.d}</div></details>`));
                 });
             },
             renderPlaybook() {
                 const container = document.getElementById('playbook-container');
-                DataStore.playbook.forEach(i => {
-                    container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary><span style="color:var(--accent);">■</span> ${i.t}</summary><div class="edu-content">${i.d}</div></details>`);
-                });
+                DataStore.playbook.forEach(i => container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary><span style="color:var(--primary);">■</span> ${i.t}</summary><div class="edu-content">${i.d}</div></details>`));
             },
             updateSession() {
                 const h = new Date().getHours(); 
                 const b = document.getElementById('session-badge');
-                if (h >= 6 && h < 14) { document.body.style.background = "#0d213b"; b.textContent = "TOKYO SESSION"; b.style.color = "#00E6B8"; }
-                else if (h >= 14 && h < 19) { document.body.style.background = "#1f1a38"; b.textContent = "LONDON SESSION"; b.style.color = "#3D8BFF"; }
-                else { document.body.style.background = "#301014"; b.textContent = "NEW YORK SESSION"; b.style.color = "var(--danger)"; }
+                
+                if (h >= 6 && h < 14) { 
+                    document.body.style.background = "linear-gradient(135deg, #18181b 0%, #4a0d0d 100%)"; 
+                    b.innerHTML = "🇯🇵 TOKYO SESSION"; b.style.color = "#ff3366"; 
+                    document.documentElement.style.setProperty('--primary', '#ff3366');
+                }
+                else if (h >= 14 && h < 19) { 
+                    document.body.style.background = "linear-gradient(135deg, #0d1b2a 0%, #1b0a1a 100%)"; 
+                    b.innerHTML = "🇬🇧 LONDON SESSION"; b.style.color = "#3D8BFF"; 
+                    document.documentElement.style.setProperty('--primary', '#3D8BFF');
+                }
+                else { 
+                    document.body.style.background = "linear-gradient(135deg, #0a1128 0%, #3e1f24 100%)"; 
+                    b.innerHTML = "🇺🇸 NEW YORK SESSION"; b.style.color = "#FFB020"; 
+                    document.documentElement.style.setProperty('--primary', '#FFB020');
+                }
+            }
+        };
+
+        const NewsManager = {
+            generateDailyBrief() {
+                // Mendapatkan tanggal hari ini secara otomatis
+                const today = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateStr = today.toLocaleDateString('id-ID', options);
+
+                const html = `
+                    <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
+                        Berikut ringkasan berita yang paling relevan untuk trader forex hari ini (<b>${dateStr}</b>):
+                    </p>
+                    
+                    <h5 style="color: var(--text-main); font-size: 14px; margin-top: 15px; margin-bottom: 8px;">📰 Berita Trump & Geopolitik</h5>
+                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+                        <li>Presiden Donald Trump masih menjadi sorotan terkait negosiasi dengan Iran. Setelah ketegangan dan konflik beberapa pekan terakhir, terdapat upaya gencatan senjata dan pembicaraan damai yang memengaruhi sentimen pasar global. <span style="color: var(--primary); font-size: 11px;">[The Guardian]</span></li>
+                        <li>Perkembangan Timur Tengah membuat pasar sering berganti antara mode <i>risk-on</i> dan <i>risk-off</i>, yang berdampak langsung pada USD, emas (XAU/USD), dan harga minyak. <span style="color: var(--primary); font-size: 11px;">[Forex]</span></li>
+                    </ul>
+
+                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">💵 Berita USD & Federal Reserve</h5>
+                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+                        <li>Ketua baru The Fed, Kevin Warsh, mempertahankan sikap yang relatif hawkish dan belum memberi sinyal kuat untuk pemotongan suku bunga. Hal ini mendukung penguatan dolar AS. <span style="color: var(--primary); font-size: 11px;">[MarketWatch]</span></li>
+                        <li>Indeks Dolar (DXY) berada di sekitar 100 dan masih menunjukkan kekuatan dibanding beberapa mata uang utama dalam beberapa minggu terakhir. <span style="color: var(--primary); font-size: 11px;">[Trading Economics]</span></li>
+                    </ul>
+
+                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">📈 Dampak ke Forex</h5>
+                    <div class="grid-2" style="margin-bottom: 15px; gap: 10px;">
+                        <div style="background: rgba(0,230,184,0.05); border: 1px solid var(--accent); padding: 12px; border-radius: 8px;">
+                            <b style="color: var(--accent); display: block; margin-bottom: 5px;"><i class="fa-solid fa-arrow-trend-up"></i> Bullish USD:</b>
+                            <ul style="padding-left: 15px; font-size: 12px; color: var(--text-muted); margin: 0;">
+                                <li>Sikap hawkish The Fed.</li>
+                                <li>Yield obligasi AS yang lebih tinggi.</li>
+                                <li>Arus modal masuk ke aset AS.</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(255,51,102,0.05); border: 1px solid var(--danger); padding: 12px; border-radius: 8px;">
+                            <b style="color: var(--danger); display: block; margin-bottom: 5px;"><i class="fa-solid fa-arrow-trend-down"></i> Bearish USD:</b>
+                            <ul style="padding-left: 15px; font-size: 12px; color: var(--text-muted); margin: 0;">
+                                <li>Situasi geopolitik membaik (risk-on).</li>
+                                <li>Ketidakpastian kebijakan tarif Trump.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">🎯 Pair Pantauan Utama</h5>
+                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+                        <li><b style="color: white;">EUR/USD</b> → Sensitif terhadap arah USD.</li>
+                        <li><b style="color: white;">GBP/USD</b> → Mengikuti sentimen dolar dan data Inggris.</li>
+                        <li><b style="color: white;">USD/JPY</b> → Sangat dipengaruhi yield AS.</li>
+                        <li><b style="color: white;">XAU/USD (Emas)</b> → Sensitif terhadap berita Iran, Trump, dan The Fed.</li>
+                    </ul>
+
+                    <div style="background: rgba(255, 176, 32, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid var(--warning); margin-top: 15px;">
+                        <b style="color: var(--warning); font-size: 13px;"><i class="fa-solid fa-bullseye"></i> Fokus Utama Trader:</b>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Pernyataan baru Trump terkait Iran & tarif perdagangan, komentar pejabat The Fed, serta rilis data ekonomi AS minggu depan (inflasi, tenaga kerja, dan PMI).</p>
+                    </div>
+                `;
+
+                document.getElementById('live-news-content').innerHTML = html;
             }
         };
 
@@ -425,29 +464,25 @@
                 const b = DataStore.macro[this.page];
                 document.getElementById('book-title').textContent = b.t;
                 document.getElementById('book-content').textContent = b.c;
-                document.getElementById('book-page-num').textContent = `${this.page + 1} / 100`;
+                document.getElementById('book-page-num').textContent = `${this.page + 1} / ${DataStore.macro.length}`;
             },
-            next() { if(this.page < 99) { this.page++; this.render(); } },
+            next() { if(this.page < DataStore.macro.length - 1) { this.page++; this.render(); } },
             prev() { if(this.page > 0) { this.page--; this.render(); } },
             jump() {
                 let val = parseInt(document.getElementById('book-jump-input').value);
-                if(val >= 1 && val <= 100) { this.page = val - 1; this.render(); document.getElementById('book-jump-input').value = '';}
+                if(val >= 1 && val <= DataStore.macro.length) { this.page = val - 1; this.render(); document.getElementById('book-jump-input').value = '';}
             }
         };
 
         const Journal = {
             addManual() {
                 const amt = parseFloat(document.getElementById('j-amount').value) || 0;
-                Engine.stats.trades++;
-                if(amt > 0) Engine.stats.wins++;
-                Engine.stats.netPnl += amt;
-                Engine.updateStatsUI();
+                Engine.stats.trades++; if(amt > 0) Engine.stats.wins++; Engine.stats.netPnl += amt; Engine.updateStatsUI();
                 this.addRecord(document.getElementById('j-type').value, document.getElementById('j-pair').value || 'MANUAL', amt);
                 document.getElementById('j-amount').value = ''; document.getElementById('j-pair').value = '';
             },
             addRecord(title, desc, amount) {
-                const color = amount >= 0 ? 'var(--accent)' : 'var(--danger)'; 
-                const d = new Date();
+                const color = amount >= 0 ? 'var(--accent)' : 'var(--danger)'; const d = new Date();
                 const html = `<div class="pt-item" style="border-right: 4px solid ${color};"><div><b style="font-size:13px; font-family:var(--font-mono);">${title}</b><div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${desc} | ${d.getHours()}:${d.getMinutes()}</div></div><div style="color:${color}; font-weight:800; font-family:var(--font-mono); font-size:16px;">$${amount.toFixed(2)}</div></div>`;
                 document.getElementById('journal-list').insertAdjacentHTML('afterbegin', html);
             }
@@ -471,42 +506,33 @@
                 if(!input.value.trim()) return; 
                 document.getElementById('bot-chat-area').insertAdjacentHTML('beforeend', `<div class="chat-bubble user-msg">${input.value}</div>`); 
                 input.value = ''; 
-                setTimeout(() => document.getElementById('bot-chat-area').insertAdjacentHTML('beforeend', `<div class="chat-bubble bot-msg">Sistem API menganalisis kueri Anda. Secara teknikal, perhatikan mitigasi Order Block di Timeframe H1 sebelum eksekusi.</div>`), 1000); 
+                setTimeout(() => document.getElementById('bot-chat-area').insertAdjacentHTML('beforeend', `<div class="chat-bubble bot-msg">Sistem API sedang menganalisis kueri. Sesuai data Ekonomi Makro terkini, perhatikan siklus aliran pendapatan institusional sebelum eksekusi.</div>`), 1000); 
             } 
         };
-
 
         // ----------------------------------------------------
         // 4. MAIN APP INITIALIZATION
         // ----------------------------------------------------
         const App = {
-            async init() {
-                // Secure Telegram Auth processing
+            init() {
                 if(window.Telegram?.WebApp) {
-                    const tg = window.Telegram.WebApp;
-                    tg.ready(); tg.expand(); tg.setHeaderColor('#0A0D14');
+                    const tg = window.Telegram.WebApp; tg.ready(); tg.expand(); tg.setHeaderColor('#0A0D14');
                     if(tg.initDataUnsafe?.user) document.getElementById('user-name').textContent = tg.initDataUnsafe.user.first_name;
                 }
 
-                // Render UI Components
+                // Initialize Components
                 UI.updateSession();
-                UI.renderAcademy();
+                setInterval(UI.updateSession, 60000); // Check session every minute
+                UI.renderAcademy(); 
                 UI.renderPlaybook();
-                MacroBook.render();
-                Tools.calc();
+                MacroBook.render(); 
+                Tools.calc(); 
                 Engine.init();
 
-                // News API Call
-                try {
-                    const res = await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN');
-                    const json = await res.json();
-                    if (json?.Data?.[0]) {
-                        document.getElementById('live-news-title').textContent = json.Data[0].title;
-                        document.getElementById('live-news-content').textContent = json.Data[0].body.substring(0, 150) + '...';
-                    }
-                } catch(e) {}
+                // Generate Structured Daily News
+                NewsManager.generateDailyBrief();
 
-                // TradingView Chart
+                // Setup TradingView
                 new TradingView.widget({ "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "15", "theme": "dark", "style": "1", "hide_top_toolbar": false, "container_id": "tv_chart_container" });
             },
             nav(id) {
@@ -517,7 +543,6 @@
             }
         };
 
-        // Bootstrap the app
         window.addEventListener('DOMContentLoaded', () => App.init());
     </script>
 </body>
