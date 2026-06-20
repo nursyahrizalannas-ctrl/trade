@@ -4,113 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Antipraktis Trade Academy - Pro</title>
+    
+    <!-- Memanggil Library Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Memanggil Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <style>
-        /* --- TEMA PREMIUM TRADE ACADEMY --- */
-        :root {
-            --bg-main: #0B0E14;
-            --card-bg: #151A22;
-            --text-main: #FFFFFF;
-            --text-muted: #8B949E;
-            --border-color: #2b2f3a;
-            --accent-blue: #2962FF;
-            --accent-purple: #9D4EDD;
-            --accent-yellow: #F5B041;
-            --accent-green: #00C853;
-            --accent-red: #D50000;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            padding-bottom: 80px; /* Ruang untuk navigasi bawah */
-        }
-
-        /* Header App */
-        .app-header {
-            background: rgba(21, 26, 34, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-color);
-            text-align: center;
-        }
-        .app-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(90deg, #FFFFFF, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Kontainer Utama & Card */
-        .content { display: none; padding: 15px; }
-        .content.active { display: block; animation: fadeIn 0.3s ease; }
-        
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .card h4 { font-size: 15px; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-
-        /* Form Input & Tombol */
-        input[type="text"] {
-            width: 100%; padding: 12px; margin-bottom: 10px;
-            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
-            color: white; border-radius: 8px; font-size: 14px; outline: none;
-        }
-        input[type="text"]:focus { border-color: var(--accent-blue); }
-
-        .action-btn {
-            width: 100%; padding: 12px; font-weight: 600; font-size: 14px;
-            border: none; border-radius: 8px; cursor: pointer; color: white;
-            transition: opacity 0.2s;
-        }
-        .action-btn:active { opacity: 0.8; transform: scale(0.98); }
-        .action-btn.blue { background: var(--accent-blue); }
-        .action-btn.buy { background: var(--accent-green); }
-        .action-btn.sell { background: var(--accent-red); }
-        
-        .trade-row { display: flex; gap: 10px; margin-bottom: 10px; }
-
-        /* Widget Rekomendasi AI Makro */
-        .recom-item {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color);
-            border-radius: 8px; padding: 12px; margin-bottom: 10px;
-        }
-        .recom-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .asset-name { font-weight: 700; font-size: 15px; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-        .badge.bullish { background: rgba(0, 200, 83, 0.2); color: var(--accent-green); border: 1px solid rgba(0, 200, 83, 0.5); }
-        .badge.bearish { background: rgba(213, 0, 0, 0.2); color: var(--accent-red); border: 1px solid rgba(213, 0, 0, 0.5); }
-        .recom-reason { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
-        
-        /* Navigasi Bawah (Bottom Nav) */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(21, 26, 34, 0.95); backdrop-filter: blur(10px);
-            display: flex; justify-content: space-around; padding: 12px 0;
-            border-top: 1px solid var(--border-color); z-index: 100;
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: var(--text-muted); font-size: 11px; cursor: pointer; text-decoration: none;
-        }
-        .nav-item.active { color: var(--accent-blue); }
-        .nav-item .icon { font-size: 20px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <!-- Memanggil file CSS Anda -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -138,29 +40,14 @@
                 <h4 style="color: var(--accent-purple); margin: 0;">⚡ AI Macro Watchlist</h4>
             </div>
             
-            <!-- Contoh Tampilan Statis (Akan dibuat dinamis oleh skrip JS nanti) -->
+            <!-- Kontainer Rekomendasi (Akan diisi otomatis oleh JavaScript nanti) -->
             <div id="recom-container">
-                <div class="recom-item">
-                    <div class="recom-top">
-                        <div class="asset-name">XAUUSD (GOLD)</div>
-                        <div class="badge bullish">BULLISH</div>
-                    </div>
-                    <div class="recom-reason">
-                        <strong>Katalis Makro:</strong> Pelemahan DXY pasca rilis CPI AS yang melandai, memicu sentimen pemangkasan suku bunga The Fed.
-                    </div>
-                </div>
-
-                <div class="recom-item">
-                    <div class="recom-top">
-                        <div class="asset-name">USDJPY</div>
-                        <div class="badge bearish">BEARISH</div>
-                    </div>
-                    <div class="recom-reason">
-                        <strong>Katalis Makro:</strong> Intervensi halus dari BoJ dan memudarnya spekulasi hawkish USD di sesi perdagangan Asia.
-                    </div>
+                <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0;">
+                    ⏳ Menarik data bias market...
                 </div>
             </div>
-            <div style="font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 10px; font-style: italic;">
+            
+            <div style="font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 15px; font-style: italic;">
                 *Data berdasarkan analisis AI makro & institusi. NFA.
             </div>
         </div>
@@ -175,8 +62,8 @@
         <!-- Sesi Market Global -->
         <div class="card" id="session-container">
             <h4 style="color:var(--text-main);">🌍 Global Market Session</h4>
-            <div style="font-size:13px; color:white; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
-                Sesi London / New York (Akan diupdate JS)
+            <div id="session-status" style="font-size:13px; color:white; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
+                ⏳ Memuat Sesi Market...
             </div>
         </div>
     </div>
@@ -186,16 +73,16 @@
         <div class="card" style="border-left: 4px solid var(--accent-yellow);">
             <h4 style="color:var(--accent-yellow);">📰 Mading Makro Harian</h4>
             <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Dapatkan rangkuman sentimen pasar terbaru dari AI.</p>
-            <button class="action-btn" style="background: var(--accent-yellow); color: #000;" onclick="askAI('MADING', 'Buatkan rangkuman berita hari ini')">BACA MADING HARI INI</button>
+            <button class="action-btn" style="background: var(--accent-yellow); color: #000;" onclick="askAI('MADING')">BACA MADING HARI INI</button>
         </div>
 
         <div class="card">
             <h4 style="color:var(--text-main);">🤖 Filter Rilis Berita AI</h4>
             <input type="text" id="newsName" placeholder="Kopas Teks/Nama Berita di sini">
             <div class="trade-row">
-                <input type="text" id="newsAct" placeholder="Actual (Act)">
-                <input type="text" id="newsPrev" placeholder="Previous (Prev)">
-                <input type="text" id="newsFore" placeholder="Forecast (Fore)">
+                <input type="text" id="newsAct" placeholder="Actual">
+                <input type="text" id="newsPrev" placeholder="Previous">
+                <input type="text" id="newsFore" placeholder="Forecast">
             </div>
             <div class="trade-row">
                 <button class="action-btn blue" onclick="processNews('TRANSLATE')">TERJEMAHKAN</button>
@@ -216,11 +103,11 @@
     <!-- TAB 4: COMBO MAKER -->
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color: var(--accent-red);">🔥 Analisis Rilis Ganda (Combo)</h4>
+            <h4 style="color: var(--accent-red);">🔥 Analisis Rilis Ganda</h4>
             <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Analisis prioritas data Institusional saat waktu rilis bentrok.</p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="action-btn sell" onclick="askAI('COMBO_NEWS', 'Paket NFP')">Paket NFP (NFP, Average Hourly, Unemployment)</button>
-                <button class="action-btn sell" onclick="askAI('COMBO_NEWS', 'Paket CPI')">Paket CPI (Core CPI & CPI)</button>
+                <button class="action-btn sell" onclick="askAI('COMBO_NEWS', 'Paket NFP')">Paket NFP Lengkap</button>
+                <button class="action-btn sell" onclick="askAI('COMBO_NEWS', 'Paket CPI')">Paket CPI Lengkap</button>
             </div>
         </div>
     </div>
@@ -245,28 +132,10 @@
         </a>
     </nav>
 
-    <!-- Skrip Internal Sederhana untuk pindah Tab -->
-    <script>
-        function showTab(tabId, element) {
-            // Sembunyikan semua konten
-            document.querySelectorAll('.content').forEach(tab => tab.classList.remove('active'));
-            // Tampilkan konten yang dipilih
-            document.getElementById(tabId).classList.add('active');
-            
-            // Hapus status active dari semua menu bawah
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            // Berikan status active pada menu yang diklik
-            element.classList.add('active');
-        }
-    </script>
-
-    <!-- Skrip Eksternal Anda (Biarkan seperti ini untuk digunakan nanti) -->
-    <script src="js/telegram.js"></script>
+    <!-- Memanggil File JavaScript Anda -->
+    <!-- Anda bisa menggabungkan semua js ini nanti menjadi 1 file (misal: app.js) agar lebih rapi -->
     <script src="js/ui.js"></script>
     <script src="js/market.js"></script>
-    <script src="js/quiz.js"></script>
-    <script src="js/library.js"></script>
-    <script src="js/ai.js"></script>
 
 </body>
 </html>
