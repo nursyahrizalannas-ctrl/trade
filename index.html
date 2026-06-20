@@ -1,549 +1,1362 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Enterprise Trading Pro - Live Terminal V4</title>
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* ==================== CSS (DESIGN SYSTEM) ==================== */
-        :root {
-            --bg-base: #0A0D14; --bg-glass: rgba(18, 23, 33, 0.55);
-            --primary: #3D8BFF; --accent: #00E6B8; 
-            --danger: #FF3366; --warning: #FFB020; 
-            --text-main: #FFFFFF; --text-muted: #8F9BB3;
-            --border: rgba(255, 255, 255, 0.08); 
-            --radius-lg: 16px; --radius-md: 12px;
-            --font-main: 'Plus Jakarta Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0b0e14; color: #fff; margin: 0; padding: 10px; transition: background-color 0.8s ease; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn { flex: 1; min-width: 22%; padding: 8px; background: #1f2630; border: none; color: #888; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; transition: 0.3s; }
+        .tab-btn.active { background: #2962ff; color: #fff; }
+        .content { display: none; } .content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #242f3d; color: white; border: 1px solid #363c4e; border-radius: 5px; box-sizing: border-box; }
+        button.action-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; margin-top: 5px; transition: 0.2s; }
+        button.action-btn:active { transform: scale(0.98); }
+        .buy { background: #089981; } .sell { background: #f23645; } .blue { background: #1976d2; }
+        .trade-row { display: flex; gap: 5px; margin-top: 5px; }
+        .trade-row button, .trade-row input { flex: 1; margin: 0; }
+        
+        h4 { margin: 0 0 10px 0; border-bottom: 1px solid #363c4e; padding-bottom: 5px; }
+        details { background: #1f2630; padding: 10px; border-radius: 5px; margin-bottom: 10px; cursor: pointer; border: 1px solid #363c4e; }
+        summary { font-weight: bold; font-size: 13px; outline: none; }
+        .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;}
+        .edu-btn { padding: 10px; font-size: 10px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .edu-btn:active { transform: scale(0.95); opacity: 0.8; }
+        
+        /* Pewarnaan Kategori */
+        .bg-red { background: #d32f2f; } .bg-orange { background: #f57c00; } 
+        .bg-yellow { background: #fbc02d; color: black; } .bg-green { background: #388e3c; } 
+        .bg-blue { background: #1976d2; } .bg-purple { background: #6a1b9a; }
+        .bg-teal { background: #00897b; } .bg-brown { background: #795548; }
+        .bg-pink { background: #c2185b; } .bg-grey { background: #616161; }
+
+        /* KUIS WELCOME SCREEN */
+        #quiz-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 14, 20, 0.98); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box; text-align: center;
+        }
+        .quiz-btn { width: 100%; padding: 15px; margin: 5px 0; background: #242f3d; border: 1px solid #2962ff; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .quiz-btn:active { background: #2962ff; }
+        
+        /* ANIMASI TEKS KUIS (BARIKI SUGEH / SUAALLAH) */
+        #quiz-result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; align-items: center; justify-content: center;
+            z-index: 100000; font-size: 55px; font-weight: 900; text-align: center;
+            animation: popinout 2.5s forwards; text-transform: uppercase;
+            text-shadow: 4px 4px 20px rgba(0,0,0,1); pointer-events: none;
+            word-wrap: break-word; padding: 20px; box-sizing: border-box; line-height: 1.1;
+        }
+        
+        /* EFEK GETAR (SHOCKING) */
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-2deg); }
+            20% { transform: translate(-3px, 0px) rotate(2deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(2deg); }
+            50% { transform: translate(-1px, 2px) rotate(-2deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-2deg); }
+            80% { transform: translate(-1px, -1px) rotate(2deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-2deg); }
+        }
+        .shake-screen { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both infinite; }
+
+        @keyframes popinout {
+            0% { transform: scale(0.1); opacity: 0; }
+            10% { transform: scale(1.3); opacity: 1; }
+            85% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-base); color: var(--text-main); font-size: 14px; padding-bottom: 100px; overflow-x: hidden; transition: background 1.5s ease, --primary 1.5s ease; }
-        body::after { content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--primary) 0%, rgba(0,0,0,0) 60%); opacity: 0.1; z-index: -1; pointer-events: none; transition: background 1.5s ease; }
-
-        h1, h2, h3, h4, h5 { font-weight: 700; margin-bottom: 0.5rem; }
-        p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; font-size: 13.5px; }
-        .text-danger { color: var(--danger); } .text-warning { color: var(--warning); } .text-primary { color: var(--primary); } .text-success { color: var(--accent); } .text-muted { color: var(--text-muted); } .text-center { text-align: center; } .m-0 { margin: 0 !important; }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-        .flex-row { display: flex; justify-content: space-between; align-items: center; }
-
-        .card { background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); transition: 0.3s; }
-        .btn { padding: 0.85rem 1rem; border: none; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; text-align: center; width: 100%; font-size: 13px; color: white; transition: 0.2s; }
-        .btn:active { transform: scale(0.97); }
+        /* POPUP AI JAWAB LANGSUNG DI MINI APP */
+        #ai-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 14, 20, 0.98); z-index: 99999; padding: 20px; box-sizing: border-box;
+            overflow-y: auto; flex-direction: column;
+        }
+        .ai-header { color: #089981; border-bottom: 2px solid #089981; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px; font-weight: bold; }
+        .ai-body { flex: 1; line-height: 1.6; font-size: 14px; margin-bottom: 20px; color: #e0e0e0; }
+        .ai-body b { color: #2962ff; }
         
-        .btn-primary { background: var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.3); } 
-        .btn-danger { background: linear-gradient(135deg, #FF3366, #D91040); }
-        .btn-success { background: linear-gradient(135deg, #00E6B8, #00B38F); color: #000; }
-        .btn-outline { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-main); }
-        .form-control { width: 100%; padding: 0.9rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: var(--radius-md); color: white; margin-bottom: 12px; font-family: var(--font-mono); }
-        .form-control:focus { outline: none; border-color: var(--primary); }
+        /* SCROLLBAR & EBOOK */
+        #library-list::-webkit-scrollbar { width: 4px; }
+        #library-list::-webkit-scrollbar-thumb { background: #363c4e; border-radius: 4px; }
+        .ebook-img { width: 100%; border-radius: 5px; margin-bottom: 10px; background: white; padding: 5px; box-sizing: border-box; display: block; }
 
-        .header { position: sticky; top: 0; background: rgba(10, 13, 20, 0.85); backdrop-filter: blur(15px); padding: 15px 20px; z-index: 100; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .profile-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #FFF; transition: background 1.5s; }
-        .badge-session { font-size: 10px; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; font-weight: 800; }
+        /* PETA DUNIA MARKET SESSION */
+        .session-dot {
+            position: absolute; width: 16px; height: 16px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff1744, #2962ff);
+            box-shadow: 0 0 10px #ff1744, 0 0 20px #2962ff;
+            animation: kelapKelip 1s infinite alternate;
+            display: none;
+        }
+        @keyframes kelapKelip {
+            0% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 5px #ff1744; }
+            100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px #2962ff, 0 0 30px #ff1744; }
+        }
 
-        .bottom-nav { position: fixed; bottom: 20px; left: 5%; width: 90%; height: 70px; background: rgba(18, 23, 33, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .nav-item { color: var(--text-muted); text-align: center; font-size: 10.5px; font-weight: 600; cursor: pointer; flex: 1; padding: 8px 0; border-radius: 15px; transition: 0.3s; }
-        .nav-item.active { color: var(--text-main); background: rgba(255,255,255,0.05); transform: translateY(-2px); } 
-        .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; color: var(--text-muted); transition: color 0.3s; }
-        .nav-item.active i { color: var(--primary); }
-
-        .view-page { display: none; padding: 20px; animation: fadeScale 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .view-page.active { display: block; }
-        @keyframes fadeScale { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .module-btn { height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; } .module-btn i { font-size: 26px; }
-        details.edu-module { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; transition: 0.3s; }
-        details.edu-module summary { padding: 16px; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; font-size: 13.5px; }
-        .edu-content { padding: 0 16px 16px; color: var(--text-muted); font-size: 13.5px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 15px; text-align: justify; }
-
-        .sync-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: var(--radius-md); margin-bottom: 15px; border: 1px solid var(--border); }
-        .btn-trade { padding: 15px; display: flex; flex-direction: column; align-items: center; } .btn-trade b { font-size: 16px; } .btn-trade span { font-size: 13px; font-family: var(--font-mono); }
-        .pt-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .stat-card { padding: 15px; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; } .stat-val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); } .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
-
-        .fab-bot { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #1A212D, #000); border: 2px solid var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 99; transition: border-color 1.5s; }
-        #bot-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 200; display: none; flex-direction: column; }
-        #bot-modal.active { display: flex; }
-        .chat-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .chat-bubble { max-width: 85%; padding: 14px 18px; border-radius: 16px; font-size: 13.5px; }
-        .bot-msg { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-top-left-radius: 4px; align-self: flex-start; }
-        .user-msg { background: var(--primary); color: white; border-top-right-radius: 4px; align-self: flex-end; transition: background 1.5s; }
+        /* KARTU GLOBAL MACRO */
+        .macro-card {
+            background: #242f3d; padding: 10px; border-radius: 8px; border-left: 4px solid #ffb300;
+            margin-bottom: 10px;
+        }
+        .macro-card h5 { margin: 0 0 5px 0; color: #ffb300; }
+        .macro-card p { margin: 0; font-size: 11px; color: #aaa; }
     </style>
 </head>
 <body>
-
-    <header class="header">
-        <div class="flex-row" style="gap:12px;">
-            <div class="profile-icon">P</div>
-            <div>
-                <h4 style="margin:0; font-size: 15px;" id="user-name">Pro Trader</h4>
-                <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);"><i class="fa-solid fa-wallet text-primary"></i> <span id="header-balance">Equ: $100,000.00</span></div>
-            </div>
+    <div id="quiz-overlay">
+        <h2 style="color: #2962ff; margin-bottom: 5px;">🚀 Welcome Trader!</h2>
+        <div id="quiz-achievement" style="background: #1f2630; padding: 10px; border-radius: 8px; border: 1px solid #ffb300; color: #ffb300; font-size: 13px; margin-bottom: 15px; width: 100%; max-width: 400px;">
+            Memuat Data...
         </div>
-        <div id="session-badge" class="badge-session">Syncing...</div>
-    </header>
-
-    <div class="fab-bot" onclick="Bot.toggle()"><i class="fa-solid fa-network-wired text-primary"></i></div>
-
-    <main id="view-dashboard" class="view-page active">
-        
-        <div class="card" style="border-left: 4px solid var(--warning); transition: border-color 1.5s; background: rgba(18, 23, 33, 0.8);">
-            <div class="flex-row" style="margin-bottom: 15px; border-bottom: 1px dashed var(--border); padding-bottom: 12px;">
-                <b id="live-news-title" style="color: var(--text-main); font-size: 16px;"><i class="fa-solid fa-bolt text-warning"></i> Daily Macro Insight</b>
-                <span style="font-size: 10px; background: var(--accent); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; animation: pulse 2s infinite;">🟢 LIVE</span>
-            </div>
-            
-            <div id="live-news-content">
-                <p class="text-center text-muted"><i class="fa-solid fa-circle-notch fa-spin"></i> Menyusun Market Briefing...</p>
-            </div>
-        </div>
-
-        <h4 style="margin-top: 25px; margin-bottom: 15px; font-size: 15px;"><i class="fa-solid fa-layer-group text-primary"></i> Terminal Modules</h4>
-        <div class="grid-3">
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-chart')"><i class="fa-solid fa-chart-candlestick text-danger"></i><span>Terminal</span></button>
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-playbook')"><i class="fa-solid fa-book-journal-whills text-success"></i><span>Playbook</span></button>
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-macro-book')"><i class="fa-solid fa-earth-americas text-warning"></i><span>Macro</span></button>
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-academy')"><i class="fa-solid fa-microscope text-primary"></i><span>Academy</span></button>
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-journal')"><i class="fa-solid fa-database text-success"></i><span>Ledger</span></button>
-            <button class="btn btn-outline module-btn" onclick="App.nav('view-tools')"><i class="fa-solid fa-calculator text-muted"></i><span>Quant</span></button>
-        </div>
-    </main>
-
-    <main id="view-playbook" class="view-page">
-        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-book-journal-whills text-success"></i> Institutional Playbook</h3>
-        <p>50 Setup Institusional lengkap dengan analisis konteks market.</p>
-        <div id="playbook-container" style="margin-top: 20px;"></div>
-    </main>
-
-    <main id="view-macro-book" class="view-page">
-        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-earth-americas text-warning"></i> Ekonomi Makro</h3>
-        <p style="font-size: 12px; color: var(--primary);">Bersumber dari Buku Pengantar Ekonomi Makro.</p>
-        <div class="card" style="padding: 25px; margin-top: 20px; border-top: 4px solid var(--primary);">
-            <h2 id="book-title" style="font-size: 18px; color: var(--text-main); margin-bottom: 15px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;">Memuat Indeks...</h2>
-            <div id="book-content" style="font-size: 14px; line-height: 1.8; color: var(--text-muted); text-align: justify;">...</div>
-            <div class="flex-row" style="margin-top: 25px; gap: 10px;">
-                <button class="btn btn-outline" style="width:30%" onclick="MacroBook.prev()"><i class="fa-solid fa-arrow-left"></i></button>
-                <div id="book-page-num" style="font-family: var(--font-mono); font-size: 12px; text-align: center; width:40%;">1 / 7</div>
-                <button class="btn btn-outline" style="width:30%" onclick="MacroBook.next()"><i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-            <div class="flex-row" style="margin-top: 15px; gap: 10px;">
-                <input type="number" id="book-jump-input" class="form-control m-0" placeholder="Hal" min="1" max="7">
-                <button class="btn btn-primary" onclick="MacroBook.jump()">Lompat</button>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-academy" class="view-page">
-        <h3 style="margin-bottom: 10px;"><i class="fa-solid fa-microscope text-primary"></i> Market Academy</h3>
-        <div id="academy-container" style="margin-top: 20px;"></div>
-    </main>
-
-    <main id="view-chart" class="view-page">
-        <div class="card" style="padding: 0; height: 35vh; margin-bottom: 15px; overflow: hidden;">
-            <div id="tv_chart_container" style="height: 100%; width: 100%;"></div>
-        </div>
-        
-        <div class="card" style="border-color: var(--primary); transition: border-color 1.5s;">
-            <div class="flex-row" style="margin-bottom: 15px;">
-                <div>
-                    <h4 style="margin:0; color:var(--primary); font-size:16px; transition: color 1.5s;"><i class="fa-brands fa-binance"></i> API Engine</h4>
-                    <div style="font-size:11px; color:var(--accent); font-family:var(--font-mono);">WebSocket: LIVE FEED</div>
-                </div>
-                <div style="text-align: right; width: 35%;">
-                    <label style="font-size:10px; color:var(--text-muted); display:block; margin-bottom:4px;">VOLUME (BTC)</label>
-                    <input type="number" id="pt-lot" class="form-control" style="margin:0; text-align:center; padding:8px;" value="0.1" step="0.01">
-                </div>
-            </div>
-            
-            <div class="sync-box flex-row">
-                <label style="color:var(--text-muted); font-size: 11px; text-transform: uppercase;">Real-Time Price</label>
-                <div id="pt-sync-price" style="font-family:var(--font-mono); font-size:20px; font-weight:bold; color:var(--accent);">0.00</div>
-            </div>
-            
-            <div class="grid-2">
-                <button class="btn btn-danger btn-trade" onclick="Engine.openPosition('SELL')">
-                    <b>SELL</b><span id="pt-sell-price">0.00</span>
-                </button>
-                <button class="btn btn-success btn-trade" onclick="Engine.openPosition('BUY')">
-                    <b style="color:#000;">BUY</b><span id="pt-buy-price" style="color:#000;">0.00</span>
-                </button>
-            </div>
-        </div>
-        
-        <h5 style="margin-bottom:12px; font-size: 13px; color: var(--text-muted);">Active Positions</h5>
-        <div id="pt-active-list"><p class="text-center text-muted" style="font-size:12px;">Tidak ada pesanan berjalan.</p></div>
-    </main>
-
-    <main id="view-journal" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-database text-success"></i> Trading Ledger</h3>
-        <div class="grid-3" style="margin-bottom: 20px;">
-            <div class="card stat-card"><div id="j-trades" class="stat-val">0</div><div class="stat-label">Executions</div></div>
-            <div class="card stat-card"><div id="j-winrate" class="stat-val text-primary">0%</div><div class="stat-label">Win Rate</div></div>
-            <div class="card stat-card"><div id="j-pnl" class="stat-val">$0</div><div class="stat-label">Net PnL</div></div>
-        </div>
-        <div class="card">
-            <h5 style="margin-bottom:15px; font-size:12px; color:var(--text-muted);">Manual Entry</h5>
-            <div class="grid-2">
-                <input type="text" id="j-pair" class="form-control" placeholder="Pair">
-                <select id="j-type" class="form-control"><option value="BUY">LONG</option><option value="SELL">SHORT</option></select>
-            </div>
-            <input type="number" id="j-amount" class="form-control" placeholder="Net Profit/Loss ($)">
-            <button class="btn btn-primary" onclick="Journal.addManual()">Rekam Jurnal</button>
-        </div>
-        <div id="journal-list"></div>
-    </main>
-
-    <main id="view-tools" class="view-page">
-        <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-calculator text-muted"></i> Quant Calculator</h3>
-        <div class="card">
-            <input type="number" id="conv-amt" class="form-control" value="1000" oninput="Tools.calc()">
-            <div class="grid-2" style="margin-bottom: 20px;">
-                <div>
-                    <label style="font-size:11px; color:var(--text-muted); display:block;">From</label>
-                    <select id="conv-from" class="form-control" onchange="Tools.calc()">
-                        <option value="USD">USD</option><option value="IDR">IDR</option><option value="EUR">EUR</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="font-size:11px; color:var(--text-muted); display:block;">To</label>
-                    <select id="conv-to" class="form-control" onchange="Tools.calc()">
-                        <option value="IDR">IDR</option><option value="USD">USD</option><option value="EUR">EUR</option>
-                    </select>
-                </div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border);">
-                <h2 id="conv-res" style="color: var(--accent); margin: 0; font-family: var(--font-mono); font-size: 24px;">Loading...</h2>
-            </div>
-        </div>
-    </main>
-
-    <div id="bot-modal">
-        <div class="header" style="position:relative;">
-            <div>
-                <h4 style="margin:0; font-size:16px;"><i class="fa-solid fa-network-wired text-primary"></i> Neural Oracle</h4>
-                <div style="font-size:11px; color:var(--accent);">Status: Online</div>
-            </div>
-            <i class="fa-solid fa-xmark" style="font-size:24px; cursor:pointer;" onclick="Bot.toggle()"></i>
-        </div>
-        <div class="chat-area" id="bot-chat-area">
-            <div class="chat-bubble bot-msg">Sistem inisiasi sukses. Ketik kueri Anda.</div>
-        </div>
-        <div style="padding: 15px 20px; background: rgba(18, 23, 33, 0.9); border-top: 1px solid var(--border); display: flex; gap: 12px;">
-            <input type="text" id="bot-input" class="form-control m-0" placeholder="Ketik perintah..." onkeypress="if(event.key === 'Enter') Bot.send()">
-            <button class="btn btn-primary" style="width:55px; border-radius:50%;" onclick="Bot.send()"><i class="fa-solid fa-paper-plane"></i></button>
+        <p style="color: #aaa; margin-top: 0; margin-bottom: 15px; font-size: 14px;">Jawab kuis pemanasan ini untuk membuka Dashboard</p>
+        <div id="quiz-container" style="width: 100%; max-width: 400px; background: #17212b; padding: 20px; border-radius: 10px; border: 1px solid #363c4e;">
+            <h3 id="quiz-question" style="margin-top: 0; color: #e0e0e0;">Memuat kuis...</h3>
+            <div id="quiz-options"></div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-target="view-dashboard" onclick="App.nav('view-dashboard')"><i class="fa-solid fa-layer-group"></i><span>Hub</span></div>
-        <div class="nav-item" data-target="view-chart" onclick="App.nav('view-chart')"><i class="fa-solid fa-chart-line"></i><span>Terminal</span></div>
-        <div class="nav-item" data-target="view-macro-book" onclick="App.nav('view-macro-book')"><i class="fa-solid fa-earth-americas"></i><span>Macro</span></div>
-        <div class="nav-item" data-target="view-academy" onclick="App.nav('view-academy')"><i class="fa-solid fa-microscope"></i><span>Learn</span></div>
-    </nav>
+    <div id="ai-modal">
+        <div class="ai-header" id="ai-modal-title">🤖 Antipraktis Logic</div>
+        <div class="ai-body" id="ai-content">
+            <i>Menganalisis data pasar, mohon tunggu beberapa detik... ⏳</i>
+        </div>
+        
+        <div style="margin-bottom: 15px; border-top: 1px solid #363c4e; padding-top: 15px;" id="followup-container">
+            <div class="trade-row">
+                <input type="text" id="ai-followup" placeholder="💬 Bingung? Tanya lebih lanjut di sini..." style="font-size: 12px;">
+                <button class="action-btn buy" style="flex: 0.4;" onclick="sendFollowUp()">KIRIM</button>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <button class="action-btn" id="btn-belum-paham" style="background: #ff9800; color: #000; margin-bottom: 5px; display: none;" onclick="explainLikeTK()">👶 BELUM PAHAM (JELASKAN GAYA TK)</button>
+            <div class="trade-row">
+                <button class="action-btn blue" id="btn-save-ai" style="display: none;" onclick="saveToLibrary()">💾 SIMPAN</button>
+                <button class="action-btn" style="background: #f23645;" onclick="document.getElementById('ai-modal').style.display='none'">TUTUP</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('main', this)">📊 Dashboard</button>
+        <button class="tab-btn" onclick="showTab('news', this)">📅 Kalender</button>
+        <button class="tab-btn" onclick="showTab('edu', this)">📚 Edukasi</button>
+        <button class="tab-btn" onclick="showTab('combo', this)">🔄 Combo</button>
+    </div>
+
+    <div id="main" class="content active">
+        <div style="background: #131722; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid #363c4e;">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+              {
+              "symbols": [
+                { "proName": "OANDA:XAUUSD", "title": "GOLD" },
+                { "proName": "FX:EURUSD", "title": "EUR/USD" },
+                { "proName": "FX:USDJPY", "title": "USD/JPY" },
+                { "proName": "TVC:DXY", "title": "US DOLLAR" },
+                { "proName": "BINANCE:BTCUSDT", "title": "BITCOIN" },
+                { "proName": "TVC:USOIL", "title": "CRUDE OIL" }
+              ],
+              "showSymbolLogo": true,
+              "colorTheme": "dark",
+              "isTransparent": true,
+              "displayMode": "adaptive",
+              "locale": "id"
+            }
+              </script>
+            </div>
+        </div>
+
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #363c4e; text-align:center; position:relative; overflow:hidden;" id="session-container">
+            <h4 style="color:#64b5f6; margin-top:0;">🌍 Global Market Session</h4>
+            
+            <div id="map-area" style="position:relative; width:100%; height:160px; background:url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') no-repeat center center; background-size:contain; border-radius:8px; opacity:0.8;">
+                <div id="syd-tok" class="session-dot" style="left: 80%; top: 40%;" title="Sydney/Tokyo"></div>
+                <div id="lon" class="session-dot" style="left: 48%; top: 30%;" title="London/Eropa"></div>
+                <div id="ny" class="session-dot" style="left: 25%; top: 35%;" title="New York"></div>
+            </div>
+
+            <div id="sleep-earth" style="display:none; width:100%; height:160px; flex-direction:column; align-items:center; justify-content:center;">
+                <img src="https://cdn3d.iconscout.com/3d/premium/thumb/sleeping-earth-5120613-4277717.png?f=webp" style="height:110px;" alt="Bumi Tidur">
+            </div>
+            
+            <div id="session-status" style="font-size:13px; color:#fff; margin-top:10px; font-weight:bold;">Memuat status market...</div>
+        </div>
+
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color:#089981; margin:0;">🛠️ StrategyTune Backtest</h4>
+            <div style="font-size: 11px; color: #aaa;">Uji Strategi Secara Presisi</div>
+        </div>
+        
+        <div style="width: 100%; height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e; background: #131722;">
+            <iframe src="https://strategytune.com/app" style="width: 100%; height: 1500px; border: none; display: block;" scrolling="yes"></iframe>
+        </div>
+
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #363c4e;">
+            <h4 style="color:#089981;">📘 E-Book: Master Class Teknikal</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia trading terlengkap. Klik materi untuk dianalisis oleh Antipraktis Logic.</p>
+            
+            <details><summary>1. Dasar-Dasar Trading</summary><div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Apa itu trading')">Apa itu trading</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Jenis pasar (Forex, Saham, Crypto, Komoditas)')">Jenis Pasar</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Bid, Ask, Spread')">Bid, Ask, Spread</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Lot, Pip, Point')">Lot, Pip, Point</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Leverage dan Margin')">Leverage & Margin</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Long dan Short')">Long dan Short</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Likuiditas pasar')">Likuiditas pasar</button>
+            </div></details>
+
+            <details><summary>2. Membaca Chart</summary><div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Jenis chart (Line, Bar, Candlestick)')">Jenis Chart</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Timeframe dalam trading')">Timeframe</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Struktur candlestick')">Struktur Candlestick</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Open, High, Low, Close (OHLC)')">OHLC</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Multi Time Frame Analysis')">Multi Time Frame</button>
+            </div></details>
+
+            <details><summary>3. Candlestick Pattern</summary>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Candlestick_chart_scheme_03-en.svg/512px-Candlestick_chart_scheme_03-en.svg.png" referrerpolicy="no-referrer" class="ebook-img" alt="Candlestick">
+                <div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Doji')">Doji</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Hammer')">Hammer</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Hanging Man')">Hanging Man</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Shooting Star')">Shooting Star</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Engulfing')">Engulfing</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Harami')">Harami</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Morning Star')">Morning Star</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Pola Evening Star')">Evening Star</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Three White Soldiers')">Three White Soldiers</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Three Black Crows')">Three Black Crows</button>
+            </div></details>
+
+            <details><summary>4. Market Structure</summary><div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Higher High (HH) & Higher Low (HL)')">HH & HL</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Lower High (LH) & Lower Low (LL)')">LH & LL</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Uptrend')">Uptrend</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Downtrend')">Downtrend</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Sideways Market')">Sideways</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Break of Structure (BOS)')">BOS</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Change of Character (CHOCH)')">CHOCH</button>
+            </div></details>
+
+            <details><summary>5. Support & Resistance</summary>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Support_and_Resistance.svg/512px-Support_and_Resistance.svg.png" referrerpolicy="no-referrer" class="ebook-img" alt="Support Resistance">
+                <div class="edu-grid">
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Support')">Support</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Resistance')">Resistance</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Dynamic Support Resistance')">Dynamic SNR</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Flip Zone')">Flip Zone</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Role Reversal')">Role Reversal</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Strength of Zone')">Strength of Zone</button>
+            </div></details>
+
+            <details><summary>6. Trend Analysis</summary>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Uptrend-en.svg/512px-Uptrend-en.svg.png" referrerpolicy="no-referrer" class="ebook-img" alt="Trendline">
+                <div class="edu-grid">
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Trendline')">Trendline</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Price Channel')">Channel</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Trend Continuation')">Continuation</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Trend Reversal')">Reversal</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Pullback')">Pullback</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Retracement')">Retracement</button>
+            </div></details>
+
+            <details><summary>7. Supply & Demand</summary><div class="edu-grid">
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Supply Zone')">Supply Zone</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Demand Zone')">Demand Zone</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Fresh Zone')">Fresh Zone</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Tested Zone')">Tested Zone</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Entry Supply Demand')">Entry Strategy</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Confirmation Entry')">Confirmation</button>
+            </div></details>
+
+            <details><summary>8. Smart Money Concept (SMC)</summary><div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Liquidity dalam SMC')">Liquidity</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Equal High dan Equal Low')">EQH / EQL</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Inducement (IDM)')">Inducement</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Liquidity Sweep')">Liquidity Sweep</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Stop Hunt')">Stop Hunt</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Order Block (OB)')">Order Block</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Breaker Block')">Breaker Block</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Mitigation Block')">Mitigation Block</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Fair Value Gap (FVG)')">Fair Value Gap</button>
+            </div></details>
+
+            <details><summary>9. Fibonacci</summary><div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Fibonacci Retracement')">Fibo Retracement</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Fibonacci Extension')">Fibo Extension</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Golden Ratio Fibonacci')">Golden Ratio</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Entry dengan Fibonacci')">Entry Fibo</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Target Profit Fibonacci')">TP Fibo</button>
+            </div></details>
+
+            <details><summary>10. Moving Average</summary><div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Simple Moving Average (SMA)')">SMA</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Exponential Moving Average (EMA)')">EMA</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Golden Cross')">Golden Cross</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Death Cross')">Death Cross</button>
+            </div></details>
+
+            <details><summary>11. Volume Analysis</summary><div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Volume Dasar')">Volume Dasar</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Volume Spike')">Volume Spike</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Volume Confirmation')">Confirmation</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Volume Divergence')">Divergence</button>
+            </div></details>
+
+            <details><summary>12. Indikator Momentum</summary><div class="edu-grid">
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Indikator RSI')">RSI</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Indikator Stochastic')">Stochastic</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Indikator CCI')">CCI</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Williams %R')">Williams %R</button>
+            </div></details>
+
+            <details><summary>13. Indikator Trend</summary><div class="edu-grid">
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Indikator MACD')">MACD</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Indikator ADX')">ADX</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Parabolic SAR')">Parabolic SAR</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Ichimoku Cloud')">Ichimoku Cloud</button>
+            </div></details>
+
+            <details><summary>14. Volatilitas</summary><div class="edu-grid">
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'ATR (Average True Range)')">ATR</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Bollinger Bands')">Bollinger Bands</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Keltner Channel')">Keltner Channel</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Volatility Breakout')">Vol Breakout</button>
+            </div></details>
+
+            <details><summary>15. Chart Pattern</summary>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Head_and_shoulders_top.svg/512px-Head_and_shoulders_top.svg.png" referrerpolicy="no-referrer" class="ebook-img" alt="Head and Shoulders">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Double_top.svg/512px-Double_top.svg.png" referrerpolicy="no-referrer" class="ebook-img" alt="Double Top">
+                <div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Double Top')">Double Top</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Double Bottom')">Double Bottom</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Head and Shoulders')">Head & Shoulders</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Inverse Head and Shoulders')">Inv H&S</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Triangle Pattern')">Triangle</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Wedge Pattern')">Wedge</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Flag Pattern')">Flag</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Cup and Handle')">Cup and Handle</button>
+            </div></details>
+
+            <details><summary>16. Harmonic Pattern</summary><div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Gartley Pattern')">Gartley</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Bat Pattern')">Bat</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Butterfly Pattern')">Butterfly</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Crab Pattern')">Crab</button>
+            </div></details>
+
+            <details><summary>17. Elliott Wave</summary><div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Impulse Wave')">Impulse Wave</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Corrective Wave')">Corrective Wave</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Wave Counting')">Wave Counting</button>
+                <button class="edu-btn bg-orange" onclick="askAI('EBOOK', 'Fibonacci dalam Elliott Wave')">Fibo & Wave</button>
+            </div></details>
+
+            <details><summary>18. Wyckoff Method</summary><div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Accumulation Wyckoff')">Accumulation</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Distribution Wyckoff')">Distribution</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Spring Wyckoff')">Spring</button>
+                <button class="edu-btn bg-red" onclick="askAI('EBOOK', 'Upthrust Wyckoff')">Upthrust</button>
+            </div></details>
+
+            <details><summary>19. Risk Management</summary><div class="edu-grid">
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Risk Reward Ratio')">Risk Reward</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Position Sizing')">Position Sizing</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Stop Loss & Take Profit')">SL & TP</button>
+                <button class="edu-btn bg-purple" onclick="askAI('EBOOK', 'Maximum Drawdown')">Drawdown</button>
+            </div></details>
+
+            <details><summary>20. Trading Psychology</summary><div class="edu-grid">
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'FOMO Trading')">FOMO</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Revenge Trading')">Revenge Trading</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Overtrading')">Overtrading</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Fear & Greed dalam Trading')">Fear & Greed</button>
+                <button class="edu-btn bg-teal" onclick="askAI('EBOOK', 'Disiplin Trading')">Disiplin</button>
+            </div></details>
+
+            <details><summary>21. Fundamental & News</summary><div class="edu-grid">
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Cara baca Kalender Ekonomi')">Kalender Ekonomi</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'Dampak News Besar ke Market')">Dampak News</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'NFP & FOMC')">NFP & FOMC</button>
+                <button class="edu-btn bg-brown" onclick="askAI('EBOOK', 'CPI & PPI')">CPI & PPI</button>
+            </div></details>
+
+            <details><summary>22. Strategi Trading Lengkap</summary><div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Trend Following Strategy')">Trend Following</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Breakout Trading Strategy')">Breakout Trading</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Reversal Trading Strategy')">Reversal Trading</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Teknik Scalping')">Scalping</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Intraday Trading')">Intraday</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'Swing Trading')">Swing Trading</button>
+                <button class="edu-btn bg-blue" onclick="askAI('EBOOK', 'News Trading Strategy')">News Trading</button>
+            </div></details>
+
+            <details><summary>23. Backtesting</summary><div class="edu-grid">
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Cara Backtest yang benar')">Cara Backtest</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Cara Membaca Statistik Backtest')">Baca Statistik</button>
+                <button class="edu-btn bg-green" onclick="askAI('EBOOK', 'Win Rate & Profit Factor')">Win Rate</button>
+            </div></details>
+        </div>
+    </div>
+
+    <div id="news" class="content">
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ffb300;">
+            <h4 style="color:#ffb300; margin-top:0;">📰 Mading Makroekonomi Harian</h4>
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Rangkuman cepat arah market hari ini. Dilengkapi dengan analogi sederhana dari Antipraktis Logic agar mudah dipahami!</p>
+            <button class="action-btn" style="background: #ffb300; color: #000;" onclick="askAI('MADING', 'Buatkan rangkuman berita dan kondisi market terbaru hari ini')">🔄 BACA MADING HARI INI</button>
+        </div>
+
+        <div style="background: #17212b; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+            <h4 style="color:#2962ff;">🤖 Filter Kalender Antipraktis</h4>
+            <input type="text" id="newsName" placeholder="Kopas Penjelasan Berita di sini">
+            <div class="trade-row">
+                <input type="text" id="newsAct" placeholder="Aktual">
+                <input type="text" id="newsPrev" placeholder="Prev">
+                <input type="text" id="newsFore" placeholder="Fore">
+            </div>
+            <div class="trade-row">
+                <button class="action-btn blue" onclick="processNews('TRANSLATE')">🔤 TERJEMAHKAN</button>
+                <button class="action-btn buy" onclick="processNews('ANALYZE')">🤖 ANALISIS</button>
+            </div>
+        </div>
+        <div style="height: 400px; background: #131722; border-radius: 5px; overflow: hidden;">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+              { "colorTheme": "dark", "isTransparent": true, "width": "100%", "height": "400", "locale": "id", "importanceFilter": "-1,0,1", "currencyFilter": "USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD" }
+              </script>
+            </div>
+        </div>
+    </div>
+
+    <div id="edu" class="content">
+        <details style="margin-bottom: 15px; border: 1px solid #089981; background: #17212b;" open>
+            <summary style="color: #089981;">📚 Perpustakaan Antipraktis Logic</summary>
+            <div id="library-list" style="margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 11px;"></div>
+            <button class="action-btn sell" style="margin-top: 10px; padding: 8px; font-size: 11px;" onclick="clearLibrary()">🗑️ HAPUS PERPUSTAKAAN</button>
+        </details>
+
+        <div style="background: #17212b; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #363c4e;">
+            <h4 style="color:#089981;">💡 Diskusi & Tanya Bebas</h4>
+            <input type="text" id="freeChat" placeholder="Cth: Kenapa market gold naik terus?">
+            <button class="action-btn" style="background:#089981;" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">TANYA ANTIPRAKTIS SEKARANG</button>
+            
+            <h4 style="color:#2962ff; margin-top: 15px;">📰 Analisis Kejadian Fundamental</h4>
+            <input type="text" id="fundiNews" placeholder="Cth: The Fed menaikkan suku bunga 25 bps">
+            <button class="action-btn blue" onclick="askAI('FUNDAMENTAL', document.getElementById('fundiNews').value)">ANALISIS DAMPAK KE MARKET</button>
+        </div>
+
+        <div style="background: #17212b; padding: 15px; border-radius: 8px;">
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Ensiklopedia Lengkap Indikator Ekonomi USD (Klik untuk penjelasan).</p>
+            <button class="action-btn blue" style="margin-bottom: 10px;" onclick="askAI('EDUKASI', 'Cara Membaca Data Fundamental (Actual vs Forecast) dan 15 News Paling Ditunggu Trader')">📖 ATURAN MEMBACA DATA & TOP 15 NEWS</button>
+
+            <h4 style="color:#ffb300; margin-top: 15px; border-bottom: 1px solid #363c4e; padding-bottom: 5px;">🌍 Pendekatan Global Macro</h4>
+            <p style="font-size: 11px; color:#ccc; margin-bottom:15px;">Analisis institusi menggerakkan pasar bukan hanya dari chart, tetapi berdasarkan 4 Pilar Global Macro berikut:</p>
+            
+            <div class="macro-card">
+                <h5>📊 1. Data Ekonomi Rill (Economic Health)</h5>
+                <p>Melihat kesehatan ekonomi suatu negara (GDP, Inflasi CPI/PCE, Tenaga Kerja NFP). Negara yang kuat akan menarik aliran dana investasi.</p>
+            </div>
+            <div class="macro-card">
+                <h5>🏦 2. Kebijakan Bank Sentral (Central Banks)</h5>
+                <p>Bagaimana Bank Sentral (seperti The Fed, ECB, BOJ) merespons data ekonomi. Divergence (perbedaan arah suku bunga antar bank sentral) adalah penggerak utama Forex.</p>
+            </div>
+            <div class="macro-card">
+                <h5>📉 3. Pasar Obligasi (Bond Yields)</h5>
+                <p>Pergerakan imbal hasil obligasi negara (contoh: US Treasury 10Y Yield). Jika yield obligasi meroket, Emas sering kali tertekan, sedangkan USD menguat.</p>
+            </div>
+            <div class="macro-card" style="margin-bottom: 15px;">
+                <h5>💸 4. Capital Flow (Aliran Modal Institusi)</h5>
+                <p>Apakah uang institusi mengalir ke aset berisiko "Risk-On" (Saham, Kripto, pair mata uang eksotis) atau bersembunyi di aset aman "Risk-Off" (Emas, USD, CHF).</p>
+            </div>
+
+            <div class="edu-grid" style="margin-bottom: 15px;">
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Hubungan US Treasury Yield 10Y dengan Gold (XAUUSD) dan USD')">US Treasury Yield 10Y</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Capital Flow (Aliran Modal) antar negara dan dampaknya ke pair mayor')">Capital Flow</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Divergence Kebijakan Bank Sentral (Contoh: Fed Hawkish vs BOJ Dovish)')">Central Bank Divergence</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Siklus Ekonomi Makro: Fase Reflation, Recovery, Overheat, Stagflation')">Siklus Makro Ekonomi</button>
+                <button class="edu-btn bg-yellow" onclick="askAI('MACRO', 'Risk On vs Risk Off Market Sentiment')">Risk On / Risk Off</button>
+            </div>
+
+            <input type="text" id="searchEdu" placeholder="🔍 Cari Indikator... (Cth: NFP, CPI, GDP)" onkeyup="filterEdukasi()" style="margin-bottom: 15px; border: 1px solid #089981;">
+
+            <div id="edu-accordion-container">
+                <details>
+                    <summary style="color: #64b5f6;">🌍 Markets</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-blue" onclick="askAI('EDUKASI', 'Currency Market')">Currency</button>
+                        <button class="edu-btn bg-blue" onclick="askAI('EDUKASI', 'Government Bond 10Y')">Gov Bond 10Y</button>
+                        <button class="edu-btn bg-blue" onclick="askAI('EDUKASI', 'Stock Market')">Stock Market</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #81c784;">📊 GDP (Gross Domestic Product)</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Full Year GDP Growth')">Full Year GDP Growth</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP')">GDP</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Annual Growth Rate')">GDP Annual Growth</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Constant Prices')">GDP Constant Prices</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Agriculture')">GDP Agriculture</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Construction')">GDP Construction</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP From Government')">GDP Government</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Manufacturing')">GDP Manufacturing</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Mining')">GDP Mining</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Services')">GDP Services</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Transport')">GDP Transport</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP from Utilities')">GDP Utilities</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Contribution Consumer Spending')">GDP Contrib. Consumer</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Contribution Exports')">GDP Contrib. Exports</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Contribution Government')">GDP Contrib. Govt</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Contribution Imports')">GDP Contrib. Imports</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Contribution Investment')">GDP Contrib. Investment</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Growth Rate')">GDP Growth Rate</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP per Capita')">GDP per Capita</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP per Capita PPP')">GDP per Capita PPP</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'GDP Sales')">GDP Sales</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Gross Fixed Capital Formation')">Fixed Capital Formation</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Gross National Product')">GNP</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Real Consumer Spending')">Real Consumer Spending</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Weekly Economic Index')">Weekly Economic Index</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #ffb74d;">👷 Labour & Employment</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'ADP Employment Change')">ADP Employment</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'ADP Employment Change - Large Firms')">ADP Large Firms</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'ADP Employment Change - Mid-Sized Firms')">ADP Mid-Sized Firms</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'ADP Employment Change - Small Firms')">ADP Small Firms</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'ADP Employment Change Weekly')">ADP Weekly</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Average Annual Wages')">Avg Annual Wages</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Average Hourly Earnings MoM')">Avg Hourly Earnings MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Average Hourly Earnings YoY')">Avg Hourly Earnings YoY</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Average Weekly Hours')">Avg Weekly Hours</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Challenger Hiring Plans')">Challenger Hiring Plans</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Challenger Job Cuts')">Challenger Job Cuts</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Chicago Fed Hiring Rate')">Chicago Fed Hiring Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Chicago Fed Layoffs Rate')">Chicago Fed Layoffs</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Continuing Jobless Claims')">Continuing Jobless Claims</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Continuing Jobless Claims - Federal Workers')">Cont. Claims Federal</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Earnings Growth Expectations')">Earnings Growth Exp</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Employed Persons')">Employed Persons</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Employment Cost Index')">Employment Cost Index</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Employment Rate')">Employment Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Full Time Employment')">Full Time Employment</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Government Payrolls')">Government Payrolls</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Gross Average Monthly Wages')">Gross Avg Monthly Wages</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Initial Jobless Claims')">Initial Jobless Claims</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Initial Jobless Claims - Federal Workers')">Initial Claims Federal</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Job Layoffs and Discharges')">Job Layoffs</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Job Openings')">Job Openings</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Job Quits Rate')">Job Quits Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Jobless Claims 4-week Average')">Claims 4-wk Average</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'JOLTs Job Openings')">JOLTs Job Openings</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'JOLTs Job Quits')">JOLTs Job Quits</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Labour Costs')">Labour Costs</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Long Term Unemployment Rate')">Long Term Unemploy.</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Manufacturing Payrolls')">Manufacturing Payrolls</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Mean Unemployment Rate Expectations')">Mean Unemploy. Exp</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Minimum Wages')">Minimum Wages</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Non Farm Payrolls')">Non Farm Payrolls</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Nonfarm Payrolls Private')">Nonfarm Payrolls Pvt</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Nonfarm Productivity')">Nonfarm Productivity</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Part Time Employment')">Part Time Employment</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Participation Rate')">Participation Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Population')">Population</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Productivity')">Productivity</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Real Average Hourly Earnings MoM')">Real Avg Hourly MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Real Average Hourly Earnings YoY')">Real Avg Hourly YoY</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retirement Age Men')">Retirement Age Men</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retirement Age Women')">Retirement Age Women</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'U-6 Unemployment Rate')">U-6 Unemployment</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Unemployed Persons')">Unemployed Persons</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Unemployment Rate')">Unemployment Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Unit Labour Costs')">Unit Labour Costs</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Wage Growth')">Wage Growth</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Wages')">Wages</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Wages in Manufacturing')">Wages Manufacturing</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Youth Unemployment Rate')">Youth Unemployment</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #e57373;">🏷️ Prices & Inflation</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', '3-Year Consumer Inflation Expectations')">3-Yr Inflation Exp</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', '5-Year Consumer Inflation Expectations')">5-Yr Inflation Exp</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Consumer Inflation Expectations')">Consumer Inflation Exp</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core Consumer Prices')">Core Consumer Prices</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core Inflation Rate MoM')">Core Inflation MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core Inflation Rate YoY')">Core Inflation YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PCE Price Index')">Core PCE Price Index</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PCE Price Index MoM')">Core PCE MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PCE Price Index YoY')">Core PCE YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PCE Prices QoQ')">Core PCE QoQ</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PPI MOM')">Core PPI MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core PPI YOY')">Core PPI YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Core Producer Prices')">Core Producer Prices</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI')">CPI</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Apparel')">CPI Apparel</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Core Core YoY')">CPI Core Core YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Education')">CPI Education</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Food')">CPI Food</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Housing Utilities')">CPI Housing Utilities</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Median')">CPI Median</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Recreation')">CPI Recreation</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI s.a')">CPI s.a</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Transportation')">CPI Transportation</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'CPI Trimmed-Mean')">CPI Trimmed-Mean</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Energy Inflation')">Energy Inflation</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Export Prices')">Export Prices</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Export Prices MoM')">Export Prices MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Export Prices YoY')">Export Prices YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Food Inflation')">Food Inflation</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'GDP Price Index')">GDP Price Index</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Import Prices')">Import Prices</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Import Prices MoM')">Import Prices MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Import Prices YoY')">Import Prices YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Inflation Rate MoM')">Inflation Rate MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Inflation Rate YoY')">Inflation Rate YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Michigan 5 Year Inflation Expectations')">Mich 5-Yr Inflation Exp</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Michigan Inflation Expectations')">Mich Inflation Exp</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PCE Price Index')">PCE Price Index</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PCE Price Index MoM')">PCE Price MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PCE Price Index YoY')">PCE Price YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PCE Prices QoQ')">PCE Prices QoQ</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI')">PPI</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI Ex Food Energy and Trade Services')">PPI Ex Food/Energy</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI Ex Food, Energy and Trade MoM')">PPI Ex Food MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI Ex Food, Energy and Trade YoY')">PPI Ex Food YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI MOM')">PPI MoM</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'PPI YOY')">PPI YoY</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Services Inflation')">Services Inflation</button>
+                        <button class="edu-btn bg-red" onclick="askAI('EDUKASI', 'Shelter Inflation')">Shelter Inflation</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #ce93d8;">💱 Money & Banking</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Banks Balance Sheet')">Banks Balance Sheet</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Effective Federal Funds Rate')">Effective Fed Funds</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Fed Balance Sheet')">Fed Balance Sheet</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Fed Capital Account Surplus')">Fed Cap Acct Surplus</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Fed Interest Rate')">Fed Interest Rate</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Foreign Bond Investment')">Foreign Bond Inv.</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Foreign Exchange Reserves')">FX Reserves</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Loans to Private Sector')">Loans to Pvt Sector</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Money Supply M0')">Money Supply M0</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Money Supply M1')">Money Supply M1</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Money Supply M2')">Money Supply M2</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Private Debt to GDP')">Pvt Debt to GDP</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Proxy Funds Rate')">Proxy Funds Rate</button>
+                        <button class="edu-btn bg-purple" onclick="askAI('EDUKASI', 'Secured Overnight Financing Rate')">SOFR</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #4db6ac;">🚢 Trade</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Auto Exports')">Auto Exports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Balance of Trade')">Balance of Trade</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Crude Oil Production')">Crude Oil Production</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Current Account')">Current Account</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Current Account Services')">Current Acct Services</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Current Account to GDP')">Current Acct to GDP</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Exports')">Exports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Exports by Category')">Exports by Category</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Exports by Country')">Exports by Country</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'External Debt')">External Debt</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Direct Investment')">FDI</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings')">Foreign Treas Holdings</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings - Belgium')">Treas. Hold Belgium</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings - Canada')">Treas. Hold Canada</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings - China')">Treas. Hold China</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings - Japan')">Treas. Hold Japan</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Foreign Treasury Holdings - UK')">Treas. Hold UK</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Gold Reserves')">Gold Reserves</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Goods Exports')">Goods Exports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Goods Imports')">Goods Imports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Goods Trade Balance')">Goods Trade Balance</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Imports')">Imports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Imports by Category')">Imports by Category</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Imports by Country')">Imports by Country</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Net Long-term TIC Flows')">TIC Flows</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Oil Exports')">Oil Exports</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Overall Net Capital Flows')">Net Capital Flows</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Terms of Trade')">Terms of Trade</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Terrorism Index')">Terrorism Index</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Tourism Revenues')">Tourism Revenues</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Tourist Arrivals')">Tourist Arrivals</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Weapons Sales')">Weapons Sales</button>
+                        <button class="edu-btn bg-teal" onclick="askAI('EDUKASI', 'Weekly Crude Oil Production')">Weekly Oil Prod</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #ffd54f;">🏛️ Government</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Asylum Applications')">Asylum Applications</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Corruption Index')">Corruption Index</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Corruption Rank')">Corruption Rank</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Credit Rating')">Credit Rating</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Fiscal Expenditure')">Fiscal Expenditure</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Budget')">Government Budget</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Debt')">Government Debt</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Debt to GDP')">Gov Debt to GDP</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Revenues')">Government Revenues</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Spending')">Government Spending</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Government Spending to GDP')">Gov Spending to GDP</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Holidays')">Holidays</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Military Expenditure')">Military Exp</button>
+                        <button class="edu-btn bg-yellow" onclick="askAI('EDUKASI', 'Monthly Budget Statement')">Monthly Budget Stmt</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #a1887f;">🏭 Business</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Average Equipment Rate')">Avg Equipment Rate</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Bankruptcies')">Bankruptcies</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Business Inventories MoM')">Business Inv MoM</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Capacity Utilization')">Capacity Utilization</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Car Loan Delinquency')">Car Loan Delinquency</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Car Production')">Car Production</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Car Registrations')">Car Registrations</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Changes in Inventories')">Changes Inventories</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Chicago Fed National Activity Index')">Chicago Fed Activity</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Chicago PMI')">Chicago PMI</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Coincident Index')">Coincident Index</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Composite Leading Indicator')">Composite Leading</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Corporate Profits')">Corporate Profits</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Dallas Fed Manufacturing Index')">Dallas Fed Mfg</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Dallas Fed Services Index')">Dallas Fed Services</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Dry-Van Rate')">Dry-Van Rate</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Durable Goods Orders MoM')">Durable Goods MoM</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Factory Orders ex Transportation')">Factory Orders ex Tr.</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Factory Orders MoM')">Factory Orders MoM</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Industrial Production MoM')">Ind. Production MoM</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Industrial Production YoY')">Ind. Production YoY</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'ISM Manufacturing PMI')">ISM Mfg PMI</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'ISM Services PMI')">ISM Services PMI</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Kansas Fed Manufacturing Index')">Kansas Fed Mfg</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Leading Economic Index')">Leading Economic Index</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'LMI Logistics Managers Index')">LMI Logistics Index</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Manufacturing Production MoM')">Mfg Production MoM</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Manufacturing Production YoY')">Mfg Production YoY</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Mining Production')">Mining Production</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'New Orders')">New Orders</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'NFIB Business Optimism Index')">NFIB Optimism</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Non Defense Goods Orders Ex Air')">Non Def Goods Ex Air</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'NY Empire State Manufacturing Index')">NY Empire State Mfg</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'NY Fed Services Activity Index')">NY Fed Services</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Philadelphia Fed Manufacturing Index')">Philly Fed Mfg</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Retail Inventories Ex Autos MoM')">Retail Inv Ex Autos</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Richmond Fed Manufacturing Index')">Richmond Fed Mfg</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Richmond Fed Services Index')">Richmond Fed Services</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Steel Production')">Steel Production</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Total Vehicle Sales')">Total Vehicle Sales</button>
+                        <button class="edu-btn bg-brown" onclick="askAI('EDUKASI', 'Wholesale Inventories MoM')">Wholesale Inv MoM</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #ff8a65;">🛒 Consumer</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Bank Lending Rate')">Bank Lending Rate</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Chain Store Sales')">Chain Store Sales</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Consumer Credit Change')">Consumer Credit Chg</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Consumer Spending')">Consumer Spending</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Credit Card Accounts')">Credit Card Accounts</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Debt Balance Auto Loans')">Debt Auto Loans</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Debt Balance Credit Cards')">Debt Credit Cards</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Debt Balance Mortgages')">Debt Mortgages</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Debt Balance Student Loans')">Debt Student Loans</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Disposable Personal Income')">Disposable Income</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Gasoline Prices')">Gasoline Prices</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Households Debt to GDP')">Households Debt/GDP</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Michigan Consumer Expectations')">Mich Consumer Exp</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Michigan Consumer Sentiment')">Mich Sentiment</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Michigan Current Conditions')">Mich Current Cond</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Personal Income MoM')">Personal Income MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Personal Savings')">Personal Savings</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Personal Spending MoM')">Personal Spending MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Private Sector Credit')">Private Sector Credit</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'RCM/TIPP Economic Optimism Index')">RCM/TIPP Optimism</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Real Personal Spending MoM')">Real Pers Spending MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Redbook YoY')">Redbook YoY</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Monitor YoY')">Retail Monitor YoY</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Building and Garden Supply Stores MoM')">Retail Sales Garden</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Car Dealers MoM')">Retail Sales Car Deals</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Clothing Stores MoM')">Retail Sales Clothing</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Control Group MoM')">Retail Sales Control</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Electronics Stores MoM')">Retail Sales Electronics</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Ex Autos MoM')">Retail Sales Ex Autos</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Ex Gas MoM')">Retail Sales Ex Gas</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Ex Gas/Autos MoM')">Retail Sales Ex Gas/Auto</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Food and Beverage Stores MoM')">Retail Sales Food/Bev</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Furniture Stores MoM')">Retail Sales Furniture</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Gasoline Stations MoM')">Retail Sales Gasoline</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales General Merchandise Stores MoM')">Retail Sales Gen Mdse</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Health and Personal Care Stores MoM')">Retail Sales Health</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Miscellaneous Store Retailers MoM')">Retail Sales Misc</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales MoM')">Retail Sales MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Online Trade MoM')">Retail Sales Online</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Restaurants and Bars MoM')">Retail Sales Rest/Bars</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales Sporting Goods and Hobby Stores MoM')">Retail Sales Sporting</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Retail Sales YoY')">Retail Sales YoY</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Total Household Debt')">Total Household Debt</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Used Car Prices MoM')">Used Car Prices MoM</button>
+                        <button class="edu-btn bg-orange" onclick="askAI('EDUKASI', 'Used Car Prices YoY')">Used Car Prices YoY</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #aed581;">🏠 Housing</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', '15-Year Mortgage Rate')">15-Yr Mortgage Rate</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', '30-Year Mortgage Rate')">30-Yr Mortgage Rate</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Average House Prices')">Avg House Prices</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Average Mortgage Size')">Avg Mortgage Size</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Building Permits')">Building Permits</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Building Permits MoM')">Building Permits MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Case-Shiller Home Price Index')">Case-Shiller Index</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Case-Shiller Home Price Index MoM')">Case-Shiller MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Case-Shiller Home Price Index YoY')">Case-Shiller YoY</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Case-Shiller Single Family Home Price Index')">Case-Shiller Single Fam</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Construction Spending MoM')">Construction Spending</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Existing Home Sales')">Existing Home Sales</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Existing Home Sales MoM')">Existing Home MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Existing Home Sales Prices')">Existing Home Prices</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Home Ownership Rate')">Home Ownership Rate</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'House Price Index')">House Price Index</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'House Price Index MoM')">House Price MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'House Price Index YoY')">House Price YoY</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Housing Starts')">Housing Starts</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Housing Starts MoM')">Housing Starts MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Housing Starts Multi Family')">Housing Starts Multi</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Housing Starts Single Family')">Housing Starts Single</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'MBA 30-Year Mortgage Rate')">MBA 30-Yr Mortgage</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'MBA Mortgage Applications')">MBA Mortg Applications</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'MBA Mortgage Market Index')">MBA Mortgage Market</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'MBA Mortgage Refinance Index')">MBA Mortg Refinance</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'MBA Purchase Index')">MBA Purchase Index</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Mortgage Originations')">Mortgage Originations</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'NAHB Housing Market Index')">NAHB Housing Market</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'New Home Sales')">New Home Sales</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'New Home Sales MoM')">New Home Sales MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Pending Home Sales MoM')">Pending Home Sales MoM</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Pending Home Sales YoY')">Pending Home Sales YoY</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Price to Rent Ratio')">Price to Rent Ratio</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Residential Property Prices')">Residential Prop Prices</button>
+                        <button class="edu-btn bg-green" onclick="askAI('EDUKASI', 'Total Housing Inventory')">Total Housing Inventory</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #f06292;">🧾 Taxes</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Corporate Tax Rate')">Corporate Tax Rate</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Personal Income Tax Rate')">Personal Income Tax</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Sales Tax Rate')">Sales Tax Rate</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Social Security Rate')">Social Security Rate</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Social Security Rate For Companies')">SS Rate Companies</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Social Security Rate For Employees')">SS Rate Employees</button>
+                        <button class="edu-btn bg-pink" onclick="askAI('EDUKASI', 'Withholding Tax Rate')">Withholding Tax Rate</button>
+                    </div>
+                </details>
+
+                <details>
+                    <summary style="color: #90a4ae;">⚡ Energy</summary>
+                    <div class="edu-grid">
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'API Crude Oil Stock Change')">API Crude Oil Stock</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'API Cushing Number')">API Cushing Number</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'API Distillate Stocks')">API Distillate Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'API Gasoline Stocks')">API Gasoline Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'Baker Hughes Oil Rig Count')">Baker Hughes Oil Rig</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'Baker Hughes Total Rigs Count')">Baker Hughes Total Rigs</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Crude Oil Imports Change')">EIA Crude Oil Imports</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Crude Oil Stocks Change')">EIA Crude Oil Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Cushing Crude Oil Stocks Change')">EIA Cushing Crude</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Distillate Fuel Production Change')">EIA Distillate Fuel Prod</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Distillate Stocks Change')">EIA Distillate Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Gasoline Production Change')">EIA Gasoline Prod</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Gasoline Stocks Change')">EIA Gasoline Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Heating Oil Stocks Change')">EIA Heating Oil Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Natural Gas Stocks Change')">EIA Natural Gas Stocks</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'EIA Refinery Crude Runs Change')">EIA Refinery Crude Runs</button>
+                        <button class="edu-btn bg-grey" onclick="askAI('EDUKASI', 'Strategic Petroleum Reserve Crude Oil Stocks')">Strategic Petroleum</button>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <div id="combo" class="content">
+        <div style="background: #17212b; padding: 15px; border-radius: 8px;">
+            <p style="font-size:12px; color:#aaa; margin-top:0;">Analisis Rilis Ganda beserta prioritas datanya (Institusional Logic) & Waktu yang sering bentrok bersamaan.</p>
+            
+            <h4 style="color: #ef5350;">🔥 Super Combo & Dampak Sangat Tinggi</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket NFP (NFP, Average Hourly Earnings, Unemployment Rate)')">Paket NFP Lengkap</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket CPI (Core CPI & CPI)')">Paket CPI Lengkap</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket FOMC (Rate Decision, Dot Plot, Press Conference)')">Paket FOMC Lengkap</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'Paket PCE (Core PCE & PCE)')">Paket PCE Lengkap</button>
+                <button class="edu-btn bg-red" onclick="askAI('COMBO_NEWS', 'US NFP + Canada Employment Change (Bentrokan data AS dan Kanada di hari Jumat)')">US NFP + CAD Jobs</button>
+            </div>
+            
+            <h4 style="color: #ffb300;">🟡 Combo Tinggi & Menengah</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket GDP (Advance GDP & Price Index)')">Paket GDP Lengkap</button>
+                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket Retail Sales (Core & Reguler)')">Paket Retail Sales</button>
+                <button class="edu-btn bg-orange" onclick="askAI('COMBO_NEWS', 'Paket ISM PMI (Manufacturing & Jasa)')">Paket ISM PMI</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Paket PPI (Core PPI & PPI)')">Paket PPI Lengkap</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Paket JOLTS (Job Openings & Quits)')">Paket JOLTS</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Advance GDP q/q + Initial Jobless Claims (Sering rilis bersamaan di hari Kamis)')">GDP + Jobless Claims</button>
+                <button class="edu-btn bg-purple" onclick="askAI('COMBO_NEWS', 'Michigan Consumer Sentiment + Inflation Expectations')">Michigan Sentiment + Inflasi</button>
+            </div>
+
+            <h4 style="color: #2962ff;">🌍 Combo Central Bank Global</h4>
+            <div class="edu-grid">
+                <button class="edu-btn bg-blue" onclick="askAI('COMBO_NEWS', 'BOE Official Bank Rate + Monetary Policy Summary + MPC Votes')">Bank of England (BOE)</button>
+                <button class="edu-btn bg-blue" onclick="askAI('COMBO_NEWS', 'ECB Main Refinancing Rate + Monetary Policy Statement')">ECB (Eropa)</button>
+                <button class="edu-btn bg-blue" onclick="askAI('COMBO_NEWS', 'RBA Cash Rate + RBA Rate Statement')">RBA (Australia)</button>
+                <button class="edu-btn bg-blue" onclick="askAI('COMBO_NEWS', 'BOC Rate Statement + Overnight Rate')">BOC (Kanada)</button>
+                <button class="edu-btn bg-blue" onclick="askAI('COMBO_NEWS', 'BOJ Policy Rate + Monetary Policy Statement')">BOJ (Jepang)</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // ----------------------------------------------------
-        // 1. DATA GENERATION & PDF INTEGRATION
-        // ----------------------------------------------------
-        const DataStore = {
-            academy: [
-                { cat: "1. Pemula: Basic Foundation", list: [ {t: "Apa itu Forex?", d: "Pasar pertukaran mata uang global. XAUUSD adalah Emas/Dolar AS."}, {t: "Lot, Pips, dan Margin", d: "Pips = satuan harga. Lot = volume. Margin = jaminan."} ]},
-                { cat: "2. Menengah: Analisis Teknikal", list: [ {t: "Support & Resistance", d: "Batas bawah dan atas harga."}, {t: "Market Structure", d: "Tren dikonfirmasi oleh Higher High & Higher Low."} ]},
-                { cat: "3. Lanjutan: Smart Money Concept", list: [ {t: "Konsep Likuiditas", d: "Institusi memicu Stop Loss ritel (Liquidity Sweep)."}, {t: "Fair Value Gap (FVG)", d: "Ruang kosong akibat momentum cepat."} ]}
-            ],
-            playbook: [],
-            macro: [
-                { t: "Bab 1: Konsep Dasar Ekonomi Makro", c: "Ilmu ekonomi makro menganalisis secara keseluruhan (agregat) kegiatan perekonomian yang bersifat global seperti pendapatan nasional, tingkat inflasi, kesempatan kerja, neraca pembayaran, dan pertumbuhan ekonomi." },
-                { t: "Bab 2: Permasalahan Ekonomi Makro", c: "Secara umum terbagi dua: masalah jangka pendek (stabilisasi) seperti inflasi, pengangguran, dan neraca pembayaran timpang; serta masalah jangka panjang (pertumbuhan) seperti ledakan penduduk dan kapasitas produksi." },
-                { t: "Bab 3: Peran Pemerintah", c: "Mekanisme pasar sering gagal berfungsi sehingga butuh peran pemerintah sebagai stabilisator, alokator, dan distributor. Intervensi bisa dilakukan secara langsung (harga minimum/maksimum) maupun tidak langsung (pajak dan subsidi)." },
-                { t: "Bab 4: Tujuan Ekonomi Makro", c: "Tujuan utamanya adalah memaksimumkan kesejahteraan masyarakat melalui tingkat pengangguran yang rendah, stabilitas harga, dan pertumbuhan ekonomi berkelanjutan." },
-                { t: "Bab 5: Instrumen Kebijakan", c: "Terdapat dua instrumen utama yang digunakan: Kebijakan Fiskal (mengubah pajak dan pengeluaran transfer pemerintah) serta Kebijakan Moneter (mengatur jumlah uang beredar atau tingkat bunga oleh otoritas bank sentral)." },
-                { t: "Bab 6: Penawaran & Permintaan Agregat", c: "Fluktuasi ekonomi diagregasi lewat model ini. Pergeseran permintaan agregat berdampak pada output jangka pendek, sementara pergeseran penawaran agregat dapat menyebabkan stagnasi/inflasi (stagflasi)." },
-                { t: "Bab 7: Siklus Aliran Pendapatan", c: "Siklus (circular flow) menggambarkan interaksi rasional pelaku ekonomi. Aliran output dari bisnis disebut produk nasional, sedangkan aliran balas jasa faktor produksi ke rumah tangga disebut pendapatan nasional." }
-            ]
-        };
+        // INISIALISASI TELEGRAM WEB APP
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
 
-        const playbookThemes = ["Asian Range Sweep", "London Fakeout", "NY Killzone", "FVG Retracement", "Valid Order Block", "SMT Divergence", "Power of 3", "Mitigation Block", "Breaker Block", "Equal Highs Sweep"];
-        for(let i=1; i<=50; i++) {
-            DataStore.playbook.push({ t: `Setup #${i}: ${playbookThemes[(i-1) % 10]} ${i>10?'Advanced':''}`, d: `Setup eksekusi level institusi. Tunggu harga merespons zona ini sebelum melakukan entry konfirmasi pada time frame M15.` });
+        // KUNCI API GROQ
+        const GROQ_API = "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";
+
+        // ==========================================
+        // LOGIKA MARKET SESSION BUMI / PETA
+        // ==========================================
+        function updateMarketSession() {
+            let now = new Date();
+            let day = now.getUTCDay(); // 0: Sunday, 6: Saturday
+            let hour = now.getUTCHours();
+
+            let mapArea = document.getElementById('map-area');
+            let sleepEarth = document.getElementById('sleep-earth');
+            let statusText = document.getElementById('session-status');
+
+            let dotAsia = document.getElementById('syd-tok');
+            let dotLon = document.getElementById('lon');
+            let dotNY = document.getElementById('ny');
+
+            // Kalkulasi Market Tutup (Weekend)
+            let isWeekend = false;
+            if (day === 6) isWeekend = true; 
+            if (day === 0 && hour < 22) isWeekend = true; 
+            if (day === 5 && hour >= 22) isWeekend = true; 
+
+            if (isWeekend) {
+                mapArea.style.display = 'none';
+                sleepEarth.style.display = 'flex';
+                statusText.innerText = "💤 Market Libur (Bumi Sedang Tidur)";
+                return;
+            }
+
+            mapArea.style.display = 'block';
+            sleepEarth.style.display = 'none';
+
+            let activeSessions = [];
+            dotAsia.style.display = 'none';
+            dotLon.style.display = 'none';
+            dotNY.style.display = 'none';
+
+            // Jam Trading UTC
+            if (hour >= 22 || hour < 8) { activeSessions.push("Asia (Syd/Tok)"); dotAsia.style.display = 'block'; }
+            if (hour >= 7 && hour < 16) { activeSessions.push("Eropa (London)"); dotLon.style.display = 'block'; }
+            if (hour >= 12 && hour < 21) { activeSessions.push("AS (New York)"); dotNY.style.display = 'block'; }
+
+            statusText.innerText = "🔥 Sesi Aktif Saat Ini: " + (activeSessions.length > 0 ? activeSessions.join(" & ") : "Peralihan Sesi");
         }
 
+        updateMarketSession();
+        setInterval(updateMarketSession, 60000);
 
-        // ----------------------------------------------------
-        // 2. CORE TRADING ENGINE (WEB-SOCKET & PNL MATH)
-        // ----------------------------------------------------
-        const Engine = {
-            ws: null, balance: 100000.00, simPrice: 0.00, positions: [], stats: { trades: 0, wins: 0, netPnl: 0 },
-            feeRate: 0.0005, spread: 1.20,
+        // ==========================================
+        // DATA KUIS & ACHIEVEMENT SYSTEM
+        // ==========================================
+        const quizData = [
+            { q: "Jika Data Inflasi (CPI) AS meroket tajam dari perkiraan, apa yang biasa The Fed lakukan?", opts: ["Menurunkan Suku Bunga", "Menaikkan Suku Bunga", "Membeli Obligasi", "Mencetak Uang"], ans: 1 },
+            { q: "Data NFP rilis JAUH lebih rendah (buruk) dari perkiraan. Apa dampak umumnya ke Gold (XAUUSD)?", opts: ["Gold Terjun Bebas", "Gold Akan Naik (Bullish)", "Gold Sideways", "Tidak Ada Efek"], ans: 1 },
+            { q: "Money Supply M2 mencakup apa saja?", opts: ["Hanya Uang Fisik", "Uang Fisik + Tabungan Lancar", "Hutang Pemerintah", "Cadangan Devisa Negara"], ans: 1 },
+            { q: "Konsep 'Smart Money' sering menargetkan area apa untuk menjebak retail?", opts: ["Area Support & Resistance", "Area Liquidity", "Titik Fibonacci 0.5", "Garis Moving Average"], ans: 1 },
+            { q: "Jika The Fed memutuskan untuk 'Hawkish', apa dampaknya pada US Dollar?", opts: ["Melemah", "Menguat", "Stagnan", "Tidak Terpengaruh"], ans: 1 },
+            { q: "Indikator fundamental manakah yang paling menggerakkan pasar setiap hari Jumat minggu pertama?", opts: ["CPI", "NFP", "Retail Sales", "GDP"], ans: 1 },
+            { q: "Apa yang dimaksud dengan 'Dovish' dalam kebijakan moneter?", opts: ["Cenderung menaikkan suku bunga", "Cenderung menurunkan suku bunga", "Menjaga suku bunga tetap", "Menghapus suku bunga"], ans: 1 },
+            { q: "Ketika tingkat pengangguran (Unemployment Rate) naik tak terduga, biasanya US Dollar akan?", opts: ["Melemah", "Menguat", "Tidak Bergerak", "Meroket"], ans: 0 },
+            { q: "Apa aset 'Safe Haven' yang paling sering dicari saat terjadi perang atau krisis?", opts: ["Bitcoin", "Saham Tech", "Emas (Gold)", "Minyak Mentah"], ans: 2 },
+            { q: "Ketika US Treasury Yield 10Y naik drastis, apa yang umumnya terjadi pada Emas (XAUUSD)?", opts: ["Emas Terbang Ratusan Pips", "Emas Turun / Tertekan", "Tidak Ada Hubungan", "Harga Emas di-Lock"], ans: 1 }
+        ];
 
-            init() { this.updateBalanceUI(); this.connectWS(); },
-            connectWS() {
-                this.ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker');
-                this.ws.onmessage = (e) => {
-                    const data = JSON.parse(e.data);
-                    if (data.c) {
-                        this.simPrice = parseFloat(data.c);
-                        this.updatePricesUI();
-                        if (this.positions.length > 0) this.updateRunningPnL();
+        function initQuiz() {
+            let total = parseInt(localStorage.getItem('quizTotal') || 0);
+            let corrects = parseInt(localStorage.getItem('quizCorrect') || 0);
+            let acc = total > 0 ? ((corrects/total)*100).toFixed(0) : 0;
+            let rank = "Pemula Baru";
+            
+            if (total > 0) {
+                if (acc >= 90) rank = "👑 Grandmaster Makro";
+                else if (acc >= 70) rank = "🏅 Master Trader";
+                else if (acc >= 50) rank = "🥈 Trader Amatir";
+                else rank = "🥉 Penjudi Pasar";
+            }
+            document.getElementById('quiz-achievement').innerHTML = `🏆 Akurasi Anda: ${acc}% (Benar: ${corrects} | Total: ${total}) <br> <b>Rank Anda: ${rank}</b>`;
+
+            let overlay = document.getElementById("quiz-overlay");
+            let qIndex = Math.floor(Math.random() * quizData.length);
+            let currentQ = quizData[qIndex];
+            
+            document.getElementById("quiz-question").innerText = currentQ.q;
+            let optionsDiv = document.getElementById("quiz-options");
+            optionsDiv.innerHTML = "";
+            
+            currentQ.opts.forEach((opt, idx) => {
+                let btn = document.createElement("button");
+                btn.className = "quiz-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, currentQ.ans);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            document.getElementById("quiz-overlay").style.display = "none";
+            
+            let total = parseInt(localStorage.getItem('quizTotal') || 0) + 1;
+            let corrects = parseInt(localStorage.getItem('quizCorrect') || 0);
+
+            let resOverlay = document.createElement("div");
+            resOverlay.id = "quiz-result-overlay";
+
+            if(selected === correct) {
+                corrects++;
+                document.body.style.backgroundColor = "#0d47a1"; 
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                resOverlay.innerText = "BARIKI\nSUGEH";
+                resOverlay.style.color = "#00e676";
+            } else {
+                document.body.style.backgroundColor = "#8a0303"; 
+                document.body.classList.add('shake-screen');
+                Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                resOverlay.innerText = "SUAAAALLAAAAAH";
+                resOverlay.style.color = "#ff1744";
+            }
+
+            localStorage.setItem('quizTotal', total);
+            localStorage.setItem('quizCorrect', corrects);
+
+            document.body.appendChild(resOverlay);
+            resOverlay.style.display = "flex";
+
+            setTimeout(() => {
+                resOverlay.remove();
+                document.body.style.backgroundColor = "#0b0e14"; 
+                document.body.classList.remove('shake-screen');
+            }, 2500);
+        }
+
+        initQuiz();
+
+        function showTab(t, elem) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
+            elem.classList.add('active');
+            Telegram.WebApp.HapticFeedback.selectionChanged();
+        }
+
+        // ==========================================
+        // FITUR PENCARIAN EDUKASI (AKORDION)
+        // ==========================================
+        function filterEdukasi() {
+            let input = document.getElementById('searchEdu').value.toUpperCase();
+            let container = document.getElementById('edu-accordion-container');
+            let detailsList = container.getElementsByTagName('details');
+
+            for (let i = 0; i < detailsList.length; i++) {
+                let detail = detailsList[i];
+                let buttons = detail.getElementsByClassName('edu-btn');
+                let hasMatch = false;
+
+                for (let j = 0; j < buttons.length; j++) {
+                    if (buttons[j].innerText.toUpperCase().indexOf(input) > -1) {
+                        buttons[j].style.display = "";
+                        hasMatch = true;
+                    } else {
+                        buttons[j].style.display = "none";
                     }
-                };
-                this.ws.onclose = () => setTimeout(() => this.connectWS(), 3000);
-            },
-            updatePricesUI() {
-                if(!document.getElementById('pt-sync-price')) return;
-                document.getElementById('pt-sync-price').textContent = this.simPrice.toFixed(2);
-                document.getElementById('pt-sell-price').textContent = (this.simPrice - (this.spread/2)).toFixed(2);
-                document.getElementById('pt-buy-price').textContent = (this.simPrice + (this.spread/2)).toFixed(2);
-            },
-            updateBalanceUI() { document.getElementById('header-balance').innerHTML = `Equ: $${this.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`; },
-            openPosition(type) {
-                const lot = parseFloat(document.getElementById('pt-lot').value);
-                if (isNaN(lot) || lot <= 0) return alert("Volume tidak valid");
-                const entryPrice = type === 'BUY' ? this.simPrice + (this.spread/2) : this.simPrice - (this.spread/2);
-                const feeCost = (entryPrice * lot) * this.feeRate;
-                this.balance -= feeCost;
-                this.positions.push({ id: Date.now(), type: type, lot: lot, entry: entryPrice, pnl: -feeCost });
-                this.updateBalanceUI(); this.renderList();
-            },
-            updateRunningPnL() {
-                this.positions.forEach(p => {
-                    let markPrice = p.type === 'BUY' ? (this.simPrice - (this.spread/2)) : (this.simPrice + (this.spread/2));
-                    let priceDiff = p.type === 'BUY' ? (markPrice - p.entry) : (p.entry - markPrice);
-                    p.pnl = priceDiff * p.lot; 
-                });
-                this.renderList();
-            },
-            closePosition(id) {
-                const index = this.positions.findIndex(x => x.id === id);
-                if (index === -1) return;
-                const pos = this.positions[index];
-                this.balance += pos.pnl;
-                this.stats.trades++; if(pos.pnl > 0) this.stats.wins++; this.stats.netPnl += pos.pnl;
-                Journal.addRecord(pos.type, `BTC/USDT (${pos.lot} Vol)`, pos.pnl);
-                this.positions.splice(index, 1);
-                this.updateBalanceUI(); this.renderList(); this.updateStatsUI();
-            },
-            renderList() {
-                const list = document.getElementById('pt-active-list');
-                if(this.positions.length === 0) { list.innerHTML = '<p class="text-center text-muted">Tidak ada pesanan berjalan.</p>'; return; }
-                list.innerHTML = '';
-                this.positions.forEach(p => {
-                    const color = p.pnl >= 0 ? 'var(--accent)' : 'var(--danger)';
-                    list.insertAdjacentHTML('beforeend', `
-                        <div class="pt-item" style="border-left: 3px solid ${p.type==='BUY'?'var(--success)':'var(--danger)'}">
-                            <div>
-                                <b style="color:white;">${p.type} ${p.lot} BTC</b>
-                                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">ENTRY: ${p.entry.toFixed(2)}</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <b style="color:${color}; font-size:16px; font-family:var(--font-mono);">$${p.pnl.toFixed(2)}</b><br>
-                                <button class="btn btn-outline" style="padding:4px 12px; font-size:10px; margin-top:8px;" onclick="Engine.closePosition(${p.id})">CLOSE</button>
-                            </div>
-                        </div>`);
-                });
-            },
-            updateStatsUI() {
-                document.getElementById('j-trades').textContent = this.stats.trades;
-                document.getElementById('j-winrate').textContent = `${this.stats.trades === 0 ? 0 : Math.round((this.stats.wins / this.stats.trades) * 100)}%`;
-                document.getElementById('j-pnl').textContent = `$${this.stats.netPnl.toFixed(2)}`;
-                document.getElementById('j-pnl').style.color = this.stats.netPnl >= 0 ? 'var(--accent)' : 'var(--danger)';
+                }
+
+                if (input !== "") {
+                    if (hasMatch) {
+                        detail.style.display = "";
+                        detail.open = true;
+                    } else {
+                        detail.style.display = "none";
+                    }
+                } else {
+                    detail.style.display = "";
+                    detail.open = false; 
+                    for (let j = 0; j < buttons.length; j++) {
+                        buttons[j].style.display = "";
+                    }
+                }
             }
-        };
+        }
 
+        // ==========================================
+        // SISTEM PERPUSTAKAAN ANTIPRAKTIS LOGIC
+        // ==========================================
+        let aiLibraryData = JSON.parse(localStorage.getItem('aiLibrary')) || [];
+        let currentAiTitle = "";
+        let currentAiContent = "";
+        let lastAskedTopicContext = ""; 
 
-        // ----------------------------------------------------
-        // 3. UI RENDERERS (ACADEMY, MACRO, JOURNAL, BOT)
-        // ----------------------------------------------------
-        const UI = {
-            renderAcademy() {
-                const container = document.getElementById('academy-container');
-                DataStore.academy.forEach(c => {
-                    container.insertAdjacentHTML('beforeend', `<h4 style="margin-top:20px; font-size:14px; color:var(--text-muted); border-bottom:1px dashed var(--border); padding-bottom:8px;">${c.cat}</h4>`);
-                    c.list.forEach(i => container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary>${i.t}</summary><div class="edu-content">${i.d}</div></details>`));
+        function renderLibrary() {
+            let list = document.getElementById('library-list');
+            list.innerHTML = "";
+            if(aiLibraryData.length === 0) {
+                list.innerHTML = "<div style='text-align:center; color:#aaa; padding:10px;'>Belum ada data tersimpan. Klik tombol simpan saat Antipraktis Logic menjawab!</div>";
+            } else {
+                aiLibraryData.forEach((item, index) => {
+                    list.innerHTML += `
+                        <div style="background: #242f3d; padding: 10px; border-radius: 5px; margin-bottom: 5px; cursor: pointer; border-left: 3px solid #2962ff;" onclick="openLibraryItem(${index})">
+                            <b style="color:#fff; font-size: 12px;">${item.title}</b><br>
+                            <i style="color:#aaa; font-size: 10px;">Klik untuk membaca kembali</i>
+                        </div>`;
                 });
-            },
-            renderPlaybook() {
-                const container = document.getElementById('playbook-container');
-                DataStore.playbook.forEach(i => container.insertAdjacentHTML('beforeend', `<details class="edu-module"><summary><span style="color:var(--primary);">■</span> ${i.t}</summary><div class="edu-content">${i.d}</div></details>`));
-            },
-            updateSession() {
-                const h = new Date().getHours(); 
-                const b = document.getElementById('session-badge');
+            }
+        }
+
+        function saveToLibrary() {
+            if(!currentAiContent) return;
+            let exists = aiLibraryData.find(i => i.title === currentAiTitle);
+            if(!exists) {
+                aiLibraryData.unshift({ title: currentAiTitle, content: currentAiContent });
+                localStorage.setItem('aiLibrary', JSON.stringify(aiLibraryData));
+                renderLibrary();
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                Telegram.WebApp.showAlert("✅ Jawaban Antipraktis Logic berhasil disimpan ke Perpustakaan!");
+            } else {
+                Telegram.WebApp.showAlert("⚠️ Jawaban ini sudah ada di Perpustakaan.");
+            }
+        }
+
+        function clearLibrary() {
+            Telegram.WebApp.showConfirm("Yakin ingin menghapus semua isi Perpustakaan?", function(confirmed) {
+                if(confirmed) {
+                    aiLibraryData = [];
+                    localStorage.setItem('aiLibrary', JSON.stringify(aiLibraryData));
+                    renderLibrary();
+                    Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+                }
+            });
+        }
+
+        function openLibraryItem(index) {
+            let item = aiLibraryData[index];
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-content');
+            
+            modal.style.display = 'flex';
+            document.getElementById('ai-modal-title').innerText = "📚 " + item.title;
+            content.innerHTML = item.content;
+            document.getElementById('btn-save-ai').style.display = 'none';
+            document.getElementById('btn-belum-paham').style.display = 'none'; 
+            document.getElementById('followup-container').style.display = 'none';
+        }
+
+        renderLibrary();
+
+        function parseMD(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function fetchAI(promptText, titleText) {
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-content');
+            const btnSave = document.getElementById('btn-save-ai');
+            const btnBelumPaham = document.getElementById('btn-belum-paham');
+            const followupCont = document.getElementById('followup-container');
+            
+            currentAiTitle = titleText || "Penjelasan Antipraktis Logic";
+            document.getElementById('ai-modal-title').innerText = "🤖 Analisis: " + currentAiTitle;
+            currentAiContent = "";
+            
+            btnSave.style.display = 'none';
+            btnBelumPaham.style.display = 'none';
+            followupCont.style.display = 'none'; 
+
+            modal.style.display = 'flex';
+            content.innerHTML = "<i>Menganalisis skenario market... Mohon tunggu ⏳</i>";
+            Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+
+            try {
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{role: "user", content: promptText}]
+                    })
+                });
+                const data = await response.json();
+                if(data.choices && data.choices.length > 0) {
+                    currentAiContent = parseMD(data.choices[0].message.content);
+                    content.innerHTML = currentAiContent;
+                    btnSave.style.display = 'block';
+                    btnBelumPaham.style.display = 'block'; 
+                    followupCont.style.display = 'block'; 
+                    Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                } else {
+                    content.innerHTML = "⚠️ Terjadi kesalahan atau batas limit API tercapai.";
+                }
+            } catch (e) {
+                content.innerHTML = "⚠️ Gagal terkoneksi ke Server. Pastikan internet Anda stabil.";
+            }
+        }
+
+        // ==========================================
+        // DISKUSI LANJUTAN (TANYA BALIK) DI POPUP
+        // ==========================================
+        async function sendFollowUp() {
+            let followUpInput = document.getElementById('ai-followup');
+            let followUpQ = followUpInput.value;
+            if(!followUpQ.trim()) return;
+
+            const contentDiv = document.getElementById('ai-content');
+            
+            contentDiv.innerHTML += `
+                <div style="margin-top: 15px; background: #1f2630; padding: 10px; border-radius: 8px; border-right: 3px solid #2962ff; text-align: right;">
+                    <b style="color: #64b5f6;">Anda:</b><br>${followUpQ}
+                </div>
+                <div id="loading-reply" style="margin-top: 10px; color: #aaa;"><i>Sedang mengetik balasan... ⏳</i></div>
+            `;
+            
+            followUpInput.value = "";
+            contentDiv.scrollTop = contentDiv.scrollHeight; 
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
+
+            let promptLanjutan = `Konteks pembicaraan sebelumnya tentang: "${lastAskedTopicContext}".\n\nPertanyaan lanjutan dari user: "${followUpQ}".\n\nJawab pertanyaan lanjutan ini secara akurat, gunakan bahasa Indonesia yang mudah dimengerti, tetap profesional layaknya Mentor Trading dari Antipraktis Logic, dan sertakan analogi jika cocok.`;
+
+            try {
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{role: "user", content: promptLanjutan}]
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('loading-reply').remove();
                 
-                if (h >= 6 && h < 14) { 
-                    document.body.style.background = "linear-gradient(135deg, #18181b 0%, #4a0d0d 100%)"; 
-                    b.innerHTML = "🇯🇵 TOKYO SESSION"; b.style.color = "#ff3366"; 
-                    document.documentElement.style.setProperty('--primary', '#ff3366');
-                }
-                else if (h >= 14 && h < 19) { 
-                    document.body.style.background = "linear-gradient(135deg, #0d1b2a 0%, #1b0a1a 100%)"; 
-                    b.innerHTML = "🇬🇧 LONDON SESSION"; b.style.color = "#3D8BFF"; 
-                    document.documentElement.style.setProperty('--primary', '#3D8BFF');
-                }
-                else { 
-                    document.body.style.background = "linear-gradient(135deg, #0a1128 0%, #3e1f24 100%)"; 
-                    b.innerHTML = "🇺🇸 NEW YORK SESSION"; b.style.color = "#FFB020"; 
-                    document.documentElement.style.setProperty('--primary', '#FFB020');
-                }
-            }
-        };
-
-        const NewsManager = {
-            generateDailyBrief() {
-                // Mendapatkan tanggal hari ini secara otomatis
-                const today = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const dateStr = today.toLocaleDateString('id-ID', options);
-
-                const html = `
-                    <p style="margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">
-                        Berikut ringkasan berita yang paling relevan untuk trader forex hari ini (<b>${dateStr}</b>):
-                    </p>
-                    
-                    <h5 style="color: var(--text-main); font-size: 14px; margin-top: 15px; margin-bottom: 8px;">📰 Berita Trump & Geopolitik</h5>
-                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-                        <li>Presiden Donald Trump masih menjadi sorotan terkait negosiasi dengan Iran. Setelah ketegangan dan konflik beberapa pekan terakhir, terdapat upaya gencatan senjata dan pembicaraan damai yang memengaruhi sentimen pasar global. <span style="color: var(--primary); font-size: 11px;">[The Guardian]</span></li>
-                        <li>Perkembangan Timur Tengah membuat pasar sering berganti antara mode <i>risk-on</i> dan <i>risk-off</i>, yang berdampak langsung pada USD, emas (XAU/USD), dan harga minyak. <span style="color: var(--primary); font-size: 11px;">[Forex]</span></li>
-                    </ul>
-
-                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">💵 Berita USD & Federal Reserve</h5>
-                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-                        <li>Ketua baru The Fed, Kevin Warsh, mempertahankan sikap yang relatif hawkish dan belum memberi sinyal kuat untuk pemotongan suku bunga. Hal ini mendukung penguatan dolar AS. <span style="color: var(--primary); font-size: 11px;">[MarketWatch]</span></li>
-                        <li>Indeks Dolar (DXY) berada di sekitar 100 dan masih menunjukkan kekuatan dibanding beberapa mata uang utama dalam beberapa minggu terakhir. <span style="color: var(--primary); font-size: 11px;">[Trading Economics]</span></li>
-                    </ul>
-
-                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">📈 Dampak ke Forex</h5>
-                    <div class="grid-2" style="margin-bottom: 15px; gap: 10px;">
-                        <div style="background: rgba(0,230,184,0.05); border: 1px solid var(--accent); padding: 12px; border-radius: 8px;">
-                            <b style="color: var(--accent); display: block; margin-bottom: 5px;"><i class="fa-solid fa-arrow-trend-up"></i> Bullish USD:</b>
-                            <ul style="padding-left: 15px; font-size: 12px; color: var(--text-muted); margin: 0;">
-                                <li>Sikap hawkish The Fed.</li>
-                                <li>Yield obligasi AS yang lebih tinggi.</li>
-                                <li>Arus modal masuk ke aset AS.</li>
-                            </ul>
+                if(data.choices && data.choices.length > 0) {
+                    let aiReply = parseMD(data.choices[0].message.content);
+                    contentDiv.innerHTML += `
+                        <div style="margin-top: 10px; background: transparent; padding: 10px; border-left: 3px solid #089981;">
+                            <b style="color: #089981;">Antipraktis Logic:</b><br>${aiReply}
                         </div>
-                        <div style="background: rgba(255,51,102,0.05); border: 1px solid var(--danger); padding: 12px; border-radius: 8px;">
-                            <b style="color: var(--danger); display: block; margin-bottom: 5px;"><i class="fa-solid fa-arrow-trend-down"></i> Bearish USD:</b>
-                            <ul style="padding-left: 15px; font-size: 12px; color: var(--text-muted); margin: 0;">
-                                <li>Situasi geopolitik membaik (risk-on).</li>
-                                <li>Ketidakpastian kebijakan tarif Trump.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h5 style="color: var(--text-main); font-size: 14px; margin-bottom: 8px;">🎯 Pair Pantauan Utama</h5>
-                    <ul style="padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-                        <li><b style="color: white;">EUR/USD</b> → Sensitif terhadap arah USD.</li>
-                        <li><b style="color: white;">GBP/USD</b> → Mengikuti sentimen dolar dan data Inggris.</li>
-                        <li><b style="color: white;">USD/JPY</b> → Sangat dipengaruhi yield AS.</li>
-                        <li><b style="color: white;">XAU/USD (Emas)</b> → Sensitif terhadap berita Iran, Trump, dan The Fed.</li>
-                    </ul>
-
-                    <div style="background: rgba(255, 176, 32, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid var(--warning); margin-top: 15px;">
-                        <b style="color: var(--warning); font-size: 13px;"><i class="fa-solid fa-bullseye"></i> Fokus Utama Trader:</b>
-                        <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Pernyataan baru Trump terkait Iran & tarif perdagangan, komentar pejabat The Fed, serta rilis data ekonomi AS minggu depan (inflasi, tenaga kerja, dan PMI).</p>
-                    </div>
-                `;
-
-                document.getElementById('live-news-content').innerHTML = html;
-            }
-        };
-
-        const MacroBook = {
-            page: 0,
-            render() {
-                const b = DataStore.macro[this.page];
-                document.getElementById('book-title').textContent = b.t;
-                document.getElementById('book-content').textContent = b.c;
-                document.getElementById('book-page-num').textContent = `${this.page + 1} / ${DataStore.macro.length}`;
-            },
-            next() { if(this.page < DataStore.macro.length - 1) { this.page++; this.render(); } },
-            prev() { if(this.page > 0) { this.page--; this.render(); } },
-            jump() {
-                let val = parseInt(document.getElementById('book-jump-input').value);
-                if(val >= 1 && val <= DataStore.macro.length) { this.page = val - 1; this.render(); document.getElementById('book-jump-input').value = '';}
-            }
-        };
-
-        const Journal = {
-            addManual() {
-                const amt = parseFloat(document.getElementById('j-amount').value) || 0;
-                Engine.stats.trades++; if(amt > 0) Engine.stats.wins++; Engine.stats.netPnl += amt; Engine.updateStatsUI();
-                this.addRecord(document.getElementById('j-type').value, document.getElementById('j-pair').value || 'MANUAL', amt);
-                document.getElementById('j-amount').value = ''; document.getElementById('j-pair').value = '';
-            },
-            addRecord(title, desc, amount) {
-                const color = amount >= 0 ? 'var(--accent)' : 'var(--danger)'; const d = new Date();
-                const html = `<div class="pt-item" style="border-right: 4px solid ${color};"><div><b style="font-size:13px; font-family:var(--font-mono);">${title}</b><div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${desc} | ${d.getHours()}:${d.getMinutes()}</div></div><div style="color:${color}; font-weight:800; font-family:var(--font-mono); font-size:16px;">$${amount.toFixed(2)}</div></div>`;
-                document.getElementById('journal-list').insertAdjacentHTML('afterbegin', html);
-            }
-        };
-
-        const Tools = {
-            rates: { USD: 1, IDR: 16100, EUR: 0.92 }, 
-            calc() { 
-                let amt = parseFloat(document.getElementById('conv-amt').value) || 0;
-                let from = document.getElementById('conv-from').value;
-                let to = document.getElementById('conv-to').value;
-                let res = (amt / this.rates[from]) * this.rates[to]; 
-                document.getElementById('conv-res').textContent = res.toLocaleString(to==='IDR'?'id-ID':'en-US', {style: 'currency', currency: to}); 
-            } 
-        };
-
-        const Bot = {
-            toggle() { document.getElementById('bot-modal').classList.toggle('active'); }, 
-            send() { 
-                const input = document.getElementById('bot-input'); 
-                if(!input.value.trim()) return; 
-                document.getElementById('bot-chat-area').insertAdjacentHTML('beforeend', `<div class="chat-bubble user-msg">${input.value}</div>`); 
-                input.value = ''; 
-                setTimeout(() => document.getElementById('bot-chat-area').insertAdjacentHTML('beforeend', `<div class="chat-bubble bot-msg">Sistem API sedang menganalisis kueri. Sesuai data Ekonomi Makro terkini, perhatikan siklus aliran pendapatan institusional sebelum eksekusi.</div>`), 1000); 
-            } 
-        };
-
-        // ----------------------------------------------------
-        // 4. MAIN APP INITIALIZATION
-        // ----------------------------------------------------
-        const App = {
-            init() {
-                if(window.Telegram?.WebApp) {
-                    const tg = window.Telegram.WebApp; tg.ready(); tg.expand(); tg.setHeaderColor('#0A0D14');
-                    if(tg.initDataUnsafe?.user) document.getElementById('user-name').textContent = tg.initDataUnsafe.user.first_name;
+                    `;
+                    currentAiContent = contentDiv.innerHTML; 
+                    contentDiv.scrollTop = contentDiv.scrollHeight;
                 }
-
-                // Initialize Components
-                UI.updateSession();
-                setInterval(UI.updateSession, 60000); // Check session every minute
-                UI.renderAcademy(); 
-                UI.renderPlaybook();
-                MacroBook.render(); 
-                Tools.calc(); 
-                Engine.init();
-
-                // Generate Structured Daily News
-                NewsManager.generateDailyBrief();
-
-                // Setup TradingView
-                new TradingView.widget({ "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "15", "theme": "dark", "style": "1", "hide_top_toolbar": false, "container_id": "tv_chart_container" });
-            },
-            nav(id) {
-                document.querySelectorAll('.view-page, .nav-item').forEach(e => e.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
-                document.querySelector(`[data-target="${id}"]`).classList.add('active');
-                window.scrollTo(0,0);
+            } catch (e) {
+                document.getElementById('loading-reply').innerHTML = "⚠️ Balasan gagal, periksa koneksi.";
             }
-        };
+        }
 
-        window.addEventListener('DOMContentLoaded', () => App.init());
+        // ==========================================
+        // MASTER FUNGSI PERINTAH AI
+        // ==========================================
+        function askAI(actionType, value) {
+            if(!value || value.trim() === '') {
+                Telegram.WebApp.showAlert("Kolom teks tidak boleh kosong!");
+                return;
+            }
+
+            let prompt = "";
+            let titleContext = value;
+            lastAskedTopicContext = value; 
+
+            if (actionType === 'EBOOK') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah Antipraktis Logic, sebuah sistem mentor trading yang canggih. Jelaskan materi E-Book: '${value}'. Berikan penjelasan yang terstruktur, mudah dipahami, berikan analogi/contoh, dan cara aplikasinya dalam trading. Jawab dalam Bahasa Indonesia. Gunakan formatting tebal/miring yang rapi.`;
+            } else if (actionType === 'EDUKASI') {
+                prompt = `[INSTRUKSI MUTLAK]: Jawab dalam Bahasa Indonesia. Dilarang pakai tag HTML. Anda adalah Antipraktis Logic. Jelaskan indikator '${value}': \n1. Definisi singkat \n2. Analogi kehidupan sehari-hari \n3. Dampak ke Emas (XAUUSD) & USD \n4. Rumus trading.`;
+            } else if (actionType === 'COMBO_NEWS') {
+                prompt = `[INSTRUKSI MUTLAK]: Jawab Bahasa Indonesia. Dilarang pakai tag HTML. Anda adalah Antipraktis Logic. Jelaskan skenario rilis berita ganda '${value}': \n1. Hierarki Prioritas Bank Besar \n2. Skenario jika data bersinergi \n3. Skenario jika data divergen.`;
+            } else if (actionType === 'FREE_CHAT') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah Antipraktis Logic (Ahli Makroekonomi dan Trading Assistant). Jawablah dalam Bahasa Indonesia yang santai tapi profesional. Pertanyaan: "${value}".`;
+            } else if (actionType === 'FUNDAMENTAL') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah Analis dari Antipraktis Logic. Kejadian: "${value}". Tugas Anda: \n1. Sentimen pasar? \n2. Dampak USD? \n3. Dampak XAUUSD? \n4. Rekomendasi posisi dengan alasan.`;
+            } else if (actionType === 'MADING') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah Antipraktis Logic. Berikan MADING HARIAN (Market Update Hari Ini). Asumsikan Anda merangkum pergerakan dan berita makroekonomi/sentimen terkini yang krusial. Format: \n1. Highlight Berita Utama \n2. Analogi Kehidupan Sehari-hari (agar user paham situasinya) \n3. Arah/Dampak ke USD dan Gold (XAUUSD) hari ini. Gunakan bahasa Indonesia gaul/mentor yang bersahabat.`;
+            } else if (actionType === 'MACRO') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah analis utama di Antipraktis Logic. Jelaskan: '${value}'. Berikan penjabaran mendalam tentang korelasi intermarket (Bonds, Equities, Currencies, Commodities). Gunakan bahasa Indonesia profesional yang mudah dipahami, berikan analogi jika perlu.`;
+            } else if (actionType === 'ROASTING_TK') {
+                prompt = `[INSTRUKSI MUTLAK]: Anda adalah Antipraktis Logic. Pengguna menekan tombol 'Belum Paham' karena dia lambat mengerti tentang '${value}'. Jelaskan ulang konsep ini SEPERTI MENJELASKAN KEPADA ANAK TK (gunakan analogi mainan, permen, atau hal super sepele). WAJIB tambahkan sedikit ROASTINGAN/sindiran lucu di awal karena dia lama pahamnya. Gunakan bahasa Indonesia gaul/santai.`;
+            }
+            fetchAI(prompt, titleContext);
+        }
+
+        function explainLikeTK() {
+            if(!lastAskedTopicContext) return;
+            askAI('ROASTING_TK', lastAskedTopicContext);
+        }
+
+        function processNews(tipe) {
+            let n = document.getElementById("newsName").value;
+            if(!n) { Telegram.WebApp.showAlert("Kopas dulu beritanya!"); return; }
+            
+            let act = document.getElementById("newsAct").value || "-";
+            let prev = document.getElementById("newsPrev").value || "-";
+            let fore = document.getElementById("newsFore").value || "-";
+            
+            let prompt = "";
+            let titleContext = tipe === 'TRANSLATE' ? `Terjemahan: ${n}` : `Analisis: ${n}`;
+            lastAskedTopicContext = n; 
+
+            if(tipe === 'TRANSLATE') {
+                prompt = `Terjemahkan penjelasan kalender finansial berikut secara akurat ke Bahasa Indonesia:\n\n${n}`;
+            } else {
+                prompt = `[INSTRUKSI MUTLAK]: Jawab Bahasa Indonesia. Anda adalah Antipraktis Logic. Teks Berita: ${n}. \nData Rilis -> Aktual: ${act} | Prev: ${prev} | Fore: ${fore}. \nJelaskan: 1. Makna ringkasnya. 2. Analogi sederhana. 3. Dampaknya ke Emas (XAUUSD) & USD.`;
+            }
+            fetchAI(prompt, titleContext);
+        }
     </script>
 </body>
 </html>
