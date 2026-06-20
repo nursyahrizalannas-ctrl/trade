@@ -5,20 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Antipraktis Trade Academy - Pro</title>
     
-    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lottie Player (Animasi Super Ringan) -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <!-- CSS Internal -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <!-- HEADER -->
     <header class="app-header">
-        <h2>Antipraktis Academy</h2>
+        <h2>ANTIPRAKTIS ACADEMY</h2>
     </header>
 
     <!-- TAB 1: DASHBOARD UTAMA -->
@@ -29,59 +25,65 @@
             <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json" background="transparent" speed="1" style="width: 100%; height: 180px;" loop autoplay></lottie-player>
             <div class="video-overlay"></div>
             <div class="hero-text">
-                <h3>Antipraktis Analytics</h3>
+                <h3>Macro Analytics Terminal</h3>
                 <p>Institutional Grade Logic</p>
             </div>
         </div>
 
-        <!-- Widget TradingView -->
+        <!-- WIDGET TRADINGVIEW -->
         <div class="card" style="padding: 0; border: none; background: transparent; box-shadow: none;">
             <div class="tradingview-widget-container">
               <div class="tradingview-widget-container__widget"></div>
               <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-              { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "GOLD" }, { "proName": "FX:EURUSD", "title": "EUR/USD" }, { "proName": "FX:USDJPY", "title": "USD/JPY" }, { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR" } ], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "id" }
+              { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "GOLD" }, { "proName": "FX:EURUSD", "title": "EUR/USD" }, { "proName": "FX:USDJPY", "title": "USD/JPY" }, { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR" } ], "showSymbolLogo": false, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en" }
               </script>
             </div>
         </div>
 
-        <!-- AI Macro Watchlist -->
+        <!-- AI MACRO WATCHLIST -->
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h4 style="color: var(--accent-red); margin: 0;">Antipraktis Macro Watchlist</h4>
+            <div class="card-header">
+                <h4 style="color: var(--accent-red);">ANTIPRAKTIS MACRO WATCHLIST</h4>
             </div>
             <div id="recom-container">
-                <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0;">⏳ Menarik data bias market...</div>
+                <div class="loading-state">
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
+                    <span>Menarik data institusi...</span>
+                </div>
             </div>
         </div>
 
-        <!-- Live News Investing & AI Analysis -->
+        <!-- LIVE NEWS INVESTING -->
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="color: var(--accent-blue); margin: 0;">🌐 Live Market News</h4>
-                <button class="action-btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 4px 8px; font-size: 11px; width: auto; border-radius: 6px;" onclick="fetchLiveNews()">🔄 Refresh</button>
+            <div class="card-header">
+                <h4 style="color: var(--accent-blue);">LIVE MARKET NEWS</h4>
+                <button class="outline-btn" onclick="fetchLiveNews()">REFRESH</button>
             </div>
-            <div id="live-news-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 5px;">
-                <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">⏳ Menghubungkan ke server berita...</div>
+            <div id="live-news-container" class="scrollable-container">
+                <div class="loading-state">
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
+                    <span>Menghubungkan ke node server...</span>
+                </div>
             </div>
-            <div style="font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 12px; font-style: italic;">
-                *Ketuk berita untuk melihat analisis eksklusif AI.
+            <div class="disclaimer">
+                *Ketuk berita untuk melihat analisis eksklusif dan kesinambungan makro.
             </div>
         </div>
 
-        <!-- Sesi Market Global -->
+        <!-- SESI MARKET GLOBAL -->
         <div class="card" id="session-container">
-            <h4 style="color:var(--text-main);">🌍 Global Market Session</h4>
-            <div id="session-status" style="font-size:13px; color:white; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
-                ⏳ Memuat Sesi Market...
+            <h4>GLOBAL MARKET SESSION</h4>
+            <div id="session-status" class="session-box">
+                Memuat siklus market...
             </div>
         </div>
     </div>
 
-    <!-- TAB 2: KALENDER -->
+    <!-- TAB 2: MADING -->
     <div id="news" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <h4 style="color:var(--accent-blue);">📜Mading Makro Harian</h4>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Dapatkan rangkuman sentimen pasar terbaru dari AI.</p>
+            <h4 style="color:var(--accent-blue);">MADING MAKRO HARIAN</h4>
+            <p class="subtitle">Dapatkan rangkuman sentimen pasar terbaru dari AI.</p>
             <button class="action-btn blue" onclick="askAI('MADING')">BACA MADING HARI INI</button>
         </div>
     </div>
@@ -89,55 +91,56 @@
     <!-- TAB 3: EDUKASI -->
     <div id="edu" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color:var(--accent-red);">Antipraktis Logic</h4>
-            <input type="text" id="freeChat" placeholder="Cth: Kenapa NFP ngaruh ke Gold?">
-            <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">TANYA MENTOR LOGIC</button>
+            <h4 style="color:var(--accent-red);">TANYA BEBAS</h4>
+            <input type="text" id="freeChat" placeholder="Cth: Korelasi NFP terhadap likuiditas Gold">
+            <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">ANALISIS PERTANYAAN</button>
         </div>
     </div>
 
     <!-- TAB 4: COMBO -->
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <h4 style="color: var(--accent-blue);">🔥 Analisis Rilis Ganda</h4>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Solusi AI saat rilis data bentrok di waktu yang sama.</p>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="action-btn blue" onclick="askAI('COMBO_NEWS', 'Paket NFP')">Paket NFP Lengkap</button>
-                <button class="action-btn red" onclick="askAI('COMBO_NEWS', 'Paket CPI')">Paket CPI Lengkap</button>
+            <h4 style="color: var(--accent-blue);">ANALISIS RILIS GANDA</h4>
+            <p class="subtitle">Solusi AI saat rilis data bentrok di waktu yang sama.</p>
+            <div class="btn-group">
+                <button class="action-btn blue" onclick="askAI('COMBO_NEWS', 'Paket NFP')">PAKET NFP LENGKAP</button>
+                <button class="action-btn red" onclick="askAI('COMBO_NEWS', 'Paket CPI')">PAKET CPI LENGKAP</button>
             </div>
         </div>
     </div>
 
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <a class="nav-item active" onclick="showTab('main', this)"><span class="icon"></span><span>Dashboard</span></a>
-        <a class="nav-item" onclick="showTab('news', this)"><span class="icon"></span><span>Berita</span></a>
-        <a class="nav-item" onclick="showTab('edu', this)"><span class="icon"></span><span>Edukasi</span></a>
-        <a class="nav-item" onclick="showTab('combo', this)"><span class="icon"></span><span>Combo</span></a>
+        <a class="nav-item active" onclick="showTab('main', this)">DASHBOARD</a>
+        <a class="nav-item" onclick="showTab('news', this)">BERITA</a>
+        <a class="nav-item" onclick="showTab('edu', this)">EDUKASI</a>
+        <a class="nav-item" onclick="showTab('combo', this)">COMBO</a>
     </nav>
 
-    <!-- MODAL POP-UP RINGKASAN BERITA PROFESIONAL -->
+    <!-- MODAL POP-UP AI SUMMARY -->
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 style="font-size: 14px; color: var(--accent-red); margin: 0; font-weight: 800; text-transform: uppercase;">
-                     Antipraktis LOGIC
-                </h3>
+                <h3>ANTIPRAKTIS LOGIC</h3>
                 <button class="close-btn" onclick="closeNewsModal()">✕</button>
             </div>
             <div class="modal-body">
-                <h4 id="modal-news-title" style="font-size: 15px; margin-bottom: 8px; line-height: 1.4; color: white;">Memuat Judul...</h4>
-                <div id="modal-news-excerpt" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); font-style: italic;">
-                    Kutipan asli berita akan muncul di sini...
+                <h4 id="modal-news-title" class="modal-title">Memuat Judul...</h4>
+                
+                <div id="modal-loader" style="display: none; text-align: center; padding: 20px 0;">
+                    <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_x62chj.json" background="transparent" speed="1.5" style="width: 80px; height: 80px; margin: 0 auto;" loop autoplay></lottie-player>
+                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Menganalisis Node Data...</div>
                 </div>
-                <div id="modal-news-content" style="font-size: 13px; color: #E2E8F0; line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                    ⏳ Sedang menyusun laporan institusional...
+
+                <div id="modal-news-content" class="modal-analysis">
+                    <!-- Konten AI akan dirender di sini -->
                 </div>
-                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 15px; padding: 10px; font-size: 12px;">BACA ARTIKEL ASLI</button>
+                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 20px;">BACA ARTIKEL ASLI</button>
             </div>
         </div>
     </div>
 
-    <!-- Load JS -->
+    <!-- SCRIPT -->
     <script src="js/ui.js"></script>
     <script src="js/market.js"></script>
 </body>
