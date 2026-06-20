@@ -1,26 +1,27 @@
 /* ==========================================================================
-   MARKET.JS - LOGIKA TRADING & AI NEWS ANALYTICS
+   MARKET.JS - LOGIKA TRADING & INSTITUTIONAL NEWS ANALYTICS
    ========================================================================== */
 
-// 1. Generate AI Macro Watchlist
+let globalNewsData = []; // Array untuk menyimpan data berita asli
+
+// 1. Generate AI Macro Watchlist (Simulasi)
 function generateRecommendations() {
     const container = document.getElementById('recom-container');
     setTimeout(() => {
         const aiData = [
-            { asset: "XAUUSD", bias: "BULLISH", reason: "Sentimen pemangkasan suku bunga & de-dolarisasi memicu akumulasi buy institusi." },
-            { asset: "DXY", bias: "BEARISH", reason: "Pelemahan imbal hasil obligasi AS menekan kekuatan indeks Dolar." }
+            { asset: "XAUUSD", bias: "BULLISH", reason: "Sentimen pemangkasan suku bunga & pergerakan likuiditas menuju aset safe-haven." },
+            { asset: "DXY", bias: "BEARISH", reason: "Pelemahan yield obligasi AS menekan kekuatan USD di area supply utama." }
         ];
         container.innerHTML = ''; 
         aiData.forEach(item => {
             let badgeClass = item.bias === 'BULLISH' ? 'bullish' : 'bearish';
-            // Styling diubah agar sesuai dengan tema merah-biru
             container.insertAdjacentHTML('beforeend', `
                 <div class="recom-item" style="border-left-color: var(--accent-${item.bias==='BULLISH'?'blue':'red'});">
                     <div class="recom-top">
                         <div class="asset-name">${item.asset}</div>
                         <div class="badge ${badgeClass}">${item.bias}</div>
                     </div>
-                    <div class="recom-reason"><strong>AI Logic:</strong> ${item.reason}</div>
+                    <div class="recom-reason"><strong>Smart Money Logic:</strong> ${item.reason}</div>
                 </div>
             `);
         });
@@ -34,17 +35,17 @@ function updateMarketSession() {
     let session = "Sesi Market Tutup";
     
     if (utcHour >= 22 || utcHour < 8) session = "🇯🇵 SESI ASIA - Volatilitas Rendah";
-    else if (utcHour >= 8 && utcHour < 13) session = "🇬🇧 SESI LONDON - Volatilitas Naik";
-    else if (utcHour >= 13 && utcHour < 17) session = "🔥 NEW YORK OVERLAP - Volatilitas Tinggi";
-    else if (utcHour >= 17 && utcHour < 22) session = "🇺🇸 SESI NEW YORK - Volatilitas Sedang";
+    else if (utcHour >= 8 && utcHour < 13) session = "🇬🇧 SESI LONDON - Menjemput Likuiditas";
+    else if (utcHour >= 13 && utcHour < 17) session = "🔥 NEW YORK OVERLAP - Volatilitas Puncak";
+    else if (utcHour >= 17 && utcHour < 22) session = "🇺🇸 SESI NEW YORK - Distribusi Harga";
 
     statusDiv.innerHTML = session;
 }
 
-// 3. Fetch Live News dari Investing.com
+// 3. Fetch Live News & Simpan ke Array
 function fetchLiveNews() {
     const container = document.getElementById('live-news-container');
-    container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">⏳ Menarik berita live...</div>`;
+    container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">⏳ Sinkronisasi data institusi...</div>`;
 
     const rssUrl = 'https://id.investing.com/rss/news_285.rss';
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
@@ -54,16 +55,15 @@ function fetchLiveNews() {
         .then(data => {
             if (data.status === 'ok') {
                 container.innerHTML = '';
-                const articles = data.items.slice(0, 5); // Ambil 5 berita
+                globalNewsData = data.items.slice(0, 5); // Ambil 5 berita dan simpan
                 
-                articles.forEach(article => {
+                globalNewsData.forEach((article, index) => {
                     const pubDate = new Date(article.pubDate);
                     const timeString = pubDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                    const title = article.title.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/'/g, "\\'");
                     
-                    // Klik pada kotak berita langsung memanggil modal ringkasan AI
+                    // Passing Index (angka) ke fungsi onclick agar terhindar dari error kutipan teks
                     const html = `
-                        <div class="news-item" onclick="openNewsModal('${title}')">
+                        <div class="news-item" onclick="openNewsModal(${index})">
                             <div class="news-time">🕒 Hari ini, ${timeString} WIB</div>
                             <div class="news-title">${article.title}</div>
                         </div>
@@ -72,43 +72,54 @@ function fetchLiveNews() {
                 });
             }
         }).catch(() => {
-            container.innerHTML = `<div style="text-align: center; color: var(--accent-red); font-size: 12px;">Gagal terhubung ke Investing.com</div>`;
+            container.innerHTML = `<div style="text-align: center; color: var(--accent-red); font-size: 12px;">Koneksi terputus ke penyedia data.</div>`;
         });
 }
 
-// 4. LOGIKA MODAL POP-UP RINGKASAN BERITA (3 Paragraf Spesifik)
-function openNewsModal(newsTitle) {
+// 4. Logika Profesional Analisis AI Institusi
+function openNewsModal(newsIndex) {
+    const article = globalNewsData[newsIndex]; // Ambil data dari array
     const modal = document.getElementById('news-modal');
     const titleEl = document.getElementById('modal-news-title');
+    const excerptEl = document.getElementById('modal-news-excerpt');
     const contentEl = document.getElementById('modal-news-content');
+    const btnLink = document.getElementById('modal-link-btn');
 
-    // Tampilkan Modal
     modal.classList.add('show');
-    titleEl.innerText = newsTitle;
-    contentEl.innerHTML = `⏳ AI Antipraktis sedang menyusun ringkasan...`;
+    titleEl.innerText = article.title;
+    
+    // Bersihkan deskripsi asli dari kode HTML gambar/link bawaan Investing
+    let cleanDesc = article.description.replace(/(<([^>]+)>)/gi, "").substring(0, 150) + "...";
+    excerptEl.innerText = `"${cleanDesc}"`;
 
-    // Simulasi AI memproses (Delay 1 detik)
+    contentEl.innerHTML = `<div style="text-align: center;">⏳ AI Sedang Menganalisis...</div>`;
+
+    // Tombol untuk baca ke website asli
+    btnLink.onclick = function() { window.open(article.link, '_blank'); };
+
     setTimeout(() => {
-        // Logika sederhana mendeteksi sentimen berdasarkan kata di judul
-        let sentiment = "Netral";
-        let color = "var(--text-muted)";
-        const lowerTitle = newsTitle.toLowerCase();
+        const titleLower = article.title.toLowerCase();
+        let sentiment = "Netral / Ranging";
+        let sentimentColor = "var(--text-muted)";
         
-        if (lowerTitle.includes("naik") || lowerTitle.includes("tinggi") || lowerTitle.includes("bullish") || lowerTitle.includes("positif")) {
-            sentiment = "Bullish / Ekspansif"; color = "var(--accent-blue)";
-        } else if (lowerTitle.includes("turun") || lowerTitle.includes("anjlok") || lowerTitle.includes("bearish") || lowerTitle.includes("negatif") || lowerTitle.includes("inflasi")) {
-            sentiment = "Bearish / Tertekan"; color = "var(--accent-red)";
+        // Deteksi Keyword Profesional
+        if (titleLower.match(/naik|tinggi|bullish|positif|lonjak|pertumbuhan/)) {
+            sentiment = "Ekspansif (Bullish USD/Risk-On)"; 
+            sentimentColor = "var(--accent-blue)";
+        } else if (titleLower.match(/turun|anjlok|bearish|negatif|inflasi|krisis|lemah/)) {
+            sentiment = "Tertekan (Bearish USD/Safe-Haven On)"; 
+            sentimentColor = "var(--accent-red)";
         }
 
-        // Generate 3 Paragraf Ringkasan
-        const p1 = `<p><strong style="color: white;">1. Inti Sentimen:</strong> Berdasarkan analisis narasi, berita ini membawa dampak sentimen makro yang secara umum bersifat <span style="color: ${color}; font-weight: bold;">${sentiment}</span>. Rilis atau kejadian ini mencerminkan adanya pergeseran arus likuiditas yang diakibatkan oleh perubahan pandangan pelaku pasar terhadap risiko ekonomi saat ini.</p>`;
+        // Susun 3 Paragraf Standar Institusi (Konteks, Dampak Aset, Eksekusi)
+        const p1 = `<div><strong style="color: var(--accent-blue);">1. Konteks Makro:</strong><br> Berita ini mengonfirmasi arus data yang berpotensi memicu bias sentimen <span style="color: ${sentimentColor}; font-weight: bold;">${sentiment}</span>. Katalis ini kemungkinan besar akan digunakan oleh institusi sebagai alasan fundamental untuk menyesuaikan portofolio likuiditas mereka.</div>`;
         
-        const p2 = `<p><strong style="color: white;">2. Dampak Aset (Gold/USD):</strong> Kondisi ini secara spesifik memengaruhi indeks Dolar (DXY). Jika data ini memicu penguatan DXY, maka aset *safe-haven* seperti XAUUSD (Gold) berisiko mengalami tekanan jual dalam jangka pendek. Sebaliknya, pelemahan nilai aset AS akan membuka ruang bagi aliran dana masuk ke komoditas.</p>`;
+        const p2 = `<div><strong style="color: var(--accent-red);">2. Dampak Aset (XAUUSD / DXY):</strong><br> Jika sentimen ini terbukti melemahkan indeks Dolar (DXY), maka terdapat probabilitas tinggi aliran dana (Smart Money) berpindah ke aset safe-haven seperti Gold. Sebaliknya, penguatan narasi pada data ini dapat menekan harga komoditas dalam jangka pendek.</div>`;
         
-        const p3 = `<p><strong style="color: white;">3. Tindakan Institusi (Smart Money):</strong> Algoritma Antipraktis mendeteksi bahwa area *supply* dan *demand* utama akan segera diuji ulang (re-test). Trader disarankan untuk tidak *entry* secara agresif saat volatilitas berlangsung, melainkan menunggu harga kembali ke level institusional *order block* di sesi Overlap London - New York.</p>`;
+        const p3 = `<div><strong style="color: #fff;">3. Setup & Eksekusi:</strong><br> Antipraktis AI Logic menyarankan Anda untuk **TIDAK FOMO**. Tunggu hingga harga bereaksi, menciptakan manipulasi awal (Liquidity Sweep), lalu cari peluang entry hanya di area *Institutional Order Block* terdekat saat sesi London atau New York dibuka.</div>`;
 
         contentEl.innerHTML = p1 + p2 + p3;
-    }, 1000);
+    }, 1200);
 }
 
 // Tutup Modal
@@ -116,17 +127,19 @@ function closeNewsModal() {
     document.getElementById('news-modal').classList.remove('show');
 }
 
-// 5. Alert AI Sederhana untuk Tab Lain
+// 5. Fitur Lain (Tanya AI / Combo)
 function askAI(type, query = '') {
     const tg = window.Telegram.WebApp;
-    tg.showAlert("Fitur " + type + " sedang diproses oleh Backend AI Antipraktis...");
+    tg.showAlert("Fitur " + type + " sedang diproses di server utama Antipraktis Academy...");
 }
 
-// Inisialisasi Saat Buka App
+// Jalankan otomatis saat buka WebApp
 document.addEventListener("DOMContentLoaded", () => {
     generateRecommendations();
     updateMarketSession();
     fetchLiveNews();
-    setInterval(updateMarketSession, 60000);
-    setInterval(fetchLiveNews, 300000); // Refresh berita tiap 5 menit
+    
+    // Auto-update waktu
+    setInterval(updateMarketSession, 60000); 
+    setInterval(fetchLiveNews, 300000); 
 });
