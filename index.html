@@ -4,18 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Antipraktis Trade Academy - Pro</title>
+    
+    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lottie Player (Animasi Super Ringan) -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- CSS Internal -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+    <!-- HEADER -->
     <header class="app-header">
         <h2>Antipraktis Academy</h2>
     </header>
 
+    <!-- TAB 1: DASHBOARD UTAMA -->
     <div id="main" class="content active">
         
+        <!-- HERO LOTTIE ANIMATION -->
+        <div class="hero-lottie-container">
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json" background="transparent" speed="1" style="width: 100%; height: 180px;" loop autoplay></lottie-player>
+            <div class="video-overlay"></div>
+            <div class="hero-text">
+                <h3>Antipraktis Analytics</h3>
+                <p>Institutional Grade Logic</p>
+            </div>
+        </div>
+
+        <!-- Widget TradingView -->
         <div class="card" style="padding: 0; border: none; background: transparent; box-shadow: none;">
             <div class="tradingview-widget-container">
               <div class="tradingview-widget-container__widget"></div>
@@ -25,18 +44,17 @@
             </div>
         </div>
 
+        <!-- AI Macro Watchlist -->
         <div class="card" style="border-left: 4px solid var(--accent-red);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h4 style="color: var(--accent-red); margin: 0;">📰NEWS WATCHLIST LIVE</h4>
+                <h4 style="color: var(--accent-red); margin: 0;">⚡ AI Macro Watchlist</h4>
             </div>
             <div id="recom-container">
                 <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px 0;">⏳ Menarik data bias market...</div>
             </div>
-            <div style="font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 15px; font-style: italic;">
-                *Data berdasarkan analisis makro institusi. NFA.
-            </div>
         </div>
 
+        <!-- Live News Investing & AI Analysis -->
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <h4 style="color: var(--accent-blue); margin: 0;">🌐 Live Market News</h4>
@@ -45,8 +63,12 @@
             <div id="live-news-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 5px;">
                 <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">⏳ Menghubungkan ke server berita...</div>
             </div>
+            <div style="font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 12px; font-style: italic;">
+                *Ketuk berita untuk melihat analisis eksklusif AI.
+            </div>
         </div>
 
+        <!-- Sesi Market Global -->
         <div class="card" id="session-container">
             <h4 style="color:var(--text-main);">🌍 Global Market Session</h4>
             <div id="session-status" style="font-size:13px; color:white; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 8px; text-align: center; border: 1px solid var(--border-color);">
@@ -55,6 +77,7 @@
         </div>
     </div>
 
+    <!-- TAB 2: KALENDER -->
     <div id="news" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color:var(--accent-blue);">📰 Mading Makro Harian</h4>
@@ -63,17 +86,20 @@
         </div>
     </div>
 
+    <!-- TAB 3: EDUKASI -->
     <div id="edu" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color:var(--accent-red);">💡 Tanya Bebas AI</h4>
+            <h4 style="color:var(--accent-red);">Antipraktis Logic</h4>
             <input type="text" id="freeChat" placeholder="Cth: Kenapa NFP ngaruh ke Gold?">
-            <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">TANYA MENTOR AI</button>
+            <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">TANYA MENTOR LOGIC</button>
         </div>
     </div>
 
+    <!-- TAB 4: COMBO -->
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color: var(--accent-blue);">🔥 Analisis Rilis Ganda</h4>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Solusi AI saat rilis data bentrok di waktu yang sama.</p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button class="action-btn blue" onclick="askAI('COMBO_NEWS', 'Paket NFP')">Paket NFP Lengkap</button>
                 <button class="action-btn red" onclick="askAI('COMBO_NEWS', 'Paket CPI')">Paket CPI Lengkap</button>
@@ -81,32 +107,38 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <a class="nav-item active" onclick="showTab('main', this)"><span class="icon">📊</span><span>Dashboard</span></a>
-        <a class="nav-item" onclick="showTab('news', this)"><span class="icon">📅</span><span>Berita</span></a>
-        <a class="nav-item" onclick="showTab('edu', this)"><span class="icon">📚</span><span>Edukasi</span></a>
-        <a class="nav-item" onclick="showTab('combo', this)"><span class="icon">🔄</span><span>Combo</span></a>
+        <a class="nav-item active" onclick="showTab('main', this)"><span class="icon"></span><span>Dashboard</span></a>
+        <a class="nav-item" onclick="showTab('news', this)"><span class="icon"></span><span>Berita</span></a>
+        <a class="nav-item" onclick="showTab('edu', this)"><span class="icon"></span><span>Edukasi</span></a>
+        <a class="nav-item" onclick="showTab('combo', this)"><span class="icon"></span><span>Combo</span></a>
     </nav>
 
+    <!-- MODAL POP-UP RINGKASAN BERITA PROFESIONAL -->
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 style="font-size: 14px; color: var(--accent-red); margin: 0; display: flex; align-items: center; gap: 8px;">
-                    📜 Antipraktis Logic
+                <h3 style="font-size: 14px; color: var(--accent-red); margin: 0; font-weight: 800; text-transform: uppercase;">
+                     Antipraktis LOGIC
                 </h3>
                 <button class="close-btn" onclick="closeNewsModal()">✕</button>
             </div>
             <div class="modal-body">
-                <h4 id="modal-news-title" style="font-size: 16px; margin-bottom: 15px; line-height: 1.4; color: white;">Memuat Judul...</h4>
-                <div id="modal-news-content" style="font-size: 13px; color: var(--text-muted); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                    ⏳ Sedang menganalisis sentimen market...
+                <h4 id="modal-news-title" style="font-size: 15px; margin-bottom: 8px; line-height: 1.4; color: white;">Memuat Judul...</h4>
+                <div id="modal-news-excerpt" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); font-style: italic;">
+                    Kutipan asli berita akan muncul di sini...
                 </div>
+                <div id="modal-news-content" style="font-size: 13px; color: #E2E8F0; line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
+                    ⏳ Sedang menyusun laporan institusional...
+                </div>
+                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 15px; padding: 10px; font-size: 12px;">BACA ARTIKEL ASLI</button>
             </div>
         </div>
     </div>
 
+    <!-- Load JS -->
     <script src="js/ui.js"></script>
     <script src="js/market.js"></script>
-
 </body>
 </html>
