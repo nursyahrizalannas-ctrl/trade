@@ -117,3 +117,64 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Update jam market secara otomatis setiap 1 menit (60000 ms)
     setInterval(updateMarketSession, 60000);
 });
+
+// 5. Fungsi Fetch Live News (Dari RSS Investing.com Indonesia)
+function fetchLiveNews() {
+    const container = document.getElementById('live-news-container');
+    container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px 0;">⏳ Menarik berita live dari Investing.com...</div>`;
+
+    // Menggunakan RSS Berita Forex/Ekonomi Investing ID + API Pengubah ke JSON (Bypass CORS)
+    const rssUrl = 'https://id.investing.com/rss/news_285.rss';
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                container.innerHTML = ''; // Bersihkan loading
+                
+                // Ambil 5 berita paling baru
+                const articles = data.items.slice(0, 5);
+                
+                articles.forEach(article => {
+                    // Konversi waktu publikasi agar rapi
+                    const pubDate = new Date(article.pubDate);
+                    const timeString = pubDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    const dateString = pubDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                    
+                    // Bersihkan karakter aneh pada judul (jika ada)
+                    const title = article.title.replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+                    
+                    // Buat elemen HTML untuk setiap berita
+                    const html = `
+                        <div class="news-item">
+                            <div class="news-time">🕒 ${dateString}, ${timeString} WIB</div>
+                            <div class="news-title">${title}</div>
+                            <div class="news-action">
+                                <button class="news-btn" onclick="window.open('${article.link}', '_blank')">Baca Asli</button>
+                                <button class="news-btn analyze" onclick="askAI('ANALYZE_NEWS', '${title}')">🤖 Analisis AI</button>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+            } else {
+                container.innerHTML = `<div style="text-align: center; color: var(--accent-red); font-size: 12px;">Gagal memuat berita. Server penuh.</div>`;
+            }
+        })
+        .catch(error => {
+            container.innerHTML = `<div style="text-align: center; color: var(--accent-red); font-size: 12px;">Koneksi terputus. Silakan Refresh.</div>`;
+        });
+}
+
+// ==========================================================================
+// INISIALISASI SAAT APLIKASI DIBUKA
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    generateRecommendations(); // Munculkan watchlist
+    updateMarketSession();     // Cek jam market
+    fetchLiveNews();           // <--- TAMBAHKAN INI: Tarik berita live saat buka aplikasi
+    
+    setInterval(updateMarketSession, 60000); // Update jam tiap 1 menit
+    setInterval(fetchLiveNews, 300000);      // <--- TAMBAHKAN INI: Auto-refresh berita tiap 5 menit
+});
