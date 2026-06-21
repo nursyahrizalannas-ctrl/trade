@@ -47,7 +47,7 @@
             </div>
             <div id="bias-container">
                 <div class="loading-state">
-                    <lottie-player id="session-globe" src="https://lottie.host/9e5352c8-8df0-4b80-87a4-8b010c3c8b42/xLw99r2vA7.json" background="transparent" speed="0.5" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
                     <span>Sinkronisasi bias harian...</span>
                 </div>
             </div>
@@ -59,12 +59,13 @@
                 <h4 style="color: var(--text-main);">GLOBAL MARKET SESSION</h4>
             </div>
             <div class="globe-container">
-                <lottie-player id="session-globe" src="https://assets4.lottiefiles.com/packages/lf20_4wzrs71a.json" background="transparent" speed="0.5" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+                <!-- Animasi bumi sudah diperbarui ke server baru agar berfungsi -->
+                <lottie-player id="session-globe" src="https://lottie.host/9e5352c8-8df0-4b80-87a4-8b010c3c8b42/xLw99r2vA7.json" background="transparent" speed="0.5" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
             </div>
             <div id="session-status" class="session-box">Memuat siklus market...</div>
         </div>
 
-        <!-- US TREASURY YIELD (FITUR BARU) -->
+        <!-- US TREASURY YIELD -->
         <div class="card" style="border-left: 4px solid #F59E0B;">
             <div class="card-header" style="margin-bottom: 10px;">
                 <h4 style="color: #F59E0B;">US 10-YEAR TREASURY YIELD</h4>
@@ -89,18 +90,21 @@
         </div>
     </div>
 
-    <!-- TAB 2: MADING & BERITA TERMINAL -->
+    <!-- TAB 2: LIVE TERMINAL (11 KATEGORI) -->
     <div id="news" class="content">
-        <div class="card-header" style="margin-bottom: 15px; padding: 0 10px;">
-            <h4 style="color: var(--accent-blue); font-size: 14px;">LIVE INSTITUTIONAL TERMINAL</h4>
-            <button class="outline-btn" onclick="fetchLiveNews()">SYNC</button>
+        <div class="card-header" style="margin-bottom: 10px; padding: 0 5px;">
+            <div>
+                <h4 style="color: var(--accent-blue); font-size: 14px; display: inline-block;">LIVE INSTITUTIONAL TERMINAL</h4>
+                <span style="font-size: 10px; color: var(--text-muted); margin-left: 10px;">⚡ REAL-TIME DATA NODE</span>
+            </div>
+            <button class="outline-btn" onclick="fetchLiveNews()">🔄 SYNC DATA</button>
         </div>
         
-        <!-- Terminal Grid Layout -->
-        <div class="terminal-wrapper" id="terminal-news-container">
-            <div class="loading-state" style="width: 100%;">
+        <!-- Terminal Multi-Grid Layout -->
+        <div class="terminal-grid-wrapper" id="terminal-news-container">
+            <div class="loading-state" style="grid-column: 1 / -1;">
                 <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
-                <span>Membangun koneksi ke server berita global...</span>
+                <span>Membangun koneksi ke server berita global (Reuters, Bloomberg, Investing)...</span>
             </div>
         </div>
     </div>
@@ -149,7 +153,7 @@
                 </div>
 
                 <div id="modal-news-content">
-                    <!-- Teks Analisis 6 Tahap -->
+                    <!-- Teks Analisis 6 Tahap (Institutional Grade) -->
                 </div>
             </div>
         </div>
