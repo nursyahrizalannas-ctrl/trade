@@ -238,9 +238,22 @@ function closeNewsModal() {
     document.getElementById('news-modal').classList.remove('show');
 }
 
+// GANTI FUNGSI INI DI market.js
 function askLogic(type, query = '') {
-    const tg = window.Telegram.WebApp;
-    tg.showAlert("PROSES TERMINAL:\nFungsi [" + type + "] sedang diproses secara eksklusif oleh ANTIPRAKTIS LOGIC di backend.");
+    const pesan = "PROSES TERMINAL:\nFungsi [" + type + "] sedang diproses secara eksklusif oleh ANTIPRAKTIS LOGIC di backend.";
+    
+    try {
+        const tg = window.Telegram.WebApp;
+        if (tg && tg.showAlert) {
+            tg.showAlert(pesan);
+        } else {
+            alert(pesan); // Akan muncul sebagai pop-up biasa jika di luar Telegram
+        }
+    } catch (e) {
+        alert(pesan);
+    }
+}
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
