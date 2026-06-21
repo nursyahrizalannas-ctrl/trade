@@ -35,20 +35,20 @@
             <div class="tradingview-widget-container">
               <div class="tradingview-widget-container__widget"></div>
               <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-              { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "GOLD" }, { "proName": "FX:EURUSD", "title": "EUR/USD" }, { "proName": "FX:USDJPY", "title": "USD/JPY" }, { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR" } ], "showSymbolLogo": false, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en" }
+              { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "GOLD" }, { "proName": "BINANCE:BTCUSDT", "title": "BITCOIN" }, { "proName": "FX:USDJPY", "title": "USD/JPY" }, { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR" } ], "showSymbolLogo": false, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en" }
               </script>
             </div>
         </div>
 
-        <!-- AI MACRO WATCHLIST -->
+        <!-- DAILY BIAS BOARD (NEW FEATURE) -->
         <div class="card" style="border-left: 4px solid var(--accent-red);">
             <div class="card-header">
-                <h4 style="color: var(--accent-red);">AI MACRO WATCHLIST</h4>
+                <h4 style="color: var(--accent-red);">DAILY BIAS BOARD</h4>
             </div>
-            <div id="recom-container">
+            <div id="bias-container">
                 <div class="loading-state">
                     <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <span>Menarik data institusi...</span>
+                    <span>Sinkronisasi bias harian...</span>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="disclaimer">
-                KETUK BERITA UNTUK MELIHAT ANALISIS EKSKLUSIF AI
+                KETUK BERITA UNTUK MELIHAT ANALISIS EKSKLUSIF ANTIPRAKTIS LOGIC
             </div>
         </div>
 
@@ -81,24 +81,23 @@
 
     <!-- TAB 2: MADING & BERITA -->
     <div id="news" class="content">
-        <!-- Lottie Animasi Dokumen/Koran -->
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
             <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_qf1pt6za.json" background="transparent" speed="0.8" style="width: 140px; height: 140px;" loop autoplay></lottie-player>
         </div>
 
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color:var(--accent-blue);">MADING MAKRO HARIAN</h4>
-            <p class="subtitle">Dapatkan rangkuman sentimen pasar terbaru dari AI.</p>
-            <button class="action-btn blue" onclick="askAI('MADING')">BACA MADING HARI INI</button>
+            <p class="subtitle">Dapatkan rangkuman sentimen pasar terbaru dari ANTIPRAKTIS LOGIC.</p>
+            <button class="action-btn blue" onclick="askLogic('MADING')">BACA MADING HARI INI</button>
         </div>
     </div>
 
     <!-- TAB 3: EDUKASI -->
     <div id="edu" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color:var(--accent-red);">TANYA BEBAS AI</h4>
+            <h4 style="color:var(--accent-red);">TANYA ANTIPRAKTIS LOGIC</h4>
             <input type="text" id="freeChat" placeholder="Cth: Korelasi NFP terhadap likuiditas Gold">
-            <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">ANALISIS PERTANYAAN</button>
+            <button class="action-btn red" onclick="askLogic('FREE_CHAT', document.getElementById('freeChat').value)">ANALISIS PERTANYAAN</button>
         </div>
     </div>
 
@@ -106,10 +105,10 @@
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color: var(--accent-blue);">ANALISIS RILIS GANDA</h4>
-            <p class="subtitle">Solusi AI saat rilis data bentrok di waktu yang sama.</p>
+            <p class="subtitle">Solusi ANTIPRAKTIS LOGIC saat rilis data bentrok di waktu yang sama.</p>
             <div class="btn-group">
-                <button class="action-btn blue" onclick="askAI('COMBO_NEWS', 'Paket NFP')">PAKET NFP LENGKAP</button>
-                <button class="action-btn red" onclick="askAI('COMBO_NEWS', 'Paket CPI')">PAKET CPI LENGKAP</button>
+                <button class="action-btn blue" onclick="askLogic('COMBO_NEWS', 'Paket NFP')">PAKET NFP LENGKAP</button>
+                <button class="action-btn red" onclick="askLogic('COMBO_NEWS', 'Paket CPI')">PAKET CPI LENGKAP</button>
             </div>
         </div>
     </div>
@@ -122,11 +121,11 @@
         <a class="nav-item" onclick="showTab('combo', this)">COMBO</a>
     </nav>
 
-    <!-- MODAL POP-UP AI SUMMARY -->
+    <!-- MODAL POP-UP SUMMARY -->
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>ANTIPRAKTIS AI LOGIC</h3>
+                <h3>ANTIPRAKTIS LOGIC</h3>
                 <button class="close-btn" onclick="closeNewsModal()">✕</button>
             </div>
             <div class="modal-body">
@@ -134,18 +133,17 @@
                 
                 <div id="modal-loader" style="display: none; text-align: center; padding: 20px 0;">
                     <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_x62chj.json" background="transparent" speed="1.5" style="width: 80px; height: 80px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Menganalisis Node Data...</div>
+                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Menyinkronkan Node Data...</div>
                 </div>
 
                 <div id="modal-news-content">
-                    <!-- Teks AI 3 Paragraf akan masuk ke sini -->
+                    <!-- Teks Analisis akan masuk ke sini -->
                 </div>
                 <button id="modal-link-btn" class="action-btn blue" style="margin-top: 20px;">BACA SUMBER ASLI</button>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT -->
     <script src="js/ui.js"></script>
     <script src="js/market.js"></script>
 </body>
