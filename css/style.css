@@ -99,3 +99,37 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); }
+/* --- GAYA ARTIKEL AI NEWS ANALYSIS --- */
+.news-article-format {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 5px;
+}
+
+.news-article-format p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #CBD5E1; /* Warna teks abu terang agar mata tidak lelah */
+    text-align: justify; /* Membuat teks rata kanan-kiri yang rapi */
+    letter-spacing: 0.3px;
+}
+
+/* Memberikan aksen huruf kapital pertama (Drop Cap) di paragraf pertama layaknya koran finansial */
+.news-article-format p:first-of-type::first-letter {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent-blue);
+    float: left;
+    margin-right: 6px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+/* Highlight khusus untuk kata kunci penting di dalam artikel */
+.news-article-format p:nth-child(2) {
+    border-left: 2px solid var(--accent-red);
+    padding-left: 12px;
+    background: linear-gradient(90deg, rgba(225, 29, 72, 0.05), transparent);
+}
+
