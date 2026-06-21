@@ -22,7 +22,7 @@
         
         <!-- HERO LOTTIE ANIMATION -->
         <div class="hero-lottie-container">
-            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json" background="transparent" speed="0.8" style="width: 100%; height: 160px;" loop autoplay></lottie-player>
+            <lottie-player src="https://lottie.host/9e5352c8-8df0-4b80-87a4-8b010c3c8b42/xLw99r2vA7.json" background="transparent" speed="0.8" style="width: 100%; height: 160px;" loop autoplay></lottie-player>
             <div class="video-overlay"></div>
             <div class="hero-text">
                 <h3>Macro Analytics Terminal</h3>
@@ -40,71 +40,59 @@
             </div>
         </div>
 
+        <!-- DASHBOARD NEWS FEED (FITUR BARU) -->
+        <div class="card" style="border-left: 4px solid var(--accent-blue); padding: 12px;">
+            <div class="card-header" style="margin-bottom: 10px;">
+                <h4 style="color: var(--accent-blue); font-size: 11px;">LIVE MACRO BRIEFING</h4>
+            </div>
+            <div id="dashboard-news-container">
+                <div class="loading-action">
+                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1.5" style="width: 30px; height: 30px; margin: 0 auto;" loop autoplay></lottie-player>
+                    <span>[ EXECUTING ANTIPRAKTIS ACTION ]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GLOBAL MARKET SESSION & FLAG ANIMATION -->
+        <div class="card" style="border-left: 4px solid #10B981;">
+            <div class="card-header" style="margin-bottom: 5px;">
+                <h4 style="color: #10B981;">LIQUIDITY SESSION</h4>
+            </div>
+            <!-- Container Bendera Animasi -->
+            <div id="session-flag-container" class="flag-wrapper">
+                <!-- Injeksi JS disini -->
+            </div>
+            <div id="session-status" class="session-box">CALCULATING ALGORITHMIC CYCLE...</div>
+        </div>
+
         <!-- DAILY BIAS BOARD -->
         <div class="card" style="border-left: 4px solid var(--accent-red);">
             <div class="card-header">
                 <h4 style="color: var(--accent-red);">DAILY BIAS BOARD</h4>
             </div>
             <div id="bias-container">
-                <div class="loading-state">
-                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <span>Sinkronisasi bias harian...</span>
+                <div class="loading-action">
+                    <span>[ EXECUTING ANTIPRAKTIS ACTION ]</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- GLOBAL MARKET SESSION -->
-        <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <div class="card-header" style="margin-bottom: 5px;">
-                <h4 style="color: var(--text-main);">GLOBAL MARKET SESSION</h4>
-            </div>
-            <div class="globe-container">
-                <!-- Animasi bumi sudah diperbarui ke server baru agar berfungsi -->
-                <lottie-player id="session-globe" src="https://lottie.host/9e5352c8-8df0-4b80-87a4-8b010c3c8b42/xLw99r2vA7.json" background="transparent" speed="0.5" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
-            </div>
-            <div id="session-status" class="session-box">Memuat siklus market...</div>
-        </div>
-
-        <!-- US TREASURY YIELD -->
-        <div class="card" style="border-left: 4px solid #F59E0B;">
-            <div class="card-header" style="margin-bottom: 10px;">
-                <h4 style="color: #F59E0B;">US 10-YEAR TREASURY YIELD</h4>
-            </div>
-            
-            <div class="tradingview-widget-container" style="height: 180px; width: 100%; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 15px;">
-              <div id="tv_treasury_chart" style="height: 100%; width: 100%;"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-              <script type="text/javascript">
-              new TradingView.widget({
-              "autosize": true, "symbol": "TVC:US10Y", "interval": "60", "timezone": "Etc/UTC",
-              "theme": "dark", "style": "3", "locale": "en", "enable_publishing": false,
-              "backgroundColor": "#060913", "gridColor": "rgba(30, 41, 59, 0.3)", "hide_top_toolbar": true,
-              "hide_legend": true, "save_image": false, "container_id": "tv_treasury_chart"
-              });
-              </script>
-            </div>
-
-            <div id="treasury-explanation" class="treasury-box">
-                <div class="loading-state">Menganalisis pergerakan Yield Obligasi...</div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 2: LIVE TERMINAL (11 KATEGORI) -->
+    <!-- TAB 2: TERMINAL BERITA (LAYOUT 2 KOLOM KATEGORI) -->
     <div id="news" class="content">
-        <div class="card-header" style="margin-bottom: 10px; padding: 0 5px;">
+        <div class="card-header" style="margin-bottom: 15px; padding: 0 5px;">
             <div>
-                <h4 style="color: var(--accent-blue); font-size: 14px; display: inline-block;">LIVE INSTITUTIONAL TERMINAL</h4>
-                <span style="font-size: 10px; color: var(--text-muted); margin-left: 10px;">⚡ REAL-TIME DATA NODE</span>
+                <h4 style="color: var(--accent-blue); font-size: 14px;">MACRO NEWS MATRIX</h4>
+                <span style="font-size: 9px; color: var(--text-muted);">CATEGORIZED INSTITUTIONAL FEED</span>
             </div>
-            <button class="outline-btn" onclick="fetchLiveNews()">🔄 SYNC DATA</button>
+            <button class="outline-btn" onclick="fetchLiveNews()">SYNC</button>
         </div>
         
-        <!-- Terminal Multi-Grid Layout -->
-        <div class="terminal-grid-wrapper" id="terminal-news-container">
-            <div class="loading-state" style="grid-column: 1 / -1;">
-                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
-                <span>Membangun koneksi ke server berita global (Reuters, Bloomberg, Investing)...</span>
+        <!-- Grid 2 Kolom -->
+        <div class="terminal-2col-grid" id="terminal-news-grid">
+            <div class="loading-action" style="grid-column: 1 / -1; margin-top: 50px;">
+                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="2" style="width: 50px; height: 50px; margin: 0 auto;" loop autoplay></lottie-player>
+                <span>[ COMPILING ANTIPRAKTIS ACTION ]</span>
             </div>
         </div>
     </div>
@@ -112,20 +100,21 @@
     <!-- TAB 3: EDUKASI -->
     <div id="edu" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color:var(--accent-red);">TANYA ANTIPRAKTIS LOGIC</h4>
-            <input type="text" id="freeChat" placeholder="Cth: Korelasi NFP terhadap likuiditas Gold">
-            <button class="action-btn red" onclick="askLogic('FREE_CHAT', document.getElementById('freeChat').value)">ANALISIS PERTANYAAN</button>
+            <h4 style="color:var(--accent-red);">QUANTITATIVE INQUIRY</h4>
+            <p class="subtitle">Akses logika Antipraktis untuk membedah korelasi aset.</p>
+            <input type="text" id="freeChat" placeholder="Cth: Korelasi yield US10Y terhadap order block XAUUSD">
+            <button class="action-btn red" onclick="askLogic('QUANT_ANALYSIS', document.getElementById('freeChat').value)">PROCESS LOGIC</button>
         </div>
     </div>
 
     <!-- TAB 4: COMBO -->
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <h4 style="color: var(--accent-blue);">ANALISIS RILIS GANDA</h4>
-            <p class="subtitle">Solusi ANTIPRAKTIS LOGIC saat rilis data bentrok.</p>
+            <h4 style="color: var(--accent-blue);">CLASH DATA PROTOCOL</h4>
+            <p class="subtitle">Algoritma eksekusi saat rilis data high-impact saling berlawanan.</p>
             <div class="btn-group">
-                <button class="action-btn blue" onclick="askLogic('COMBO_NEWS', 'Paket NFP')">PAKET NFP LENGKAP</button>
-                <button class="action-btn red" onclick="askLogic('COMBO_NEWS', 'Paket CPI')">PAKET CPI LENGKAP</button>
+                <button class="action-btn blue" onclick="askLogic('NFP_PROTOCOL', 'Paket NFP')">EXECUTE NFP PROTOCOL</button>
+                <button class="action-btn red" onclick="askLogic('CPI_PROTOCOL', 'Paket CPI')">EXECUTE CPI PROTOCOL</button>
             </div>
         </div>
     </div>
@@ -138,7 +127,7 @@
         <a class="nav-item" onclick="showTab('combo', this)">COMBO</a>
     </nav>
 
-    <!-- MODAL POP-UP SUMMARY 6 TAHAP -->
+    <!-- MODAL POP-UP SUMMARY INSTITUTIONAL GRADE -->
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -149,11 +138,11 @@
                 
                 <div id="modal-loader" style="display: none; text-align: center; padding: 40px 0;">
                     <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_x62chj.json" background="transparent" speed="1.5" style="width: 80px; height: 80px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Mengekstraksi Node Data...</div>
+                    <div style="font-size: 11px; color: var(--accent-red); margin-top: 10px; font-weight: 800; letter-spacing: 2px;">[ EXECUTING ANTIPRAKTIS ACTION ]</div>
                 </div>
 
                 <div id="modal-news-content">
-                    <!-- Teks Analisis 6 Tahap (Institutional Grade) -->
+                    <!-- Injeksi Teks Institusional -->
                 </div>
             </div>
         </div>
