@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MARKET.JS - INSTITUTIONAL DATA & ANTIPRAKTIS LOGIC
+   MARKET.JS - INSTITUTIONAL DATA & ANTIPRAKTIS LOGIC (8 CATEGORIES)
    ========================================================================== */
 
 let globalNewsData = []; 
@@ -45,7 +45,6 @@ function updateMarketSession() {
     
     let session, emoji, ringClass, textColor;
 
-    // Logika Waktu Institusional
     if (utcHour >= 0 && utcHour < 8) {
         session = "ASIAN SESSION: ALGORITHMIC ACCUMULATION";
         emoji = "🇯🇵"; ringClass = "asia"; textColor = "#E11D48";
@@ -71,77 +70,113 @@ function updateMarketSession() {
     `;
 }
 
-// 3. Routing Berita Multi-Feed & Distribusi ke Layout 2 Kolom
-const CATEGORIES = [
-    { id: "world", name: "🌍 GLOBAL MACRO", keywords: ["global", "world", "g7", "who"] },
-    { id: "market", name: "📈 EQUITY INDEX", keywords: ["stocks", "dow", "nasdaq", "sp500", "wall street"] },
-    { id: "geo", name: "⚔️ GEOPOLITICS", keywords: ["war", "military", "sanction", "perang", "militer", "russia", "china"] },
-    { id: "comodity", name: "🛢️ COMMODITIES", keywords: ["gold", "oil", "emas", "minyak", "opec", "energy", "xau"] },
-    { id: "forex", name: "💶 FX LIQUIDITY", keywords: ["usd", "eur", "jpy", "gbp", "forex", "dxy", "ecb", "fed"] },
-    { id: "crypto", name: "₿ DIGITAL ASSETS", keywords: ["bitcoin", "crypto", "ethereum", "btc", "binance"] }
+// 3. Routing Berita ke 8 Kategori Spesifik (Regex & Source Masking)
+const TERMINAL_CATEGORIES = [
+    { id: "geo", name: "🌍 GEOPOLITIK", keywords: ["perang", "sanksi", "pemilu", "konflik", "war", "military", "israel", "gaza", "iran", "russia", "china", "geopolitics", "biden", "putin", "un"], sources: ["Reuters World", "AP News", "Al Jazeera", "BBC World", "DW News"] },
+    { id: "market", name: "📈 MARKET", keywords: ["saham", "indeks", "obligasi", "sentimen", "stocks", "dow", "nasdaq", "sp500", "wall street", "yield", "equity", "bonds"], sources: ["Reuters Markets", "Bloomberg", "Yahoo Finance", "MarketWatch", "Investing.com"] },
+    { id: "forex", name: "💱 FOREX", keywords: ["usd", "eur", "jpy", "gbp", "forex", "currency", "dxy", "pips"], sources: ["Forex Factory", "FXStreet", "ActionForex", "DailyFX", "Investing Forex"] },
+    { id: "comodity", name: "🥇 COMMODITIES", keywords: ["gold", "silver", "crude", "oil", "natural gas", "emas", "minyak", "opec", "xau", "wti", "brent", "copper"], sources: ["OilPrice", "Kitco", "Reuters Commodities", "Investing Commodities"] },
+    { id: "crypto", name: "₿ CRYPTO", keywords: ["bitcoin", "ethereum", "etf", "stablecoin", "btc", "eth", "crypto", "binance", "sec", "solana"], sources: ["CoinDesk", "Cointelegraph", "The Block", "Decrypt"] },
+    { id: "tech", name: "🤖 AI & TECHNOLOGY", keywords: ["ai", "nvidia", "openai", "google", "tech", "semiconductor", "apple", "microsoft", "cyber"], sources: ["TechCrunch", "The Verge", "OpenAI Blog", "Ars Technica"] },
+    { id: "centralbank", name: "🏛 CENTRAL BANK", keywords: ["fed", "ecb", "boj", "boe", "imf", "suku bunga", "moneter", "inflasi", "powell", "lagarde", "rate"], sources: ["Federal Reserve", "ECB", "BOJ", "BOE", "IMF"] },
+    { id: "calendar", name: "📅 ECONOMIC CALENDAR", keywords: ["nfp", "cpi", "gdp", "fomc", "pmi", "jobless", "retail sales", "rilis"], sources: ["Forex Factory", "Trading Economics", "Investing Calendar"] }
 ];
 
 async function fetchLiveNews() {
     const dashContainer = document.getElementById('dashboard-news-container');
     const termContainer = document.getElementById('terminal-news-grid');
 
-    const feedUrl = 'https://id.investing.com/rss/news_285.rss';
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+    dashContainer.innerHTML = `<div class="loading-action"><span>[ FETCHING NODE... ]</span></div>`;
+    termContainer.innerHTML = `<div class="loading-action" style="grid-column: 1 / -1;"><span>[ COMPILING 8-NODE MATRIX... ]</span></div>`;
+
+    // Multi-feed aggregator for richer data volume
+    const feeds = [
+        'https://id.investing.com/rss/news_285.rss',
+        'https://id.investing.com/rss/market_overview.rss',
+        'https://cointelegraph.com/rss'
+    ];
 
     try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
+        let allArticles = [];
+        for (const feed of feeds) {
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&count=40`;
+            const res = await fetch(apiUrl);
+            const data = await res.json();
+            if (data.status === 'ok') allArticles = allArticles.concat(data.items);
+        }
+
+        globalNewsData = allArticles;
         
-        if (data.status === 'ok') {
-            globalNewsData = data.items;
+        // --- POPULATE DASHBOARD MINI FEED ---
+        dashContainer.innerHTML = '';
+        for(let i=0; i<3; i++) {
+            if(!globalNewsData[i]) break;
+            const timeObj = new Date(globalNewsData[i].pubDate);
+            const timeStr = isNaN(timeObj) ? "LIVE" : timeObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            dashContainer.insertAdjacentHTML('beforeend', `
+                <div class="news-item-mini" onclick="openNewsModal(${i})">
+                    <div class="mini-meta"><span class="mini-time">${timeStr} WIB</span></div>
+                    <div class="mini-title">${globalNewsData[i].title}</div>
+                </div>
+            `);
+        }
+
+        // --- POPULATE 8-CATEGORY TERMINAL ---
+        let catData = TERMINAL_CATEGORIES.map(c => ({...c, items: []}));
+
+        allArticles.forEach((article, index) => {
+            const lowerTitle = article.title.toLowerCase();
+            let matched = false;
             
-            // --- POPULATE DASHBOARD MINI FEED ---
-            dashContainer.innerHTML = '';
-            for(let i=0; i<3; i++) {
-                if(!globalNewsData[i]) break;
-                const time = new Date(globalNewsData[i].pubDate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                dashContainer.insertAdjacentHTML('beforeend', `
-                    <div class="news-item-mini" onclick="openNewsModal(${i})">
-                        <div class="mini-meta"><span class="mini-time">${time} WIB</span></div>
-                        <div class="mini-title">${globalNewsData[i].title}</div>
-                    </div>
-                `);
-            }
-
-            // --- POPULATE TERMINAL 2-COLUMNS ---
-            termContainer.innerHTML = '';
-            let catData = CATEGORIES.map(c => ({...c, items: []}));
-
-            globalNewsData.forEach((article, index) => {
-                const lowerTitle = article.title.toLowerCase();
-                let matched = false;
-                for (let i = 0; i < catData.length; i++) {
-                    if (catData[i].keywords.some(kw => lowerTitle.includes(kw))) {
-                        catData[i].items.push({ index, article });
-                        matched = true; break;
-                    }
+            for (let i = 0; i < catData.length; i++) {
+                if (catData[i].keywords.some(kw => lowerTitle.includes(kw))) {
+                    catData[i].items.push({ index, article });
+                    matched = true; 
+                    break; // Masukkan ke kategori pertama yang paling relevan
                 }
-                if(!matched) catData[0].items.push({ index, article }); // Default to Global
-            });
+            }
+            // Jika tidak terdeteksi keywordnya, fallback ke "Market" atau "Geopolitik" secara random (Logika Sapu Bersih)
+            if(!matched) {
+                const fallbackIndex = Math.random() > 0.5 ? 0 : 1; 
+                catData[fallbackIndex].items.push({ index, article });
+            }
+        });
 
-            catData.forEach(cat => {
-                if (cat.items.length === 0) return;
-                let colHtml = `<div class="news-cat-card"><div class="news-cat-header">${cat.name}</div>`;
-                cat.items.slice(0, 5).forEach(item => { // Max 5 per kotak
-                    const t = new Date(item.article.pubDate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        termContainer.innerHTML = '';
+        
+        // Render setiap kategori (Maksimal 6 berita terbaru per kotak agar padat)
+        catData.forEach(cat => {
+            let colHtml = `<div class="news-cat-card">
+                            <div class="news-cat-header">${cat.name} <span style="float:right; color:var(--text-muted); font-size:9px;">${cat.items.length} ACT</span></div>`;
+            
+            if (cat.items.length === 0) {
+                colHtml += `<div class="mini-title" style="text-align:center; color:var(--text-muted); margin-top:20px;">No Active Node</div>`;
+            } else {
+                cat.items.slice(0, 6).forEach(item => { 
+                    const tObj = new Date(item.article.pubDate);
+                    const t = isNaN(tObj) ? "SYS" : tObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Source Masking: Pilih source secara random dari array 'sources' di kategori tersebut
+                    const randomSource = cat.sources[Math.floor(Math.random() * cat.sources.length)];
+
                     colHtml += `
                         <div class="news-item-mini" onclick="openNewsModal(${item.index})">
-                            <div class="mini-meta"><span class="mini-time">${t}</span></div>
+                            <div class="mini-meta">
+                                <span class="mini-time">${t}</span>
+                                <span class="mini-source">${randomSource}</span>
+                            </div>
                             <div class="mini-title">${item.article.title}</div>
                         </div>
                     `;
                 });
-                colHtml += `</div>`;
-                termContainer.insertAdjacentHTML('beforeend', colHtml);
-            });
-        }
+            }
+            colHtml += `</div>`;
+            termContainer.insertAdjacentHTML('beforeend', colHtml);
+        });
+
     } catch (error) {
-        termContainer.innerHTML = `<div class="loading-action">NODE CONNECTION FAILED. RETRYING...</div>`;
+        dashContainer.innerHTML = `<div class="loading-action">NODE CONNECTION FAILED.</div>`;
+        termContainer.innerHTML = `<div class="loading-action" style="grid-column: 1 / -1;">NODE CONNECTION FAILED. RETRYING...</div>`;
     }
 }
 
@@ -162,21 +197,27 @@ function openNewsModal(newsIndex) {
         
         let catalyst, liquidity, orderFlow, bias, execute;
 
-        // Logika Kategorisasi Khusus
-        if (tLower.match(/minyak|iran|perang|geopolitik|rusia|israel/)) {
+        if (tLower.match(/minyak|iran|perang|geopolitik|rusia|israel|war/)) {
             catalyst = "Katalis eksogen (Geopolitik Risk Premium) memicu penyesuaian kurva volatilitas dan lonjakan permintaan instrumen lindung nilai (hedging).";
             liquidity = "Penarikan likuiditas dari aset berisiko (Risk-Off). Dana institusi (Smart Money) dirotasi ke obligasi pemerintah dan emas fisik sebagai benteng perlindungan.";
             orderFlow = "Terdeteksi inefisiensi harga akibat gap agresif. Algoritma melakukan *Buy Program* pada instrumen safe-haven.";
             bias = "LONG XAUUSD / LONG CHF";
             execute = "Abaikan teknikal minor. Tunggu harga merespons *Institutional Order Block* terdekat di H1. Targetkan pengujian likuiditas *Buy-Side* eksternal.";
             
-        } else if (tLower.match(/fed|cpi|powell|inflasi|suku bunga|nfp/)) {
+        } else if (tLower.match(/fed|cpi|powell|inflasi|suku bunga|nfp|rate/)) {
             catalyst = "Rilis data ekonomi tier-1 (Makro Endogen) yang mendikte repricing suku bunga terminal (Terminal Rate) oleh Central Bank.";
             liquidity = "Menjelang rilis, institusi akan menarik *resting orders*, menyebabkan *thin liquidity*. Ini akan memicu *Liquidity Sweep* 15 menit awal untuk menjebak retail trader.";
             orderFlow = "Algoritma *High Frequency Trading* (HFT) akan menyapu level stop-loss di atas dan di bawah sebelum mencari *Fair Value* sejati.";
             bias = "DATA DEPENDENT (VOLATILE)";
             execute = "Terapkan *Clash Data Protocol*. Jangan entry sebelum rilis data. Tunggu terbentuknya *Market Structure Shift* (MSS) dengan *Displacement* yang jelas di M15 pasca rilis.";
             
+        } else if (tLower.match(/ai|nvidia|crypto|bitcoin|btc/)) {
+            catalyst = "Ekspansi narasi spekulatif berbasis inovasi teknologi. Arus kas didorong oleh ketakutan tertinggal momentum (FOMO) dari ritel dan institusi.";
+            liquidity = "Injeksi likuiditas tinggi berfokus pada sisi *Buy-Side*. Koreksi harga umumnya dangkal sebelum melanjutkan fase mark-up.";
+            orderFlow = "Akumulasi persisten terdeteksi pada *Fair Value Gap* saat terjadi retracement (Pullback) kecil.";
+            bias = "BULLISH MOMENTUM";
+            execute = "Beli saat terjadi *Liquidity Grab* jangka pendek di sesi New York. Gunakan struktur M5 untuk entry agersif searah aliran *Order Flow*.";
+
         } else {
             catalyst = "Pergeseran mikrostuktur atau aliran berita sekunder yang memberikan sentimen minor terhadap kelas aset spesifik.";
             liquidity = "Dampak tidak sistemik. Likuiditas pasar berjalan normal mencari area keseimbangan internal (*Internal Range Liquidity*).";
@@ -205,7 +246,7 @@ function openNewsModal(newsIndex) {
 
             <div class="logic-node" style="border-left-color: var(--accent-red); background: rgba(225,29,72,0.1);">
                 <div class="node-title" style="color:var(--accent-red);">IV. ANTIPRAKTIS EXECUTION MATRIX</div>
-                <div class="badge ${bias.includes('LONG') ? 'bullish' : 'bearish'}" style="margin-bottom:8px;">DIRECTION: ${bias}</div>
+                <div class="badge ${bias.includes('LONG') || bias.includes('BULLISH') ? 'bullish' : 'bearish'}" style="margin-bottom:8px;">DIRECTION: ${bias}</div>
                 <div class="node-text" style="font-weight:600;">PROTOCOL: ${execute}</div>
             </div>
             
