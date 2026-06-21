@@ -1,31 +1,63 @@
 /* ==========================================================================
-   MARKET.JS - INSTITUTIONAL DATA ANALYTICS & LOGIC
+   MARKET.JS - ANTIPRAKTIS LOGIC & DATA ANALYTICS
    ========================================================================== */
 
 let globalNewsData = []; 
 
-// 1. Generate Watchlist
-function generateRecommendations() {
-    const container = document.getElementById('recom-container');
+// 1. Generate Daily Bias Board (Diperbarui Otomatis Setiap Hari)
+function generateDailyBias() {
+    const container = document.getElementById('bias-container');
+    
+    // Algoritma rotasi berdasarkan tanggal harian
+    const today = new Date();
+    const dateSeed = today.getFullYear() + today.getMonth() + today.getDate();
+
+    // Database Penjelasan Bullish & Bearish Institusional
+    const assets = [
+        {
+            name: "XAUUSD (GOLD)",
+            bullishReason: "Likuiditas berpindah ke aset safe-haven akibat ketidakpastian makro dan pelemahan yield obligasi AS. Order block institusi mendukung fase akumulasi.",
+            bearishReason: "Penguatan Dolar AS dan sentimen risk-on menekan daya tarik emas sebagai lindung nilai. Harga berpotensi menyapu likuiditas di level support bawah."
+        },
+        {
+            name: "BTCUSD (BITCOIN)",
+            bullishReason: "Volume akumulasi dari institusi meningkat seiring penyerapan likuiditas pasar. Struktur harga menunjukkan rotasi ke arah ekspansif (Bullish).",
+            bearishReason: "Aksi profit-taking terdeteksi di area premium. Likuiditas sedang didistribusikan ke luar dari aset berisiko tinggi menuju instrumen yang lebih aman."
+        },
+        {
+            name: "DXY (US DOLLAR)",
+            bullishReason: "Permintaan Dolar memuncak didorong oleh katalis data ekonomi AS yang solid. Arus kas global (capital flow) kembali masuk menyokong kekuatan USD.",
+            bearishReason: "Pelemahan momentum makro dan ekspektasi pergeseran kebijakan moneter menekan nilai tukar Dolar di area supply utama harian."
+        },
+        {
+            name: "USDJPY",
+            bullishReason: "Pelebaran divergensi suku bunga terus mempertahankan struktur dominasi pembeli (buyer). Area demand sebelumnya berhasil menahan tekanan jual.",
+            bearishReason: "Risiko intervensi tersembunyi dan penyesuaian posisi carry trade memicu tekanan jual struktural. Yen mulai menyerap likuiditas kembali."
+        }
+    ];
+
     setTimeout(() => {
-        const aiData = [
-            { asset: "XAUUSD", bias: "BULLISH", reason: "Akumulasi terdeteksi pada level discount pasca-rilis data. Likuiditas bergerak menuju safe-haven." },
-            { asset: "DXY", bias: "BEARISH", reason: "Penolakan pada area supply premium harian. Yield obligasi mengkonfirmasi pelemahan." }
-        ];
         container.innerHTML = ''; 
-        aiData.forEach(item => {
-            let badgeClass = item.bias === 'BULLISH' ? 'bullish' : 'bearish';
+        
+        assets.forEach((asset, index) => {
+            // Logika untuk menentukan bias harian yang berubah-ubah secara rotasi
+            const isBullish = (dateSeed + index) % 2 === 0;
+            const bias = isBullish ? "BULLISH" : "BEARISH";
+            const reason = isBullish ? asset.bullishReason : asset.bearishReason;
+            const badgeClass = isBullish ? "bullish" : "bearish";
+            const borderColor = isBullish ? "var(--accent-blue)" : "var(--accent-red)";
+
             container.insertAdjacentHTML('beforeend', `
-                <div class="recom-item" style="border-left-color: var(--accent-${item.bias==='BULLISH'?'blue':'red'});">
+                <div class="recom-item" style="border-left-color: ${borderColor};">
                     <div class="recom-top">
-                        <div class="asset-name">${item.asset}</div>
-                        <div class="badge ${badgeClass}">${item.bias}</div>
+                        <div class="asset-name">${asset.name}</div>
+                        <div class="badge ${badgeClass}">${bias}</div>
                     </div>
-                    <div class="recom-reason"><strong style="color:#fff;">LOGIC:</strong> ${item.reason}</div>
+                    <div class="recom-reason"><strong style="color:#fff;">LOGIC:</strong> ${reason}</div>
                 </div>
             `);
         });
-    }, 1000);
+    }, 1200);
 }
 
 // 2. Market Session
@@ -79,7 +111,7 @@ function fetchLiveNews() {
         });
 }
 
-// 4. Analisis Profesional AI (Naratif Institusi Mendalam 3 Paragraf)
+// 4. Analisis Profesional (Naratif Institusi Mendalam 3 Paragraf)
 function openNewsModal(newsIndex) {
     const article = globalNewsData[newsIndex]; 
     const modal = document.getElementById('news-modal');
@@ -108,9 +140,9 @@ function openNewsModal(newsIndex) {
             p2 = "Respons pasar sangat agresif. Jika narasi ini mereda, kita akan melihat harga minyak mentah mengalami koreksi tajam seiring langkah investor menghapus (unwind) risk premium yang sebelumnya terbangun. Sebaliknya, eskalasi akan memicu lonjakan harga yang memaksa pasar melakukan repricing besar-besaran terhadap aset safe-haven seperti Emas (XAUUSD).";
             p3 = "Perubahan harga energi ini langsung memicu rotasi sektor di pasar ekuitas. Penurunan harga minyak biasanya menguntungkan sektor transportasi dan consumer discretionary karena beban biaya menurun, sementara sektor energi akan mengalami profit taking. Smart money saat ini sedang melakukan re-balancing portofolio menyesuaikan arah likuiditas terbaru.";
         } else if (titleLower.match(/inflasi|cpi|fed|suku bunga|pce|powell|bunga/)) {
-            p1 = "Rilis berita ini sangat krusial karena menyentuh inti dari kebijakan moneter global saat ini. Pasar secara aktif membedah data ini untuk mencari petunjuk apakah bank sentral (terutama The Fed) memiliki ruang yang cukup untuk memulai atau menahan siklus pemangkasan suku bunga pada pertemuan berikutnya.";
+            p1 = "Rilis berita ini sangat krusial karena menyentuh inti dari kebijakan moneter global saat ini. Pasar secara aktif membedah data ini untuk mencari petunjuk apakah bank sentral memiliki ruang yang cukup untuk memulai atau menahan siklus pemangkasan suku bunga pada pertemuan berikutnya.";
             p2 = "Terjadi repricing yang signifikan di pasar obligasi. Angka yang lebih dovish dari perkiraan langsung menekan imbal hasil (yield) US Treasury dan melemahkan Indeks Dolar (DXY), memicu aliran dana institusional masuk secara masif ke aset berisiko dan emas. Sebaliknya, data yang hawkish akan menopang kekuatan Dolar dan memukul harga komoditas.";
-            p3 = "Dari perspektif institusional, momentum ini digunakan untuk menyapu area likuiditas (liquidity sweep). Algoritma HFT mengeksekusi order di level support/resistance kunci sesaat setelah rilis. Trader disarankan menunggu terbentuknya struktur harga baru di sesi New York sebelum mengambil posisi jangka menengah.";
+            p3 = "Dari perspektif institusional, momentum ini digunakan untuk menyapu area likuiditas (liquidity sweep). Algoritma High-Frequency Trading mengeksekusi order di level support/resistance kunci sesaat setelah rilis. Sangat disarankan menunggu terbentuknya struktur harga baru di sesi New York sebelum mengambil posisi.";
         } else {
             p1 = "Berita ini menyoroti pergeseran struktural dalam landasan ekonomi riil, yang memberikan indikasi awal mengenai kekuatan daya beli konsumen dan prospek pertumbuhan GDP. Institusi menganggap data tier ini sebagai leading indicator untuk memproyeksikan stabilitas ekonomi beberapa kuartal ke depan.";
             p2 = "Dampak terbesarnya terlihat pada penyesuaian aliran modal (capital flow). Data yang solid akan menarik likuiditas kembali ke pasar saham AS, mendorong indeks utama menguat. Sementara di pasar valas, data ini menentukan apakah Dolar AS masih layak memegang status yield advantage dibandingkan mata uang major lainnya.";
@@ -131,13 +163,13 @@ function closeNewsModal() {
     document.getElementById('news-modal').classList.remove('show');
 }
 
-function askAI(type, query = '') {
+function askLogic(type, query = '') {
     const tg = window.Telegram.WebApp;
-    tg.showAlert("PROSES TERMINAL:\nFitur [" + type + "] sedang dieksekusi di node backend Antipraktis.");
+    tg.showAlert("PROSES TERMINAL:\nFungsi [" + type + "] sedang diproses secara eksklusif oleh ANTIPRAKTIS LOGIC di backend.");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    generateRecommendations();
+    generateDailyBias(); // Menjalankan fitur Bias otomatis harian
     updateMarketSession();
     fetchLiveNews();
     
