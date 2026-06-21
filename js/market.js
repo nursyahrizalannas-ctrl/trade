@@ -4,43 +4,22 @@
 
 let globalNewsData = []; 
 
-// 1. Generate Daily Bias Board (Diperbarui Otomatis Setiap Hari)
+// 1. Generate Daily Bias Board 
 function generateDailyBias() {
     const container = document.getElementById('bias-container');
-    
-    // Algoritma rotasi berdasarkan tanggal harian
     const today = new Date();
     const dateSeed = today.getFullYear() + today.getMonth() + today.getDate();
 
-    // Database Penjelasan Bullish & Bearish Institusional
     const assets = [
-        {
-            name: "XAUUSD (GOLD)",
-            bullishReason: "Likuiditas berpindah ke aset safe-haven akibat ketidakpastian makro dan pelemahan yield obligasi AS. Order block institusi mendukung fase akumulasi.",
-            bearishReason: "Penguatan Dolar AS dan sentimen risk-on menekan daya tarik emas sebagai lindung nilai. Harga berpotensi menyapu likuiditas di level support bawah."
-        },
-        {
-            name: "BTCUSD (BITCOIN)",
-            bullishReason: "Volume akumulasi dari institusi meningkat seiring penyerapan likuiditas pasar. Struktur harga menunjukkan rotasi ke arah ekspansif (Bullish).",
-            bearishReason: "Aksi profit-taking terdeteksi di area premium. Likuiditas sedang didistribusikan ke luar dari aset berisiko tinggi menuju instrumen yang lebih aman."
-        },
-        {
-            name: "DXY (US DOLLAR)",
-            bullishReason: "Permintaan Dolar memuncak didorong oleh katalis data ekonomi AS yang solid. Arus kas global (capital flow) kembali masuk menyokong kekuatan USD.",
-            bearishReason: "Pelemahan momentum makro dan ekspektasi pergeseran kebijakan moneter menekan nilai tukar Dolar di area supply utama harian."
-        },
-        {
-            name: "USDJPY",
-            bullishReason: "Pelebaran divergensi suku bunga terus mempertahankan struktur dominasi pembeli (buyer). Area demand sebelumnya berhasil menahan tekanan jual.",
-            bearishReason: "Risiko intervensi tersembunyi dan penyesuaian posisi carry trade memicu tekanan jual struktural. Yen mulai menyerap likuiditas kembali."
-        }
+        { name: "XAUUSD (GOLD)", bullishReason: "Likuiditas berpindah ke aset safe-haven akibat ketidakpastian makro dan pelemahan yield obligasi AS. Order block institusi mendukung fase akumulasi.", bearishReason: "Penguatan Dolar AS dan sentimen risk-on menekan daya tarik emas. Harga berpotensi menyapu likuiditas di level support bawah." },
+        { name: "BTCUSD (BITCOIN)", bullishReason: "Volume akumulasi dari institusi meningkat seiring penyerapan likuiditas pasar. Struktur harga menunjukkan rotasi ke arah ekspansif.", bearishReason: "Aksi profit-taking terdeteksi di area premium. Likuiditas didistribusikan keluar menuju instrumen yang lebih aman." },
+        { name: "DXY (US DOLLAR)", bullishReason: "Permintaan Dolar memuncak didorong katalis data ekonomi AS yang solid. Arus kas global kembali masuk menyokong kekuatan USD.", bearishReason: "Pelemahan momentum makro dan ekspektasi pergeseran kebijakan moneter menekan nilai tukar Dolar di area supply utama." },
+        { name: "USDJPY", bullishReason: "Pelebaran divergensi suku bunga mempertahankan dominasi buyer. Area demand sebelumnya berhasil menahan tekanan jual.", bearishReason: "Risiko intervensi tersembunyi dan penyesuaian posisi carry trade memicu tekanan jual struktural. Yen menyerap likuiditas kembali." }
     ];
 
     setTimeout(() => {
         container.innerHTML = ''; 
-        
         assets.forEach((asset, index) => {
-            // Logika untuk menentukan bias harian yang berubah-ubah secara rotasi
             const isBullish = (dateSeed + index) % 2 === 0;
             const bias = isBullish ? "BULLISH" : "BEARISH";
             const reason = isBullish ? asset.bullishReason : asset.bearishReason;
@@ -60,21 +39,46 @@ function generateDailyBias() {
     }, 1200);
 }
 
-// 2. Market Session
+// 2. Market Session & Dynamic Globe Color (FITUR BARU)
 function updateMarketSession() {
     const statusDiv = document.getElementById('session-status');
+    const globe = document.getElementById('session-globe');
     const utcHour = new Date().getUTCHours(); 
-    let session = "OFF-MARKET HOURS";
     
-    if (utcHour >= 22 || utcHour < 8) session = "ASIAN SESSION - ACCUMULATION PHASE";
-    else if (utcHour >= 8 && utcHour < 13) session = "LONDON SESSION - LIQUIDITY HUNT";
-    else if (utcHour >= 13 && utcHour < 17) session = "NEW YORK OVERLAP - HIGH VOLATILITY";
-    else if (utcHour >= 17 && utcHour < 22) session = "NEW YORK SESSION - DISTRIBUTION";
+    let session = "OFF-MARKET HOURS";
+    let globeFilter = "grayscale(100%) opacity(0.5)"; // Mode Netral/Tutup
+    let textColor = "#fff";
+
+    if (utcHour >= 22 || utcHour < 8) {
+        session = "ASIAN SESSION - ACCUMULATION PHASE";
+        globeFilter = "hue-rotate(45deg) drop-shadow(0 0 15px rgba(245, 176, 65, 0.8))"; // Warna Kuning/Emas
+        textColor = "#F5B041";
+    } else if (utcHour >= 8 && utcHour < 13) {
+        session = "LONDON SESSION - LIQUIDITY HUNT";
+        globeFilter = "hue-rotate(190deg) drop-shadow(0 0 15px rgba(59, 130, 246, 0.8))"; // Warna Biru Elektrik
+        textColor = "var(--accent-blue)";
+    } else if (utcHour >= 13 && utcHour < 17) {
+        session = "NEW YORK OVERLAP - HIGH VOLATILITY";
+        globeFilter = "hue-rotate(330deg) saturate(2) drop-shadow(0 0 20px rgba(225, 29, 72, 1))"; // Merah Menyala
+        textColor = "var(--accent-red)";
+    } else if (utcHour >= 17 && utcHour < 22) {
+        session = "NEW YORK SESSION - DISTRIBUTION";
+        globeFilter = "hue-rotate(15deg) saturate(1.5) drop-shadow(0 0 15px rgba(230, 126, 34, 0.8))"; // Oranye Terang
+        textColor = "#E67E22";
+    }
 
     statusDiv.innerHTML = session;
+    statusDiv.style.color = textColor;
+    statusDiv.style.borderColor = textColor;
+    
+    // Menerapkan efek iklim warna ke Lottie Bumi
+    if(globe) {
+        globe.style.transition = "filter 1.5s ease-in-out";
+        globe.style.filter = globeFilter;
+    }
 }
 
-// 3. Fetch News dari Investing.com
+// 3. Fetch News 
 function fetchLiveNews() {
     const container = document.getElementById('live-news-container');
     container.innerHTML = `
@@ -111,7 +115,7 @@ function fetchLiveNews() {
         });
 }
 
-// 4. Analisis Profesional (Naratif Institusi Mendalam 3 Paragraf)
+// 4. Analisis Profesional 3 Paragraf
 function openNewsModal(newsIndex) {
     const article = globalNewsData[newsIndex]; 
     const modal = document.getElementById('news-modal');
@@ -169,7 +173,7 @@ function askLogic(type, query = '') {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    generateDailyBias(); // Menjalankan fitur Bias otomatis harian
+    generateDailyBias(); 
     updateMarketSession();
     fetchLiveNews();
     
