@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <!-- DASHBOARD NEWS FEED (FITUR BARU) -->
+        <!-- DASHBOARD NEWS FEED -->
         <div class="card" style="border-left: 4px solid var(--accent-blue); padding: 12px;">
             <div class="card-header" style="margin-bottom: 10px;">
                 <h4 style="color: var(--accent-blue); font-size: 11px;">LIVE MACRO BRIEFING</h4>
@@ -58,7 +58,6 @@
             <div class="card-header" style="margin-bottom: 5px;">
                 <h4 style="color: #10B981;">LIQUIDITY SESSION</h4>
             </div>
-            <!-- Container Bendera Animasi -->
             <div id="session-flag-container" class="flag-wrapper">
                 <!-- Injeksi JS disini -->
             </div>
@@ -78,18 +77,18 @@
         </div>
     </div>
 
-    <!-- TAB 2: TERMINAL BERITA (LAYOUT 2 KOLOM KATEGORI) -->
+    <!-- TAB 2: TERMINAL BERITA (LAYOUT FOKUS PER KATEGORI) -->
     <div id="news" class="content">
         <div class="card-header" style="margin-bottom: 15px; padding: 0 5px;">
             <div>
                 <h4 style="color: var(--accent-blue); font-size: 14px;">MACRO NEWS MATRIX</h4>
-                <span style="font-size: 9px; color: var(--text-muted);">CATEGORIZED INSTITUTIONAL FEED</span>
+                <span style="font-size: 9px; color: var(--text-muted);">8-NODE INSTITUTIONAL CATEGORIZATION</span>
             </div>
             <button class="outline-btn" onclick="fetchLiveNews()">SYNC</button>
         </div>
         
-        <!-- Grid 2 Kolom -->
-        <div class="terminal-2col-grid" id="terminal-news-grid">
+        <!-- Grid Kategori Berita -->
+        <div class="terminal-category-grid" id="terminal-news-grid">
             <div class="loading-action" style="grid-column: 1 / -1; margin-top: 50px;">
                 <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="2" style="width: 50px; height: 50px; margin: 0 auto;" loop autoplay></lottie-player>
                 <span>[ COMPILING ANTIPRAKTIS ACTION ]</span>
