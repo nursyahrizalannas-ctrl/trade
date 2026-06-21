@@ -1,8 +1,8 @@
 /* ==========================================================================
-   UI.JS - KONTROL ANTARMUKA & TELEGRAM
+   UI.JS - KONTROL ANTARMUKA & TELEGRAM (SAFE FALLBACK)
    ========================================================================== */
 
-// 1. Inisialisasi Telegram dengan Pengecekan Aman
+// 1. Inisialisasi Telegram dengan Pengecekan Aman (Anti-Error di Browser)
 if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
     const tg = window.Telegram.WebApp;
     tg.expand();
