@@ -155,7 +155,37 @@
         </div>
     </div>
 
-    <script src="js/ui.js"></script>
+        <!-- SCRIPT NAVIGASI (LANGSUNG DITANAM AGAR ANTI-ERROR & BEBAS CACHE) -->
+    <script>
+        // 1. Fitur Auto-Expand Telegram (Aman jika dibuka di browser biasa)
+        try {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.expand();
+            }
+        } catch (error) {
+            console.log("Aplikasi dibuka di luar Telegram.");
+        }
+
+        // 2. Logika Navigasi Perpindahan Tab
+        function showTab(tabId, element) {
+            // Sembunyikan semua konten tab
+            document.querySelectorAll('.content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).classList.add('active');
+            
+            // Hapus warna biru dari semua menu bawah
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            // Berikan warna biru pada menu yang sedang di-klik
+            element.classList.add('active');
+        }
+    </script>
+    
+    <!-- Load AI Logic -->
     <script src="js/market.js"></script>
 </body>
 </html>
+
