@@ -72,7 +72,7 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 700; cursor: pointer; width: 25%; text-transform: uppercase; letter-spacing: 1px; }
 .nav-item.active { color: var(--accent-blue); }
 
-/* MODAL AI SUMMARY */
+/* MODAL SUMMARY */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(6, 9, 19, 0.9); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
 .modal-overlay.show { display: flex; opacity: 1; }
 .modal-content { background: var(--card-bg); width: 100%; max-width: 400px; border-radius: 8px; border: 1px solid var(--border-color); transform: translateY(10px); transition: transform 0.3s; overflow: hidden; }
@@ -84,7 +84,7 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 .modal-body { padding: 20px; max-height: 75vh; overflow-y: auto; }
 .modal-title { font-size: 14px; margin-bottom: 20px; line-height: 1.5; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
 
-/* --- GAYA ARTIKEL AI NEWS ANALYSIS --- */
+/* --- GAYA ARTIKEL NEWS ANALYSIS --- */
 .news-article-format { display: flex; flex-direction: column; gap: 16px; padding: 0 5px; }
 .news-article-format p { font-size: 12px; line-height: 1.7; color: #CBD5E1; text-align: justify; letter-spacing: 0.3px; }
 .news-article-format p:first-of-type::first-letter { font-size: 32px; font-weight: 800; color: var(--accent-blue); float: left; margin-right: 8px; line-height: 1; margin-top: 2px; }
