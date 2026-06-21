@@ -22,7 +22,7 @@
         
         <!-- HERO LOTTIE ANIMATION -->
         <div class="hero-lottie-container">
-            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json" background="transparent" speed="1" style="width: 100%; height: 180px;" loop autoplay></lottie-player>
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json" background="transparent" speed="0.8" style="width: 100%; height: 160px;" loop autoplay></lottie-player>
             <div class="video-overlay"></div>
             <div class="hero-text">
                 <h3>Macro Analytics Terminal</h3>
@@ -43,7 +43,7 @@
         <!-- AI MACRO WATCHLIST -->
         <div class="card" style="border-left: 4px solid var(--accent-red);">
             <div class="card-header">
-                <h4 style="color: var(--accent-red);">ANTIPRAKTIS MACRO WATCHLIST</h4>
+                <h4 style="color: var(--accent-red);">AI MACRO WATCHLIST</h4>
             </div>
             <div id="recom-container">
                 <div class="loading-state">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="disclaimer">
-                *Ketuk berita untuk melihat analisis eksklusif dan kesinambungan makro.
+                KETUK BERITA UNTUK MELIHAT ANALISIS EKSKLUSIF AI
             </div>
         </div>
 
@@ -79,8 +79,13 @@
         </div>
     </div>
 
-    <!-- TAB 2: MADING -->
+    <!-- TAB 2: MADING & BERITA -->
     <div id="news" class="content">
+        <!-- Lottie Animasi Dokumen/Koran -->
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_qf1pt6za.json" background="transparent" speed="0.8" style="width: 140px; height: 140px;" loop autoplay></lottie-player>
+        </div>
+
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color:var(--accent-blue);">MADING MAKRO HARIAN</h4>
             <p class="subtitle">Dapatkan rangkuman sentimen pasar terbaru dari AI.</p>
@@ -91,7 +96,7 @@
     <!-- TAB 3: EDUKASI -->
     <div id="edu" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-red);">
-            <h4 style="color:var(--accent-red);">TANYA BEBAS</h4>
+            <h4 style="color:var(--accent-red);">TANYA BEBAS AI</h4>
             <input type="text" id="freeChat" placeholder="Cth: Korelasi NFP terhadap likuiditas Gold">
             <button class="action-btn red" onclick="askAI('FREE_CHAT', document.getElementById('freeChat').value)">ANALISIS PERTANYAAN</button>
         </div>
@@ -121,7 +126,7 @@
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>ANTIPRAKTIS LOGIC</h3>
+                <h3>ANTIPRAKTIS AI LOGIC</h3>
                 <button class="close-btn" onclick="closeNewsModal()">✕</button>
             </div>
             <div class="modal-body">
@@ -132,10 +137,10 @@
                     <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Menganalisis Node Data...</div>
                 </div>
 
-                <div id="modal-news-content" class="modal-analysis">
-                    <!-- Konten AI akan dirender di sini -->
+                <div id="modal-news-content">
+                    <!-- Teks AI 3 Paragraf akan masuk ke sini -->
                 </div>
-                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 20px;">BACA ARTIKEL ASLI</button>
+                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 20px;">BACA SUMBER ASLI</button>
             </div>
         </div>
     </div>
