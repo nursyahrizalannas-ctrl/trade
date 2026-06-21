@@ -53,84 +53,55 @@
             </div>
         </div>
 
-        <!-- SESI MARKET GLOBAL & VOLUME INSTITUSI (FITUR BARU) -->
+        <!-- GLOBAL MARKET SESSION -->
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <div class="card-header" style="margin-bottom: 5px;">
                 <h4 style="color: var(--text-main);">GLOBAL MARKET SESSION</h4>
             </div>
-            
-            <!-- Animasi Bumi Hologram -->
             <div class="globe-container">
                 <lottie-player id="session-globe" src="https://assets4.lottiefiles.com/packages/lf20_4wzrs71a.json" background="transparent" speed="0.5" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
             </div>
-            
-            <!-- Status Sesi (Otomatis berubah warna) -->
-            <div id="session-status" class="session-box" style="margin-bottom: 20px;">
-                Memuat siklus market...
-            </div>
-
-            <div class="card-header" style="margin-bottom: 10px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                <h4 style="color: var(--text-muted); font-size: 11px;">LIVE INSTITUTIONAL VOLUME (GOLD)</h4>
-            </div>
-
-            <!-- TradingView Volume Chart -->
-            <div class="tradingview-widget-container" style="height: 180px; width: 100%; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color);">
-              <div id="tv_volume_chart" style="height: 100%; width: 100%;"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-              <script type="text/javascript">
-              new TradingView.widget(
-              {
-              "autosize": true,
-              "symbol": "OANDA:XAUUSD",
-              "interval": "15",
-              "timezone": "Etc/UTC",
-              "theme": "dark",
-              "style": "3", /* Area Chart untuk kesan Density Map */
-              "locale": "en",
-              "enable_publishing": false,
-              "backgroundColor": "#060913",
-              "gridColor": "rgba(30, 41, 59, 0.3)",
-              "hide_top_toolbar": true,
-              "hide_legend": true,
-              "save_image": false,
-              "container_id": "tv_volume_chart",
-              "studies": [
-                "Volume@tv-basicstudies" /* Indikator Volume Utama */
-              ]
-            }
-              );
-              </script>
-            </div>
+            <div id="session-status" class="session-box">Memuat siklus market...</div>
         </div>
 
-        <!-- LIVE NEWS INVESTING -->
-        <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <div class="card-header">
-                <h4 style="color: var(--accent-blue);">LIVE MARKET NEWS</h4>
-                <button class="outline-btn" onclick="fetchLiveNews()">REFRESH</button>
+        <!-- US TREASURY YIELD (FITUR BARU) -->
+        <div class="card" style="border-left: 4px solid #F59E0B;">
+            <div class="card-header" style="margin-bottom: 10px;">
+                <h4 style="color: #F59E0B;">US 10-YEAR TREASURY YIELD</h4>
             </div>
-            <div id="live-news-container" class="scrollable-container">
-                <div class="loading-state">
-                    <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <span>Menghubungkan ke node server...</span>
-                </div>
+            
+            <div class="tradingview-widget-container" style="height: 180px; width: 100%; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 15px;">
+              <div id="tv_treasury_chart" style="height: 100%; width: 100%;"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+              <script type="text/javascript">
+              new TradingView.widget({
+              "autosize": true, "symbol": "TVC:US10Y", "interval": "60", "timezone": "Etc/UTC",
+              "theme": "dark", "style": "3", "locale": "en", "enable_publishing": false,
+              "backgroundColor": "#060913", "gridColor": "rgba(30, 41, 59, 0.3)", "hide_top_toolbar": true,
+              "hide_legend": true, "save_image": false, "container_id": "tv_treasury_chart"
+              });
+              </script>
             </div>
-            <div class="disclaimer">
-                KETUK BERITA UNTUK MELIHAT ANALISIS EKSKLUSIF ANTIPRAKTIS LOGIC
+
+            <div id="treasury-explanation" class="treasury-box">
+                <div class="loading-state">Menganalisis pergerakan Yield Obligasi...</div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 2: MADING & BERITA -->
+    <!-- TAB 2: MADING & BERITA TERMINAL (BERDASARKAN GAMBAR) -->
     <div id="news" class="content">
-        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_qf1pt6za.json" background="transparent" speed="0.8" style="width: 140px; height: 140px;" loop autoplay></lottie-player>
+        <div class="card-header" style="margin-bottom: 15px; padding: 0 10px;">
+            <h4 style="color: var(--accent-blue); font-size: 14px;">LIVE INSTITUTIONAL TERMINAL</h4>
+            <button class="outline-btn" onclick="fetchLiveNews()">SYNC</button>
         </div>
-
-        <div class="card" style="border-left: 4px solid var(--accent-blue);">
-            <h4 style="color:var(--accent-blue);">MADING MAKRO HARIAN</h4>
-            <p class="subtitle">Dapatkan rangkuman sentimen pasar terbaru dari ANTIPRAKTIS LOGIC.</p>
-            <button class="action-btn blue" onclick="askLogic('MADING')">BACA MADING HARI INI</button>
+        
+        <!-- Terminal Grid Layout -->
+        <div class="terminal-wrapper" id="terminal-news-container">
+            <div class="loading-state" style="width: 100%;">
+                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t9gk0703.json" background="transparent" speed="1" style="width: 40px; height: 40px; margin: 0 auto;" loop autoplay></lottie-player>
+                <span>Membangun koneksi ke server berita global...</span>
+            </div>
         </div>
     </div>
 
@@ -147,7 +118,7 @@
     <div id="combo" class="content">
         <div class="card" style="border-left: 4px solid var(--accent-blue);">
             <h4 style="color: var(--accent-blue);">ANALISIS RILIS GANDA</h4>
-            <p class="subtitle">Solusi ANTIPRAKTIS LOGIC saat rilis data bentrok di waktu yang sama.</p>
+            <p class="subtitle">Solusi ANTIPRAKTIS LOGIC saat rilis data bentrok.</p>
             <div class="btn-group">
                 <button class="action-btn blue" onclick="askLogic('COMBO_NEWS', 'Paket NFP')">PAKET NFP LENGKAP</button>
                 <button class="action-btn red" onclick="askLogic('COMBO_NEWS', 'Paket CPI')">PAKET CPI LENGKAP</button>
@@ -158,30 +129,28 @@
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a class="nav-item active" onclick="showTab('main', this)">DASHBOARD</a>
-        <a class="nav-item" onclick="showTab('news', this)">BERITA</a>
+        <a class="nav-item" onclick="showTab('news', this)">TERMINAL</a>
         <a class="nav-item" onclick="showTab('edu', this)">EDUKASI</a>
         <a class="nav-item" onclick="showTab('combo', this)">COMBO</a>
     </nav>
 
-    <!-- MODAL POP-UP SUMMARY -->
+    <!-- MODAL POP-UP SUMMARY 6 TAHAP -->
     <div id="news-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>ANTIPRAKTIS LOGIC</h3>
                 <button class="close-btn" onclick="closeNewsModal()">✕</button>
             </div>
-            <div class="modal-body">
-                <h4 id="modal-news-title" class="modal-title">Memuat Judul...</h4>
+            <div class="modal-body" style="padding: 0;">
                 
-                <div id="modal-loader" style="display: none; text-align: center; padding: 20px 0;">
+                <div id="modal-loader" style="display: none; text-align: center; padding: 40px 0;">
                     <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_x62chj.json" background="transparent" speed="1.5" style="width: 80px; height: 80px; margin: 0 auto;" loop autoplay></lottie-player>
-                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Menyinkronkan Node Data...</div>
+                    <div style="font-size: 11px; color: var(--accent-blue); margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">Mengekstraksi Node Data...</div>
                 </div>
 
                 <div id="modal-news-content">
-                    <!-- Teks Analisis 3 Paragraf -->
+                    <!-- Teks Analisis 6 Tahap -->
                 </div>
-                <button id="modal-link-btn" class="action-btn blue" style="margin-top: 20px;">BACA SUMBER ASLI</button>
             </div>
         </div>
     </div>
