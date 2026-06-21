@@ -36,9 +36,8 @@ lottie-player { width: 100%; height: 100%; filter: grayscale(50%) contrast(1.2);
 .card { background: var(--card-bg); border-radius: 8px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--border-color); }
 .card h4 { font-size: 13px; margin: 0; font-weight: 800; letter-spacing: 1px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-
 .subtitle { font-size: 12px; color: var(--text-muted); margin: 10px 0 15px 0; }
-.disclaimer { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 15px; font-style: normal; text-transform: uppercase; letter-spacing: 0.5px; }
+.disclaimer { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
 .loading-state { text-align: center; color: var(--text-muted); font-size: 11px; padding: 20px 0; text-transform: uppercase; letter-spacing: 1px; }
 
 /* INPUT & TOMBOL */
@@ -50,10 +49,7 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 .action-btn:active { transform: scale(0.98); }
 .action-btn.blue { background: var(--dark-blue-bg); border: 1px solid var(--accent-blue); color: var(--accent-blue); }
 .action-btn.red { background: var(--dark-red-bg); border: 1px solid var(--accent-red); color: var(--accent-red); }
-.action-btn:hover { filter: brightness(1.2); }
-
 .outline-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 10px; font-size: 10px; font-weight: 700; border-radius: 4px; cursor: pointer; letter-spacing: 0.5px; }
-.outline-btn:hover { border-color: var(--text-main); color: var(--text-main); }
 
 /* LIST WIDGETS */
 .recom-item { background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 10px; border-left-width: 3px; }
@@ -69,7 +65,6 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 .news-item:hover { border-color: var(--accent-blue); background: var(--dark-blue-bg); }
 .news-time { font-size: 10px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
 .news-title { font-size: 13px; color: var(--text-main); line-height: 1.5; font-weight: 600; }
-
 .session-box { font-size: 12px; color: #fff; padding: 14px; background: rgba(0,0,0,0.5); border-radius: 6px; text-align: center; border: 1px solid var(--border-color); letter-spacing: 0.5px; font-weight: 600; text-transform: uppercase; }
 
 /* NAV BAWAH */
@@ -89,47 +84,12 @@ input[type="text"]:focus { border-color: var(--accent-blue); background: var(--d
 .modal-body { padding: 20px; max-height: 75vh; overflow-y: auto; }
 .modal-title { font-size: 14px; margin-bottom: 20px; line-height: 1.5; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
 
-.modal-analysis { font-size: 12px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 15px; }
-.analysis-block { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; border-left: 2px solid; }
-.analysis-block.factual { border-color: var(--text-muted); }
-.analysis-block.correlation { border-color: var(--accent-blue); }
-.analysis-block.projection { border-color: var(--accent-red); }
-.block-title { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
+/* --- GAYA ARTIKEL AI NEWS ANALYSIS --- */
+.news-article-format { display: flex; flex-direction: column; gap: 16px; padding: 0 5px; }
+.news-article-format p { font-size: 12px; line-height: 1.7; color: #CBD5E1; text-align: justify; letter-spacing: 0.3px; }
+.news-article-format p:first-of-type::first-letter { font-size: 32px; font-weight: 800; color: var(--accent-blue); float: left; margin-right: 8px; line-height: 1; margin-top: 2px; }
+.news-article-format p:nth-child(2) { border-left: 2px solid var(--accent-red); padding-left: 12px; background: linear-gradient(90deg, rgba(225, 29, 72, 0.05), transparent); }
 
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); }
-/* --- GAYA ARTIKEL AI NEWS ANALYSIS --- */
-.news-article-format {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 5px;
-}
-
-.news-article-format p {
-    font-size: 13px;
-    line-height: 1.7;
-    color: #CBD5E1; /* Warna teks abu terang agar mata tidak lelah */
-    text-align: justify; /* Membuat teks rata kanan-kiri yang rapi */
-    letter-spacing: 0.3px;
-}
-
-/* Memberikan aksen huruf kapital pertama (Drop Cap) di paragraf pertama layaknya koran finansial */
-.news-article-format p:first-of-type::first-letter {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--accent-blue);
-    float: left;
-    margin-right: 6px;
-    line-height: 1;
-    margin-top: 2px;
-}
-
-/* Highlight khusus untuk kata kunci penting di dalam artikel */
-.news-article-format p:nth-child(2) {
-    border-left: 2px solid var(--accent-red);
-    padding-left: 12px;
-    background: linear-gradient(90deg, rgba(225, 29, 72, 0.05), transparent);
-}
-
