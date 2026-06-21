@@ -80,7 +80,7 @@ function fetchLiveNews() {
         });
 }
 
-// 4. Analisis Profesional AI (Fakta, Kesinambungan, Proyeksi)
+// 4. Analisis Profesional (Naratif Institusi Mendalam)
 function openNewsModal(newsIndex) {
     const article = globalNewsData[newsIndex]; 
     const modal = document.getElementById('news-modal');
@@ -88,6 +88,57 @@ function openNewsModal(newsIndex) {
     const contentEl = document.getElementById('modal-news-content');
     const loaderEl = document.getElementById('modal-loader');
     const btnLink = document.getElementById('modal-link-btn');
+
+    // Tampilkan Modal & Setup Awal
+    modal.classList.add('show');
+    titleEl.innerText = article.title;
+    contentEl.innerHTML = '';
+    loaderEl.style.display = 'block';
+    btnLink.style.display = 'none';
+
+    // Tombol untuk baca ke website asli
+    btnLink.onclick = function() { window.open(article.link, '_blank'); };
+
+    // Simulasi AI memproses data (Delay 1.5 detik)
+    setTimeout(() => {
+        loaderEl.style.display = 'none';
+        btnLink.style.display = 'block';
+
+        const titleLower = article.title.toLowerCase();
+        let p1, p2, p3;
+        
+        // --- LOGIKA NARASI AI (Mendeteksi Konteks Berita) ---
+
+        if (titleLower.match(/minyak|iran|perang|geopolitik|rusia|opec|energi/)) {
+            // TEMA 1: GEOPOLITIK & ENERGI (Sesuai contoh Anda)
+            p1 = "Perkembangan terbaru terkait geopolitik dan regulasi energi ini memicu pergeseran besar dalam sentimen risiko global. Peristiwa ini meningkatkan (atau meredakan) kekhawatiran atas stabilitas jalur pasokan energi utama, yang secara langsung memengaruhi proyeksi inflasi global di kuartal mendatang.";
+            p2 = "Respons pasar sangat agresif. Jika narasi ini mereda, kita akan melihat harga minyak mentah (Brent/WTI) mengalami koreksi tajam seiring langkah investor menghapus (unwind) risk premium yang sebelumnya terbangun. Sebaliknya, eskalasi akan memicu lonjakan harga yang memaksa pasar melakukan repricing besar-besaran terhadap aset safe-haven seperti Emas (XAUUSD).";
+            p3 = "Perubahan harga energi ini langsung memicu rotasi sektor di pasar ekuitas. Penurunan harga minyak biasanya menguntungkan sektor transportasi dan consumer discretionary karena beban biaya menurun, sementara sektor energi akan mengalami profit taking. Smart money saat ini sedang melakukan re-balancing portofolio menyesuaikan arah likuiditas terbaru.";
+        
+        } else if (titleLower.match(/inflasi|cpi|fed|suku bunga|pce|powell/)) {
+            // TEMA 2: KEBIJAKAN MONETER & INFLASI
+            p1 = "Rilis berita ini sangat krusial karena menyentuh inti dari kebijakan moneter global saat ini. Pasar secara aktif membedah data ini untuk mencari petunjuk apakah bank sentral (terutama The Fed) memiliki ruang yang cukup untuk memulai atau menahan siklus pemangkasan suku bunga (rate cuts) pada pertemuan berikutnya.";
+            p2 = "Terjadi repricing yang signifikan di pasar obligasi. Angka yang lebih dovish dari perkiraan langsung menekan imbal hasil (yield) US Treasury dan melemahkan Indeks Dolar (DXY), memicu aliran dana institusional masuk secara masif ke aset berisiko dan emas. Sebaliknya, data yang hawkish akan menopang kekuatan Dolar dan memukul harga komoditas.";
+            p3 = "Dari perspektif institusional, momentum ini digunakan untuk menyapu area likuiditas (liquidity sweep). Algoritma HFT (High-Frequency Trading) mengeksekusi order di level support/resistance kunci sesaat setelah rilis. Trader disarankan menunggu terbentuknya struktur harga baru di sesi New York sebelum mengambil posisi jangka menengah.";
+        
+        } else {
+            // TEMA 3: MAKRO EKONOMI UMUM (Tenaga Kerja, GDP, dll)
+            p1 = "Berita ini menyoroti pergeseran struktural dalam landasan ekonomi riil, yang memberikan indikasi awal mengenai kekuatan daya beli konsumen dan prospek pertumbuhan GDP. Institusi menganggap data tier ini sebagai leading indicator untuk memproyeksikan stabilitas ekonomi beberapa kuartal ke depan.";
+            p2 = "Dampak terbesarnya terlihat pada penyesuaian aliran modal (capital flow). Data yang solid akan menarik likuiditas kembali ke pasar saham AS, mendorong indeks utama (S&P 500, Nasdaq) menguat. Sementara di pasar valas, data ini menentukan apakah Dolar AS masih layak memegang status yield advantage dibandingkan mata uang major lainnya.";
+            p3 = "Pergerakan harga saat ini didominasi oleh penyesuaian posisi (positioning adjustment) dari para manajer aset besar. Menjelang penutupan sesi, area fair value gap (FVG) yang tercipta dari volatilitas berita ini kemungkinan besar akan diuji kembali. Sangat disarankan untuk tidak entry secara agresif saat volatilitas awal masih berlangsung.";
+        }
+
+        // Render narasi dengan format artikel yang elegan
+        contentEl.innerHTML = `
+            <div class="news-article-format">
+                <p>${p1}</p>
+                <p>${p2}</p>
+                <p>${p3}</p>
+            </div>
+        `;
+    }, 1500);
+}
+
 
     // Setup Tampilan Awal
     modal.classList.add('show');
@@ -99,7 +150,7 @@ function openNewsModal(newsIndex) {
     // Event Tombol Asli
     btnLink.onclick = function() { window.open(article.link, '_blank'); };
 
-    // Proses Logika AI (Simulasi Delay)
+    // Proses Logika (Simulasi Delay)
     setTimeout(() => {
         loaderEl.style.display = 'none';
         btnLink.style.display = 'block';
